@@ -1,0 +1,238 @@
+<!-- Модальное окно -->
+<div
+  id="modal"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+>
+  <div
+    class="bg-gray-100 rounded-xl p-8 max-w-md w-full mx-4 lg:mx-auto relative"
+  >
+    <button
+      id="closeModal"
+      class="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <h2 class="text-3xl font-semibold mb-4 text-center font-gilroy">Обсудить заказ</h2>
+    <p class="text-center text-gray-700 mb-6 font-gilroy">
+      Оставьте ваши контактные данные. Наши менеджеры отправят вам актуальную
+      информацию о ценах и наличии продукции на складе.
+    </p>
+    <form id="contactForm">
+      <input
+        type="text"
+        id="name"
+        placeholder="Ваше имя"
+        class="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy"
+        required
+      />
+      <input
+        type="tel"
+        id="phone"
+        placeholder="Телефон"
+        class="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy"
+        required
+      />
+      <textarea
+        id="comment"
+        placeholder="Комментарий"
+        class="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy"
+        rows="4"
+        required></textarea>
+      <button
+        type="submit"
+        class="w-full py-3 bg-yellow-500 text-white rounded-lg font-semibold hover:bg-yellow-600 transition font-gilroy"
+      >
+        Отправить
+      </button>
+    </form>
+  </div>
+</div>
+
+<header
+  class="fixed text-white top-4 left-1/2 transform -translate-x-1/2 w-11/12 max-w-screen-xl z-50 flex justify-between items-center px-4 py-3 lg:px-6 lg:py-4 bg-black bg-opacity-70 backdrop-blur-sm rounded-2xl border border-white border-opacity-20"
+>
+  <a href="/" class="flex items-center">
+    <img src="/logo.svg" alt="Логотип" class="h-8 lg:h-12" />
+    <span class="ml-2 font-bold text-lg lg:text-2xl font-gilroy">
+      ООО «ДМДК»
+    </span>
+  </a>
+
+  <nav class="hidden lg:flex items-center space-x-6">
+    <ul class="flex text-lg space-x-8">
+      <li>
+        <a href="/#about" class="hover:text-yellow-400 font-gilroy transition-colors">О НАС</a>
+      </li>
+      <li>
+        <a href="/#products" class="hover:text-yellow-400 font-gilroy transition-colors">ПРОДУКЦИЯ</a>
+      </li>
+      <li>
+        <a href="/blog" class="hover:text-yellow-400 font-gilroy transition-colors">БЛОГ</a>
+      </li>
+      <li>
+        <a href="/faq" class="hover:text-yellow-400 font-gilroy transition-colors">FAQ</a>
+      </li>
+      <li class="relative group">
+        <a href="/#contacts" class="hover:text-yellow-400 font-gilroy transition-colors">КОНТАКТЫ</a>
+        <div
+          class="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 bg-black bg-opacity-90 backdrop-blur-sm text-white p-6 rounded-xl mt-2 w-80 left-1/2 transform -translate-x-1/2 transition-all duration-300 ease-in-out scale-95 group-hover:scale-100 border border-white border-opacity-20"
+        >
+          <div class="flex justify-center items-center mb-4">
+            <img src="/logo.svg" alt="Логотип" class="h-8" />
+            <span class="ml-2 font-bold font-gilroy">ООО «ДМДК»</span>
+          </div>
+          <div class="space-y-2 text-center font-gilroy">
+            <p>+7 (925) 104-50-50</p>
+            <p>+7 (926) 664-62-46</p>
+            <p>ooo.dmdk@mail.ru</p>
+            <p>Режим работы:<br /> <span class="text-lg">9:00 - 21:00</span></p>
+          </div>
+          <div class="flex justify-center space-x-4 mt-4">
+            <a href="https://t.me/OOO_DMDK" class="social-icon">
+              <img
+                src="/icons/tg.svg"
+                alt="Telegram"
+                class="w-8 h-8"
+              />
+            </a>
+            <a href="https://wa.me/79251045050" class="social-icon">
+              <img
+                src="/icons/ws.svg"
+                alt="WhatsApp"
+                class="w-8 h-8"
+              />
+            </a>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <!-- Кнопка "Оставить заявку" -->
+    <button
+      class="open-modal ml-6 px-6 py-3 text-lg font-semibold bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 text-white rounded-lg shadow-lg shadow-yellow-500/50 hover:shadow-xl hover:shadow-yellow-400/70 hover:bg-opacity-90 transition-all duration-300 font-gilroy"
+    >
+      Оставить заявку
+    </button>
+  </nav>
+
+  <div class="lg:hidden">
+    <button id="menu-toggle" class="focus:outline-none">
+      <svg
+        class="w-8 h-8"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16m-7 6h7"></path>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<div
+  id="mobile-menu"
+  class="hidden fixed inset-x-0 top-0 pt-20 p-4 bg-black bg-opacity-90 backdrop-blur-sm text-white flex flex-col items-center space-y-4 transform transition-transform duration-300 ease-in-out z-40"
+>
+  <a href="/#about" class="text-lg font-gilroy hover:text-yellow-400 transition-colors">О НАС</a>
+  <a href="/#products" class="text-lg font-gilroy hover:text-yellow-400 transition-colors">ПРОДУКЦИЯ</a>
+  <a href="/blog" class="text-lg font-gilroy hover:text-yellow-400 transition-colors">БЛОГ</a>
+  <a href="/faq" class="text-lg font-gilroy hover:text-yellow-400 transition-colors">FAQ</a>
+  <a href="/#contacts" class="text-lg font-gilroy hover:text-yellow-400 transition-colors">КОНТАКТЫ</a>
+  <!-- Кнопка "Оставить заявку" в мобильном меню -->
+  <button
+    class="open-modal mt-4 w-full py-3 text-lg font-semibold bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 text-white rounded-lg shadow-lg shadow-yellow-500/50 hover:shadow-xl hover:shadow-yellow-400/70 hover:bg-opacity-90 transition-all duration-300 font-gilroy"
+  >
+    Оставить заявку
+  </button>
+</div>
+
+<script>
+  // Получение всех кнопок с классом "open-modal"
+  const openModalButtons = document.querySelectorAll(".open-modal");
+  const closeModalBtn = document.getElementById("closeModal");
+  const modal = document.getElementById("modal");
+  const contactForm = document.getElementById("contactForm") as HTMLFormElement;
+
+  // Привязка события открытия модального окна ко всем кнопкам
+  openModalButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      modal?.classList.remove("hidden");
+    });
+  });
+
+  // Закрытие модального окна при клике на крестик
+  closeModalBtn?.addEventListener("click", () => {
+    modal?.classList.add("hidden");
+  });
+
+  // Закрытие модального окна при клике на фон
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.classList.add("hidden");
+    }
+  });
+
+  // Отправка данных в Telegram
+  contactForm?.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const nameInput = document.getElementById("name") as HTMLInputElement;
+    const phoneInput = document.getElementById("phone") as HTMLInputElement;
+    const commentInput = document.getElementById("comment") as HTMLTextAreaElement;
+
+    const name = nameInput?.value || '';
+    const phone = phoneInput?.value || '';
+    const comment = commentInput?.value || '';
+
+    const message = `Новая заявка:\n\nИмя: ${name}\nТелефон: ${phone}\nКомментарий: ${comment}`;
+
+    const token = "7413445274:AAGFPUJZypcq5fG6r-Eq6pu81RHf6GOW2oU";
+    const chatId = "-1002176656869";
+    const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(
+      message,
+    )}`;
+
+    fetch(url)
+      .then((response) => {
+        if (response.ok) {
+          alert("Заявка успешно отправлена!");
+          contactForm?.reset();
+          modal?.classList.add("hidden");
+        } else {
+          alert("Ошибка при отправке заявки. Попробуйте позже.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Ошибка при отправке заявки. Попробуйте позже.");
+      });
+  });
+
+  // Функционал мобильного меню
+  const menuToggle = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  menuToggle?.addEventListener("click", () => {
+    mobileMenu?.classList.toggle("hidden");
+    mobileMenu?.classList.toggle("transform");
+    mobileMenu?.classList.toggle("translate-y-full");
+  });
+</script>

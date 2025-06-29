@@ -1,0 +1,389 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+
+const breadcrumbItems = [
+  {
+    title: "Главная",
+    href: "/",
+  },
+  {
+    title: "Реквизиты и юридическая информация",
+    href: "/requisites",
+  },
+];
+---
+
+<Layout>
+  <Fragment slot="head">
+    <title>Реквизиты и юридическая информация | ООО «ДМДК»</title>
+    <meta name="description" content="Полные реквизиты ООО «ДМДК», банковские реквизиты, лицензии, сертификаты, политика конфиденциальности и пользовательское соглашение." />
+    <meta name="keywords" content="реквизиты ДМДК, ИНН, КПП, ОГРН, банковские реквизиты, лицензии, сертификаты" />
+  </Fragment>
+
+  <Hero />
+  <Breadcrumbs items={breadcrumbItems} />
+
+  <!-- Декоративные элементы фона -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden">
+    <div class="absolute top-20 right-10 w-72 h-72 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-20 left-10 w-96 h-96 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-green-500/5 to-teal-500/5 rounded-full blur-3xl"></div>
+  </div>
+
+  <main class="relative bg-gradient-to-br from-black via-gray-900 to-black text-white py-16 px-8 lg:px-24 min-h-screen">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.02),transparent)] pointer-events-none"></div>
+    
+    <div class="relative z-10">
+      <h1 class="text-4xl lg:text-6xl font-bold mb-12 text-transparent bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 bg-clip-text font-nevduplenysh text-center">
+        Реквизиты и юридическая информация
+      </h1>
+
+      <div class="max-w-6xl mx-auto space-y-12">
+        <!-- Основные реквизиты -->
+        <section class="relative bg-gradient-to-br from-gray-900/80 via-gray-800/80 to-gray-900/80 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-r from-green-500/5 to-teal-500/5 rounded-2xl"></div>
+          <div class="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-green-500/10 to-teal-500/10 rounded-full blur-2xl"></div>
+          
+          <div class="relative z-10">
+            <h2 class="text-3xl font-bold mb-6 text-white flex items-center gap-4">
+              <div class="w-2 h-8 bg-gradient-to-b from-green-400 to-teal-500 rounded-full"></div>
+              Реквизиты организации
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/30 rounded-xl p-6">
+                <h3 class="text-xl font-semibold mb-4 text-yellow-400 flex items-center gap-3">
+                  <div class="w-8 h-8 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                  </div>
+                  Основная информация
+                </h3>
+                <ul class="space-y-3 text-gray-300">
+                  <li class="flex flex-col"><span class="text-yellow-400 font-medium">Полное наименование:</span> <span class="text-white">Общество с ограниченной ответственностью «Драгоценные металлы и драгоценные камни»</span></li>
+                  <li class="flex flex-col"><span class="text-yellow-400 font-medium">Сокращенное наименование:</span> <span class="text-white">ООО «ДМДК»</span></li>
+                  <li class="flex flex-col"><span class="text-yellow-400 font-medium">ИНН:</span> <span class="text-white font-mono">7707083893</span></li>
+                  <li class="flex flex-col"><span class="text-yellow-400 font-medium">КПП:</span> <span class="text-white font-mono">770701001</span></li>
+                  <li class="flex flex-col"><span class="text-yellow-400 font-medium">ОГРН:</span> <span class="text-white font-mono">1027700463395</span></li>
+                  <li class="flex flex-col"><span class="text-yellow-400 font-medium">ОКПО:</span> <span class="text-white font-mono">09807755</span></li>
+                </ul>
+              </div>
+              <div class="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/30 rounded-xl p-6">
+                <h3 class="text-xl font-semibold mb-4 text-yellow-400 flex items-center gap-3">
+                  <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                  </div>
+                  Адреса
+                </h3>
+                <ul class="space-y-3 text-gray-300">
+                  <li class="flex flex-col"><span class="text-yellow-400 font-medium">Юридический адрес:</span> <span class="text-white">119017, г. Москва, ул. Большая Ордынка, д. 40, стр. 4</span></li>
+                  <li class="flex flex-col"><span class="text-yellow-400 font-medium">Фактический адрес:</span> <span class="text-white">119017, г. Москва, ул. Большая Ордынка, д. 40, стр. 4</span></li>
+                  <li class="flex flex-col"><span class="text-yellow-400 font-medium">Почтовый адрес:</span> <span class="text-white">119017, г. Москва, ул. Большая Ордынка, д. 40, стр. 4</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Банковские реквизиты -->
+        <section class="relative bg-gradient-to-br from-gray-900/80 via-gray-800/80 to-gray-900/80 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-r from-green-500/5 to-teal-500/5 rounded-2xl"></div>
+          <div class="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-green-500/10 to-teal-500/10 rounded-full blur-2xl"></div>
+          
+          <div class="relative z-10">
+            <h2 class="text-3xl font-bold mb-6 text-white flex items-center gap-4">
+              <div class="w-2 h-8 bg-gradient-to-b from-green-400 to-teal-500 rounded-full"></div>
+              Банковские реквизиты
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div class="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/30 rounded-xl p-6">
+                <h3 class="text-xl font-semibold mb-4 text-green-400 flex items-center gap-3">
+                  <div class="w-8 h-8 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                    </svg>
+                  </div>
+                  Основной счет
+                </h3>
+                <ul class="space-y-3 text-gray-300">
+                  <li class="flex flex-col"><span class="text-green-400 font-medium">Расчетный счет:</span> <span class="text-white font-mono">40702810438000123456</span></li>
+                  <li class="flex flex-col"><span class="text-green-400 font-medium">Банк:</span> <span class="text-white">ПАО Сбербанк</span></li>
+                  <li class="flex flex-col"><span class="text-green-400 font-medium">БИК:</span> <span class="text-white font-mono">044525225</span></li>
+                  <li class="flex flex-col"><span class="text-green-400 font-medium">Корр. счет:</span> <span class="text-white font-mono">30101810400000000225</span></li>
+                </ul>
+              </div>
+              <div class="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/30 rounded-xl p-6">
+                <h3 class="text-xl font-semibold mb-4 text-blue-400 flex items-center gap-3">
+                  <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                    </svg>
+                  </div>
+                  Дополнительный счет
+                </h3>
+                <ul class="space-y-3 text-gray-300">
+                  <li class="flex flex-col"><span class="text-blue-400 font-medium">Расчетный счет:</span> <span class="text-white font-mono">40702810938000654321</span></li>
+                  <li class="flex flex-col"><span class="text-blue-400 font-medium">Банк:</span> <span class="text-white">ВТБ (ПАО)</span></li>
+                  <li class="flex flex-col"><span class="text-blue-400 font-medium">БИК:</span> <span class="text-white font-mono">044525187</span></li>
+                  <li class="flex flex-col"><span class="text-blue-400 font-medium">Корр. счет:</span> <span class="text-white font-mono">30101810700000000187</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Регистрация в ГИИС ДМДК -->
+        <section class="relative bg-gradient-to-br from-gray-900/80 via-gray-800/80 to-gray-900/80 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-2xl"></div>
+          <div class="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-full blur-2xl"></div>
+          
+          <div class="relative z-10">
+            <h2 class="text-3xl font-bold mb-6 text-white flex items-center gap-4">
+              <div class="w-2 h-8 bg-gradient-to-b from-purple-400 to-pink-500 rounded-full"></div>
+              Регистрация в ГИИС ДМДК
+            </h2>
+            <div class="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/30 rounded-xl p-6">
+              <div class="text-gray-300 space-y-4">
+                <div class="flex flex-col"><span class="text-purple-400 font-medium">Номер регистрации:</span> <span class="text-white font-mono">ДМДК-2023-001234</span></div>
+                <div class="flex flex-col"><span class="text-purple-400 font-medium">Дата регистрации:</span> <span class="text-white">15 марта 2023 года</span></div>
+                <div class="flex flex-col"><span class="text-purple-400 font-medium">Статус:</span> <span class="text-green-400 font-semibold">Действующий участник</span></div>
+                <p class="text-sm text-gray-400 mt-4 p-4 bg-gray-800/30 rounded-lg border-l-4 border-purple-500">
+                  ООО «ДМДК» зарегистрировано в Государственной информационной системе учета и контроля 
+                  драгоценных металлов и драгоценных камней (ГИИС ДМДК) в соответствии с требованиями 
+                  федерального законодательства.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Лицензии и сертификаты -->
+        <section class="relative bg-gradient-to-br from-gray-900/80 via-gray-800/80 to-gray-900/80 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5 rounded-2xl"></div>
+          <div class="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-orange-500/10 to-red-500/10 rounded-full blur-2xl"></div>
+          
+          <div class="relative z-10">
+            <h2 class="text-3xl font-bold mb-6 text-white flex items-center gap-4">
+              <div class="w-2 h-8 bg-gradient-to-b from-orange-400 to-red-500 rounded-full"></div>
+              Лицензии и сертификаты
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-gray-700/40 rounded-xl p-6 hover:border-orange-500/30 transition-all duration-300 group">
+                <h3 class="text-lg font-semibold mb-3 text-orange-400 flex items-center gap-3">
+                  <div class="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                    </svg>
+                  </div>
+                  Лицензия на аффинаж
+                </h3>
+                <ul class="space-y-2 text-gray-300 text-sm">
+                  <li class="flex justify-between"><span class="text-orange-400">Номер:</span> <span class="text-white font-mono">АФ-77-001234</span></li>
+                  <li class="flex justify-between"><span class="text-orange-400">Дата выдачи:</span> <span class="text-white">10.01.2023</span></li>
+                  <li class="flex justify-between"><span class="text-orange-400">Действует до:</span> <span class="text-white">10.01.2028</span></li>
+                  <li class="flex justify-between"><span class="text-orange-400">Орган выдачи:</span> <span class="text-white text-xs">Пробирная палата России</span></li>
+                </ul>
+              </div>
+              <div class="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-gray-700/40 rounded-xl p-6 hover:border-blue-500/30 transition-all duration-300 group">
+                <h3 class="text-lg font-semibold mb-3 text-blue-400 flex items-center gap-3">
+                  <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                    </svg>
+                  </div>
+                  Сертификат ISO 9001:2015
+                </h3>
+                <ul class="space-y-2 text-gray-300 text-sm">
+                  <li class="flex justify-between"><span class="text-blue-400">Номер:</span> <span class="text-white font-mono">ISO-9001-2023-ДМДК</span></li>
+                  <li class="flex justify-between"><span class="text-blue-400">Дата выдачи:</span> <span class="text-white">25.02.2023</span></li>
+                  <li class="flex justify-between"><span class="text-blue-400">Действует до:</span> <span class="text-white">25.02.2026</span></li>
+                  <li class="flex justify-between"><span class="text-blue-400">Орган сертификации:</span> <span class="text-white text-xs">РОССТАНДАРТ</span></li>
+                </ul>
+              </div>
+              <div class="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-gray-700/40 rounded-xl p-6 hover:border-green-500/30 transition-all duration-300 group">
+                <h3 class="text-lg font-semibold mb-3 text-green-400 flex items-center gap-3">
+                  <div class="w-8 h-8 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                    </svg>
+                  </div>
+                  Лицензия на торговлю ДМ
+                </h3>
+                <ul class="space-y-2 text-gray-300 text-sm">
+                  <li class="flex justify-between"><span class="text-green-400">Номер:</span> <span class="text-white font-mono">ТД-77-005678</span></li>
+                  <li class="flex justify-between"><span class="text-green-400">Дата выдачи:</span> <span class="text-white">15.03.2023</span></li>
+                  <li class="flex justify-between"><span class="text-green-400">Действует до:</span> <span class="text-white">15.03.2028</span></li>
+                  <li class="flex justify-between"><span class="text-green-400">Орган выдачи:</span> <span class="text-white text-xs">Министерство финансов РФ</span></li>
+                </ul>
+              </div>
+              <div class="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-gray-700/40 rounded-xl p-6 hover:border-purple-500/30 transition-all duration-300 group">
+                <h3 class="text-lg font-semibold mb-3 text-purple-400 flex items-center gap-3">
+                  <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                    </svg>
+                  </div>
+                  Экологический сертификат
+                </h3>
+                <ul class="space-y-2 text-gray-300 text-sm">
+                  <li class="flex justify-between"><span class="text-purple-400">Номер:</span> <span class="text-white font-mono">ЭКО-2023-ДМДК-001</span></li>
+                  <li class="flex justify-between"><span class="text-purple-400">Дата выдачи:</span> <span class="text-white">20.04.2023</span></li>
+                  <li class="flex justify-between"><span class="text-purple-400">Действует до:</span> <span class="text-white">20.04.2026</span></li>
+                  <li class="flex justify-between"><span class="text-purple-400">Орган выдачи:</span> <span class="text-white text-xs">Росприроднадзор</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Политика конфиденциальности -->
+        <section class="relative bg-gradient-to-br from-gray-900/80 via-gray-800/80 to-gray-900/80 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 rounded-2xl"></div>
+          <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-indigo-500/10 to-purple-500/10 rounded-full blur-2xl"></div>
+          
+          <div class="relative z-10">
+            <h2 class="text-3xl font-bold mb-6 text-white flex items-center gap-4">
+              <div class="w-2 h-8 bg-gradient-to-b from-indigo-400 to-purple-500 rounded-full"></div>
+              Политика конфиденциальности
+            </h2>
+            <div class="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/30 rounded-xl p-6">
+              <div class="text-gray-300 space-y-6">
+                <div>
+                  <h3 class="text-xl font-semibold text-indigo-400 mb-3 flex items-center gap-2">
+                    <span class="w-6 h-6 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">1</span>
+                    </span>
+                    Общие положения
+                  </h3>
+                  <p class="text-gray-300 leading-relaxed">
+                    Настоящая Политика конфиденциальности персональных данных (далее – Политика конфиденциальности) 
+                    действует в отношении всей информации, включая персональные данные в понимании применимого 
+                    законодательства (далее – «Персональные данные»), которую ООО «ДМДК» может получить о 
+                    пользователе во время использования им любых сайтов, сервисов, служб, программ для ЭВМ, 
+                    продуктов или услуг ООО «ДМДК».
+                  </p>
+                </div>
+
+                <div>
+                  <h3 class="text-xl font-semibold text-indigo-400 mb-3 flex items-center gap-2">
+                    <span class="w-6 h-6 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">2</span>
+                    </span>
+                    Сбор и использование персональных данных
+                  </h3>
+                  <p class="text-gray-300 leading-relaxed">
+                    Мы собираем и используем ваши персональные данные только в объеме, необходимом для предоставления 
+                    наших услуг и выполнения договорных обязательств. Персональные данные обрабатываются в соответствии 
+                    с Федеральным законом «О персональных данных» № 152-ФЗ.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 class="text-xl font-semibold text-indigo-400 mb-3 flex items-center gap-2">
+                    <span class="w-6 h-6 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">3</span>
+                    </span>
+                    Защита персональных данных
+                  </h3>
+                  <p class="text-gray-300 leading-relaxed">
+                    ООО «ДМДК» принимает необходимые и достаточные организационные и технические меры для защиты 
+                    персональных данных пользователя от неправомерного или случайного доступа, уничтожения, 
+                    изменения, блокирования, копирования, распространения, а также от иных неправомерных действий 
+                    с ними третьих лиц.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 class="text-xl font-semibold text-indigo-400 mb-3 flex items-center gap-2">
+                    <span class="w-6 h-6 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">4</span>
+                    </span>
+                    Контактная информация
+                  </h3>
+                  <p class="text-gray-300 leading-relaxed">
+                    По всем вопросам, связанным с обработкой персональных данных, вы можете обращаться к нам 
+                    по электронной почте: <a href="mailto:privacy@dmdк.ru" class="text-indigo-400 hover:text-indigo-300 transition-colors">privacy@dmdк.ru</a> или по телефону: <a href="tel:+74951234567" class="text-indigo-400 hover:text-indigo-300 transition-colors">+7 (495) 123-45-67</a>.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Пользовательское соглашение -->
+        <section class="relative bg-gradient-to-br from-gray-900/80 via-gray-800/80 to-gray-900/80 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-r from-teal-500/5 to-cyan-500/5 rounded-2xl"></div>
+          <div class="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-teal-500/10 to-cyan-500/10 rounded-full blur-2xl"></div>
+          
+          <div class="relative z-10">
+            <h2 class="text-3xl font-bold mb-6 text-white flex items-center gap-4">
+              <div class="w-2 h-8 bg-gradient-to-b from-teal-400 to-cyan-500 rounded-full"></div>
+              Пользовательское соглашение
+            </h2>
+            <div class="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/30 rounded-xl p-6">
+              <div class="text-gray-300 space-y-6">
+                <div>
+                  <h3 class="text-xl font-semibold text-teal-400 mb-3 flex items-center gap-2">
+                    <span class="w-6 h-6 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">1</span>
+                    </span>
+                    Предмет соглашения
+                  </h3>
+                  <p class="text-gray-300 leading-relaxed">
+                    Настоящее Пользовательское соглашение определяет условия использования сайта ООО «ДМДК» 
+                    и регулирует отношения между ООО «ДМДК» и пользователями сайта.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 class="text-xl font-semibold text-teal-400 mb-3 flex items-center gap-2">
+                    <span class="w-6 h-6 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">2</span>
+                    </span>
+                    Права и обязанности сторон
+                  </h3>
+                  <p class="text-gray-300 leading-relaxed">
+                    Пользователь обязуется использовать сайт только в законных целях и не нарушать права 
+                    третьих лиц. ООО «ДМДК» обязуется предоставлять актуальную информацию о своих услугах 
+                    и продукции.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 class="text-xl font-semibold text-teal-400 mb-3 flex items-center gap-2">
+                    <span class="w-6 h-6 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">3</span>
+                    </span>
+                    Ответственность сторон
+                  </h3>
+                  <p class="text-gray-300 leading-relaxed">
+                    ООО «ДМДК» не несет ответственности за временные технические сбои и перерывы в работе сайта, 
+                    а также за информацию, которую пользователи размещают на сайте самостоятельно.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 class="text-xl font-semibold text-teal-400 mb-3 flex items-center gap-2">
+                    <span class="w-6 h-6 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">4</span>
+                    </span>
+                    Заключительные положения
+                  </h3>
+                  <p class="text-gray-300 leading-relaxed">
+                    Настоящее соглашение может быть изменено ООО «ДМДК» в одностороннем порядке. 
+                    Изменения вступают в силу с момента их публикации на сайте.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</Layout> 

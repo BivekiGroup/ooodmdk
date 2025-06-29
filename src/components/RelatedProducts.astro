@@ -1,0 +1,65 @@
+---
+import OptimizedImage from "./OptimizedImage.astro";
+import { sanityClient } from "sanity:client";
+
+interface Props {
+  currentProductId: string;
+  categoryId: string;
+}
+
+const { currentProductId, categoryId } = Astro.props;
+
+const relatedProducts = await sanityClient.fetch(
+  `*[_type == "product" && references($categoryId) && _id != $currentProductId][0...4]{
+    _id,
+    title,
+    "slug": slug.current,
+    "imageUrl": image.asset->url,
+    description
+  }`,
+  { categoryId, currentProductId },
+);
+---
+
+<section class="py-16 px-8 lg:px-24 bg-gray-50">
+  <h2 class="text-3xl font-bold mb-8 text-yellow-500 font-nevduplenysh">
+    Похожие продукты
+  </h2>
+
+  {
+    relatedProducts?.length > 0 && (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {relatedProducts.map((product) => (
+          <a
+            href={`/${product.slug}`}
+            class="group block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow"
+            aria-label={`Перейти к продукту ${product.title}`}
+          >
+            <div class="aspect-w-16 aspect-h-9">
+              <OptimizedImage
+                src={product.imageUrl}
+                alt={product.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                width={400}
+              />
+            </div>
+
+            <div class="p-4">
+              <h3 class="text-xl font-semibold mb-2 group-hover:text-yellow-500 transition-colors">
+                {product.title}
+              </h3>
+              <p class="text-gray-600 text-sm line-clamp-3">
+                {product.description}
+              </p>
+              <div class="mt-3">
+                <span class="inline-block bg-yellow-500 text-white text-xs font-medium py-1 px-2 rounded-full">
+                  Подробнее
+                </span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    )
+  }
+</section>

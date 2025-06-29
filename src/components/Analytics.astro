@@ -1,0 +1,361 @@
+---
+// Компонент для интеграции Google Analytics и Яндекс.Метрики
+const GOOGLE_ANALYTICS_ID = "G-H5QP3K8TB7"; // Замените на реальный ID
+const YANDEX_METRIKA_ID = "103112577"; // Обновленный ID Яндекс.Метрики
+---
+
+<!-- Google Analytics -->
+<script
+  async
+  src="https://www.googletagmanager.com/gtag/js?id={GOOGLE_ANALYTICS_ID}"
+></script>
+<script define:vars={{ GOOGLE_ANALYTICS_ID }}>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("js", new Date());
+  gtag("config", GOOGLE_ANALYTICS_ID);
+</script>
+
+<!-- Яндекс.Метрика -->
+<script define:vars={{ YANDEX_METRIKA_ID }}>
+  (function (m, e, t, r, i, k, a) {
+    m[i] =
+      m[i] ||
+      function () {
+        (m[i].a = m[i].a || []).push(arguments);
+      };
+    m[i].l = 1 * new Date();
+    for (var j = 0; j < document.scripts.length; j++) {
+      if (document.scripts[j].src === r) {
+        return;
+      }
+    }
+    (k = e.createElement(t)),
+      (a = e.getElementsByTagName(t)[0]),
+      (k.async = 1),
+      (k.src = r),
+      a.parentNode.insertBefore(k, a);
+  })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+  ym(Number(YANDEX_METRIKA_ID), "init", {
+    clickmap: true,
+    trackLinks: true,
+    accurateTrackBounce: true,
+    webvisor: true,
+    ecommerce: "dataLayer",
+  });
+</script>
+<noscript
+  ><div>
+    <img
+      src={`https://mc.yandex.ru/watch/${YANDEX_METRIKA_ID}`}
+      style="position:absolute; left:-9999px;"
+      alt=""
+    />
+  </div></noscript
+>
+
+<!-- Пользовательские события -->
+<script define:vars={{ YANDEX_METRIKA_ID }}>
+  // Отслеживание просмотра продукта
+  function trackProductView(productId, productName, category) {
+    // Google Analytics
+    gtag("event", "view_item", {
+      items: [
+        {
+          id: productId,
+          name: productName,
+          category: category,
+        },
+      ],
+    });
+
+    // Яндекс.Метрика
+    ym(Number(YANDEX_METRIKA_ID), "params", {
+      productId: productId,
+      productName: productName,
+      category: category,
+    });
+  }
+
+  // Отслеживание поиска
+  function trackSearch(searchQuery) {
+    gtag("event", "search", {
+      search_term: searchQuery,
+    });
+
+    ym(Number(YANDEX_METRIKA_ID), "params", {
+      searchQuery: searchQuery,
+    });
+  }
+
+  // Отслеживание взаимодействия с контентом
+  function trackContentInteraction(contentType, contentId) {
+    gtag("event", "content_interaction", {
+      content_type: contentType,
+      content_id: contentId,
+    });
+
+    ym(Number(YANDEX_METRIKA_ID), "params", {
+      contentType: contentType,
+      contentId: contentId,
+    });
+  }
+
+  // Получение источников трафика
+  async function getSEOReport() {
+    // Здесь должен быть код для получения данных из Яндекс.Метрики API
+    // Этот код будет работать только если у вас есть доступ к API Яндекс.Метрики
+    // В веб-интерфейсе Яндекс.Метрики можно получить отчет:
+    // 1. Раздел "Источники" -> "Поисковые фразы"
+    // 2. Раздел "Отчеты" -> "Стандартные отчеты" -> "Источники" -> "Поисковые фразы"
+    console.log("Для просмотра поисковых фраз перейдите в Яндекс.Метрику:");
+    console.log(`https://metrika.yandex.ru/dashboard?id=${YANDEX_METRIKA_ID}`);
+    console.log("И откройте раздел 'Источники' -> 'Поисковые фразы'");
+
+    return "Для просмотра отчета по поисковым словам необходимо войти в интерфейс Яндекс.Метрики";
+  }
+
+  // Экспорт функций для использования в других компонентах
+  window.Analytics = {
+    trackProductView,
+    trackSearch,
+    trackContentInteraction,
+    getSEOReport,
+  };
+</script>
+
+<script>
+  // Глобальный объект аналитики
+  window.Analytics = {
+    // Отслеживание просмотра продукта
+    trackProductView: function(productId, productTitle, categoryTitle) {
+      console.log('Product View:', {
+        productId,
+        productTitle,
+        categoryTitle,
+        timestamp: new Date().toISOString(),
+        url: window.location.href
+      });
+      
+      // Отправка данных на сервер аналитики
+      this.sendEvent('product_view', {
+        product_id: productId,
+        product_title: productTitle,
+        category: categoryTitle
+      });
+    },
+
+    // Отслеживание кликов по рекомендациям
+    trackRecommendationClick: function(data) {
+      console.log('Recommendation Click:', {
+        ...data,
+        timestamp: new Date().toISOString(),
+        referrer: document.referrer
+      });
+      
+      this.sendEvent('recommendation_click', data);
+    },
+
+    // Отслеживание показов рекомендаций
+    trackRecommendationImpression: function(productIds, section) {
+      console.log('Recommendation Impression:', {
+        productIds,
+        section,
+        timestamp: new Date().toISOString()
+      });
+      
+      this.sendEvent('recommendation_impression', {
+        product_ids: productIds,
+        section: section
+      });
+    },
+
+    // Отслеживание времени на странице
+    trackTimeOnPage: function() {
+      const startTime = Date.now();
+      
+      window.addEventListener('beforeunload', () => {
+        const timeSpent = Math.round((Date.now() - startTime) / 1000);
+        
+        this.sendEvent('time_on_page', {
+          time_spent: timeSpent,
+          page_url: window.location.href
+        });
+      });
+    },
+
+    // Отслеживание скролла
+    trackScrollDepth: function() {
+      let maxScroll = 0;
+      let scrollTimer = null;
+      
+      window.addEventListener('scroll', () => {
+        const scrollPercent = Math.round(
+          (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
+        );
+        
+        if (scrollPercent > maxScroll) {
+          maxScroll = scrollPercent;
+        }
+        
+        // Отправляем данные с задержкой для оптимизации
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => {
+          if (maxScroll % 25 === 0 && maxScroll > 0) { // Отправляем каждые 25%
+            this.sendEvent('scroll_depth', {
+              max_scroll: maxScroll,
+              page_url: window.location.href
+            });
+          }
+        }, 1000);
+      });
+    },
+
+    // Отслеживание кликов по кнопкам CTA
+    trackCTAClick: function(buttonText, section) {
+      console.log('CTA Click:', {
+        buttonText,
+        section,
+        timestamp: new Date().toISOString()
+      });
+      
+      this.sendEvent('cta_click', {
+        button_text: buttonText,
+        section: section
+      });
+    },
+
+    // Отслеживание поиска
+    trackSearch: function(query, results) {
+      console.log('Search:', {
+        query,
+        results,
+        timestamp: new Date().toISOString()
+      });
+      
+      this.sendEvent('search', {
+        query: query,
+        results_count: results
+      });
+    },
+
+    // Отправка событий на сервер
+    sendEvent: function(eventName, data) {
+      const eventData = {
+        event: eventName,
+        data: data,
+        timestamp: new Date().toISOString(),
+        user_agent: navigator.userAgent,
+        page_url: window.location.href,
+        referrer: document.referrer,
+        session_id: this.getSessionId()
+      };
+
+      // В продакшене здесь будет отправка на реальный сервер аналитики
+      if (typeof gtag !== 'undefined') {
+        gtag('event', eventName, data);
+      }
+      
+      // Также сохраняем в localStorage для локальной аналитики
+      this.saveToLocalStorage(eventData);
+    },
+
+    // Получение ID сессии
+    getSessionId: function() {
+      let sessionId = sessionStorage.getItem('analytics_session_id');
+      if (!sessionId) {
+        sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        sessionStorage.setItem('analytics_session_id', sessionId);
+      }
+      return sessionId;
+    },
+
+    // Сохранение в localStorage
+    saveToLocalStorage: function(eventData) {
+      try {
+        const existingData = JSON.parse(localStorage.getItem('analytics_events') || '[]');
+        existingData.push(eventData);
+        
+        // Ограничиваем количество событий в localStorage (последние 100)
+        if (existingData.length > 100) {
+          existingData.splice(0, existingData.length - 100);
+        }
+        
+        localStorage.setItem('analytics_events', JSON.stringify(existingData));
+      } catch (error) {
+        console.warn('Failed to save analytics data to localStorage:', error);
+      }
+    },
+
+    // Получение статистики из localStorage
+    getLocalStats: function() {
+      try {
+        const events = JSON.parse(localStorage.getItem('analytics_events') || '[]');
+        
+        const stats = {
+          totalEvents: events.length,
+          eventTypes: {},
+          recentEvents: events.slice(-10)
+        };
+        
+        events.forEach(event => {
+          stats.eventTypes[event.event] = (stats.eventTypes[event.event] || 0) + 1;
+        });
+        
+        return stats;
+      } catch (error) {
+        console.warn('Failed to get analytics stats:', error);
+        return null;
+      }
+    },
+
+    // Инициализация аналитики
+    init: function() {
+      console.log('Analytics initialized');
+      
+      // Запускаем отслеживание времени на странице
+      this.trackTimeOnPage();
+      
+      // Запускаем отслеживание скролла
+      this.trackScrollDepth();
+      
+      // Отслеживаем клики по кнопкам с классом open-modal
+      document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('open-modal') || e.target.closest('.open-modal')) {
+          const button = e.target.classList.contains('open-modal') ? e.target : e.target.closest('.open-modal');
+          this.trackCTAClick(button.textContent.trim(), 'modal');
+        }
+      });
+
+      // Отслеживаем показы рекомендаций при загрузке страницы
+      setTimeout(() => {
+        const recommendationSections = document.querySelectorAll('[data-analytics="recommendations"]');
+        recommendationSections.forEach(section => {
+          const productIds = Array.from(section.querySelectorAll('[data-product-id]'))
+            .map(el => el.getAttribute('data-product-id'));
+          
+          if (productIds.length > 0) {
+            this.trackRecommendationImpression(productIds, section.getAttribute('data-section') || 'unknown');
+          }
+        });
+      }, 1000);
+    }
+  };
+
+  // Инициализируем аналитику при загрузке страницы
+  document.addEventListener('DOMContentLoaded', function() {
+    window.Analytics.init();
+  });
+
+  // Отслеживание ухода со страницы
+  window.addEventListener('beforeunload', function() {
+    // Отправляем финальные данные о сессии
+    window.Analytics.sendEvent('session_end', {
+      duration: Date.now() - performance.timing.navigationStart,
+      page_views: 1 // В реальном приложении это будет счетчик
+    });
+  });
+</script>

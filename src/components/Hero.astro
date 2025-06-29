@@ -1,0 +1,93 @@
+<section
+  class="relative flex items-center justify-start h-screen bg-cover bg-center overflow-hidden"
+  style="background-image: url('/images/hero.webp');"
+>
+  <!-- Градиентный оверлей -->
+  <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/70"></div>
+  
+  <!-- Декоративные элементы -->
+  <div class="absolute inset-0 opacity-20">
+    <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-yellow-500 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-yellow-400 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+  </div>
+
+  <!-- Контент -->
+  <div class="relative text-left z-10 p-8 lg:p-16 w-full">
+    <div class="max-w-4xl">
+      <h1
+        class="text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-bold text-white font-nevduplenysh tracking-wider leading-tight mb-8 animate-fade-in"
+      >
+        <span class="block">Драгоценные металлы</span>
+        <span class="block text-gradient">высшей пробы</span>
+      </h1>
+      
+      <p class="mt-8 lg:mt-12 text-white text-xl lg:text-3xl max-w-3xl font-gilroy leading-relaxed animate-slide-in">
+        ООО «ДМДК» — ведущий поставщик аффинированных драгоценных металлов. 
+        <span class="text-yellow-400 font-semibold">Блеск и надежность в каждом грамме.</span>
+      </p>
+      
+      <div class="mt-12 lg:mt-16 flex flex-col sm:flex-row gap-6 animate-fade-in" style="animation-delay: 0.3s;">
+        <button
+          class="open-modal group inline-flex items-center px-10 py-5 lg:px-14 lg:py-7 text-xl lg:text-2xl font-bold bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 text-black rounded-2xl shadow-2xl shadow-yellow-500/50 hover:shadow-yellow-400/70 hover:from-yellow-400 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105 font-gilroy"
+        >
+          <svg class="w-6 h-6 mr-3 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Оставить заявку
+        </button>
+        
+        <a 
+          href="/#products"
+          class="group inline-flex items-center px-10 py-5 lg:px-14 lg:py-7 text-xl lg:text-2xl font-bold bg-white/10 backdrop-blur-sm text-white rounded-2xl border-2 border-white/20 hover:bg-white hover:text-gray-900 transition-all duration-300 transform hover:scale-105 font-gilroy"
+        >
+          <svg class="w-6 h-6 mr-3 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0l-4-4m4 4l-4 4"></path>
+          </svg>
+          Наша продукция
+        </a>
+      </div>
+
+      <!-- Статистика -->
+      <div class="mt-16 lg:mt-20 grid grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in max-w-4xl" style="animation-delay: 0.6s;">
+        <div class="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300">
+          <div class="text-4xl lg:text-5xl font-bold text-yellow-400 font-nevduplenysh mb-2">15+</div>
+          <div class="text-white font-gilroy font-medium">лет опыта</div>
+        </div>
+        <div class="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300">
+          <div class="text-4xl lg:text-5xl font-bold text-yellow-400 font-nevduplenysh mb-2">99.9%</div>
+          <div class="text-white font-gilroy font-medium">чистота металлов</div>
+        </div>
+        <div class="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300">
+          <div class="text-4xl lg:text-5xl font-bold text-yellow-400 font-nevduplenysh mb-2">50+</div>
+          <div class="text-white font-gilroy font-medium">городов</div>
+        </div>
+        <div class="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300">
+          <div class="text-4xl lg:text-5xl font-bold text-yellow-400 font-nevduplenysh mb-2">24/7</div>
+          <div class="text-white font-gilroy font-medium">поддержка</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Двигающаяся стрелочка с подсказкой -->
+  <div class="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+    <div class="flex flex-col items-center">
+      <div class="text-lg mb-3 font-gilroy text-white/80">Листай ниже</div>
+      <div class="w-8 h-8 border-2 border-yellow-400 rounded-full flex items-center justify-center">
+        <svg
+          class="w-4 h-4 text-yellow-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>

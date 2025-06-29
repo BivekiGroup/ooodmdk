@@ -1,0 +1,185 @@
+---
+import { sanityClient } from "sanity:client";
+import Layout from "../layouts/Layout.astro";
+import ProductHead from "../components/ProductHead.astro";
+import OptimizedImage from "../components/OptimizedImage.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import RelatedProducts from "../components/RelatedProducts.astro";
+import RecommendedProducts from "../components/RecommendedProducts.astro";
+import InfoBanner from "../components/InfoBanner.astro";
+import Hero from "../components/Hero.astro";
+
+const { slug } = Astro.params;
+
+const product = await sanityClient.fetch(
+  `*[_type == "product" && slug.current == $slug][0]{
+    _id,
+    title,
+    description,
+    descriptions,
+    "imageUrl": image.asset->url,
+    items,
+    "category": *[_type == "category" && references(^._id)][0]{
+      _id,
+      title,
+      "slug": slug.current
+    }
+  }`,
+  { slug },
+);
+
+if (!product) {
+  return Astro.redirect("/404");
+}
+
+const breadcrumbItems = [
+  {
+    title: "Продукция",
+    href: "/#products",
+  },
+];
+
+// Добавляем категорию в хлебные крошки только если она существует
+if (product.category) {
+  breadcrumbItems.push({
+    title: product.category.title,
+    href: `/#${product.category.slug || product.category.title.toLowerCase()}`,
+  });
+}
+
+// Добавляем текущий продукт
+breadcrumbItems.push({
+  title: product.title,
+  href: `/${slug}`,
+});
+
+// Для отслеживания просмотра продукта в аналитике
+const analyticsScript = `
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.Analytics && window.Analytics.trackProductView) {
+        window.Analytics.trackProductView(
+          "${product._id}",
+          "${product.title}",
+          "${product.category?.title || ''}"
+        );
+      }
+    });
+  </script>
+`;
+---
+
+<Layout>
+  <Fragment slot="head">
+    <ProductHead
+      title={product.title}
+      description={product.description}
+      imageUrl={product.imageUrl}
+      slug={slug}
+      category={product.category?.title || ""}
+    />
+    <Fragment set:html={analyticsScript} />
+  </Fragment>
+
+  <Hero />
+
+  <Breadcrumbs items={breadcrumbItems} />
+
+  <article
+    class="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white py-20 px-8 lg:px-24 relative overflow-hidden"
+    data-product-id={product._id}
+  >
+    <!-- Декоративные элементы -->
+    <div class="absolute inset-0 opacity-5">
+      <div class="absolute top-20 left-20 w-32 h-32 bg-yellow-500 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-20 right-20 w-40 h-40 bg-yellow-400 rounded-full blur-3xl"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto">
+      <h1
+        class="text-5xl lg:text-7xl font-bold mb-12 text-yellow-500 font-nevduplenysh text-center"
+      >
+        {product.title}
+      </h1>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div class="relative group">
+          <div class="overflow-hidden rounded-3xl shadow-2xl">
+            <OptimizedImage
+              src={product.imageUrl}
+              alt={product.title}
+              className="w-full h-auto transition-transform duration-700 group-hover:scale-110"
+              width={800}
+              loading="eager"
+            />
+          </div>
+        </div>
+
+        <div class="space-y-8">
+          <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700">
+            <h2 class="text-2xl font-bold text-yellow-400 mb-6 font-gilroy">Описание продукта</h2>
+            <p class="text-lg leading-relaxed text-gray-300 font-gilroy">{product.description}</p>
+          </div>
+
+          {
+            product.descriptions && product.descriptions.length > 0 && (
+              <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700">
+                <h2 class="text-2xl font-bold text-yellow-400 mb-6 font-gilroy">Подробное описание</h2>
+                <div class="space-y-4">
+                  {product.descriptions.map((desc) => (
+                    <p class="text-base text-gray-300 leading-relaxed font-gilroy">{desc}</p>
+                  ))}
+                </div>
+              </div>
+            )
+          }
+
+          {
+            product.items && product.items.length > 0 && (
+              <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700">
+                <h2 class="text-2xl font-bold text-yellow-400 mb-6 font-gilroy">Характеристики</h2>
+                <ul class="space-y-3">
+                  {product.items.map((item) => (
+                    <li class="flex items-center space-x-3">
+                      <div class="w-2 h-2 bg-yellow-500 rounded-full flex-shrink-0" />
+                      <span class="text-gray-300 font-gilroy">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+
+          <!-- Кнопка заказа -->
+          <div class="bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 rounded-2xl p-8 border border-yellow-500/30">
+            <h3 class="text-xl font-bold text-yellow-400 mb-4 font-gilroy">Заинтересовал этот продукт?</h3>
+            <p class="text-gray-300 mb-6 font-gilroy">Свяжитесь с нами для получения подробной информации и оформления заказа</p>
+            <button class="open-modal w-full inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black rounded-xl hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 font-gilroy font-semibold shadow-lg shadow-yellow-500/25">
+              <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+              Заказать продукт
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <InfoBanner />
+  </article>
+
+  {
+    product.category && (
+      <RelatedProducts
+        currentProductId={product._id}
+        categoryId={product.category._id}
+      />
+    )
+  }
+
+  <RecommendedProducts
+    currentProductSlug={slug}
+    category={product.category?.title}
+    title="Также может заинтересовать"
+  />
+</Layout>

@@ -1,0 +1,167 @@
+---
+import { sanityClient } from "sanity:client";
+
+const categories =
+  await sanityClient.fetch(`*[_type == "category"] | order(order asc){
+  title,
+  slug,
+  color,
+  elements[] {
+    element,
+    elementNumber
+  },
+  "products": *[_type == "product" && references(^._id)] | order(_createdAt desc){
+    title,
+    slug,
+    description,
+    "imageUrl": image.asset->url,
+    items
+  }
+}`);
+---
+
+<section id="products" class="bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white py-20 px-8 lg:px-24 relative overflow-hidden">
+  <!-- Декоративные элементы -->
+  <div class="absolute inset-0 opacity-5">
+    <div class="absolute top-20 left-20 w-32 h-32 bg-yellow-500 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-20 right-20 w-40 h-40 bg-yellow-400 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-yellow-300 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="relative z-10 max-w-7xl mx-auto">
+    <h2
+      class="text-center text-6xl lg:text-8xl font-bold text-yellow-500 mb-16 font-nevduplenysh"
+    >
+      ПРОДУКЦИЯ
+    </h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {
+        categories.map((category, index) => (
+          <div
+            class={`group relative rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 hover:transform hover:scale-105 ${
+              index === categories.length - 1 ? "lg:col-span-3" : ""
+            }`}
+            style={`background: linear-gradient(135deg, ${category.color}, ${category.color}dd); min-height: ${
+              300 + category.elements.length * 18
+            }px;`}
+          >
+            <!-- Градиентный оверлей -->
+            <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-black/60"></div>
+            
+            <!-- Декоративные элементы -->
+            <div class={`absolute top-4 right-4 z-20 ${category.elements.length > 2 ? 'grid grid-cols-2 gap-1 max-w-[80px]' : 'flex flex-col space-y-2 max-w-[70px]'}`}>
+              {category.elements.map((element, idx) => (
+                <div
+                  class={`relative flex flex-col items-center justify-center rounded-lg text-white font-bold shadow-lg backdrop-blur-sm border border-white/20 shrink-0 ${category.elements.length > 2 ? 'w-9 h-9' : 'w-14 h-14'}`}
+                  style={`background: linear-gradient(135deg, ${category.color}ee, ${category.color}aa);`}
+                >
+                  <span class={category.elements.length > 2 ? 'text-xs' : 'text-sm'}>{element.element}</span>
+                  <span class={`font-normal opacity-90 ${category.elements.length > 2 ? 'text-[10px]' : 'text-xs'}`}>
+                    {element.elementNumber}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div class="relative z-10 p-8 h-full flex flex-col justify-between">
+              <div class="pr-20">
+                <h3 class="text-3xl font-bold mb-6 text-white font-nevduplenysh break-words leading-tight">
+                  {category.title.toUpperCase()}
+                </h3>
+              </div>
+
+              <div class="mt-auto">
+                <button
+                  class="w-full text-xl font-semibold py-4 px-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white transition-all duration-300 flex items-center justify-center hover:bg-white hover:text-gray-900 group-hover:transform group-hover:scale-105 font-gilroy shadow-lg"
+                  onclick={`toggleDropdown('${category.slug.current}')`}
+                >
+                  Показать товары
+                  <svg
+                    id={`arrow-${category.slug.current}`}
+                    class="ml-3 w-6 h-6 transform transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                <div id={`dropdown-${category.slug.current}`} class="mt-6 hidden">
+                  <div class="bg-black/30 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+                    <ul class="text-lg space-y-3 text-white font-gilroy">
+                      {category.products.map((product) => (
+                        <li class="group/item">
+                          <a
+                            href={`/${product.slug.current}`}
+                            class="block hover:text-yellow-400 transition-colors duration-300 font-gilroy p-3 rounded-xl hover:bg-white/5"
+                          >
+                            <div class="flex items-center">
+                              <svg class="w-4 h-4 mr-3 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                              </svg>
+                              {product.title}
+                            </div>
+                            {product.description && (
+                              <p class="ml-7 text-sm text-gray-300 mt-2 line-clamp-2 font-gilroy">
+                                {product.description}
+                              </p>
+                            )}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  // Определяем функцию в глобальном контексте
+  (window as any).toggleDropdown = (categorySlug: string) => {
+    const dropdown = document.getElementById(`dropdown-${categorySlug}`);
+    const arrow = document.getElementById(`arrow-${categorySlug}`);
+
+    if (dropdown) {
+      if (dropdown.classList.contains("hidden")) {
+        dropdown.classList.remove("hidden");
+        if (arrow) arrow.style.transform = "rotate(180deg)";
+      } else {
+        dropdown.classList.add("hidden");
+        if (arrow) arrow.style.transform = "rotate(0deg)";
+      }
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll("[onclick^='toggleDropdown']");
+    buttons.forEach((button) => {
+      (button as HTMLElement).onclick = function (e) {
+        e.preventDefault();
+        const categorySlug = this.getAttribute("onclick")?.match(/'([^']+)'/)?.[1];
+        if (categorySlug) {
+          (window as any).toggleDropdown(categorySlug);
+        }
+      };
+    });
+  });
+</script>
+
+<style>
+  svg {
+    transition: transform 0.3s ease;
+  }
+</style>

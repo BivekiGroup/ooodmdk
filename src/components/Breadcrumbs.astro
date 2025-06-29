@@ -1,0 +1,98 @@
+---
+interface Props {
+  items: {
+    title: string;
+    href: string;
+  }[];
+}
+
+const { items } = Astro.props;
+const SITE_URL = "https://ooodmdk.ru";
+---
+
+<nav aria-label="Хлебные крошки" class="py-4 px-8 lg:px-24">
+  <ol
+    class="flex flex-wrap items-center space-x-2 text-sm text-gray-600"
+    itemscope
+    itemtype="https://schema.org/BreadcrumbList"
+  >
+    <li
+      class="flex items-center"
+      itemprop="itemListElement"
+      itemscope
+      itemtype="https://schema.org/ListItem"
+    >
+      <a
+        href={SITE_URL}
+        class="hover:text-yellow-500 transition-colors"
+        itemprop="item"
+      >
+        <span itemprop="name">Главная</span>
+      </a>
+      <meta itemprop="position" content="1" />
+      <span class="mx-2">/</span>
+    </li>
+
+    {
+      items.map((item, index) => (
+        <li
+          class="flex items-center"
+          itemprop="itemListElement"
+          itemscope
+          itemtype="https://schema.org/ListItem"
+        >
+          <a
+            href={item.href}
+            class="hover:text-yellow-500 transition-colors"
+            itemprop="item"
+          >
+            <span itemprop="name">{item.title}</span>
+          </a>
+          <meta itemprop="position" content={`${index + 2}`} />
+          {index < items.length - 1 && <span class="mx-2">/</span>}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<script>
+  // Добавляем микроразметку для поисковых систем
+  const breadcrumbsSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Главная",
+        item: "https://ooodmdk.ru",
+      },
+    ],
+  };
+
+  // Добавляем остальные элементы из props
+  const items = document.querySelectorAll('[itemprop="itemListElement"]');
+  items.forEach((item, index) => {
+    if (index > 0) {
+      // пропускаем "Главная"
+      const name = item.querySelector('[itemprop="name"]')?.textContent;
+      const href = item
+        .querySelector('[itemprop="item"]')
+        ?.getAttribute("href");
+
+      breadcrumbsSchema.itemListElement.push({
+        "@type": "ListItem",
+        position: index + 1,
+        name: name,
+        item: href,
+      });
+    }
+  });
+
+  // Добавляем микроразметку на страницу
+  const script = document.createElement("script");
+  script.type = "application/ld+json";
+  script.text = JSON.stringify(breadcrumbsSchema);
+  document.head.appendChild(script);
+</script>

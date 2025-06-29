@@ -1,0 +1,42 @@
+<button
+  id="scroll-to-top"
+  class="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-yellow-500 to-yellow-600 text-black rounded-2xl shadow-2xl shadow-yellow-500/25 hover:shadow-yellow-400/40 hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 transform hover:scale-110 z-50 opacity-0 invisible"
+  aria-label="Прокрутить наверх"
+>
+  <svg
+    class="w-6 h-6 mx-auto"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+  </svg>
+</button>
+
+<script>
+  const scrollToTopButton = document.getElementById("scroll-to-top");
+
+  // Показать/скрыть кнопку при прокрутке
+  window.addEventListener("scroll", () => {
+    if (window.pageYOffset > 300) {
+      scrollToTopButton?.classList.remove("opacity-0", "invisible");
+      scrollToTopButton?.classList.add("opacity-100", "visible");
+    } else {
+      scrollToTopButton?.classList.add("opacity-0", "invisible");
+      scrollToTopButton?.classList.remove("opacity-100", "visible");
+    }
+  });
+
+  // Прокрутка наверх при клике
+  scrollToTopButton?.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
+</script>

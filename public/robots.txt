@@ -1,0 +1,29 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /cms/
+
+# Yandex specific
+User-agent: Yandex
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /cms/
+Clean-param: utm_source&utm_medium&utm_campaign
+
+# Google specific
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /cms/
+
+# Sitemap
+Sitemap: https://ooodmdk.ru/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 5
+
+# Host
+Host: https://ooodmdk.ru

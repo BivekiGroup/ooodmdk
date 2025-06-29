@@ -1,0 +1,130 @@
+---
+import Header from "../components/Header.astro";
+import Up from "../components/Up.astro";
+import Footer from "../components/Footer.astro";
+import FloatingFAQ from "../components/FloatingFAQ.astro";
+import Analytics from "../components/Analytics.astro";
+import "../styles/tailwind.css";
+
+// Оптимизированные ключевые слова для SEO
+const commonKeywords =
+  "драгоценные металлы, золото, серебро, платина, производство, переработка, слитки, проволоки, гранулы, порошки, аффинаж, металлургия";
+const silverKeywords =
+  "аноды серебряные, серебряные аноды, анод серебряный, серебро 999, чистое серебро, анодирование серебром, серебряная проволока, техническое серебро, серебряные изделия";
+const goldKeywords =
+  "золотые сплавы, золотые слитки, очистка золота, золото для ювелиров, золотые аноды";
+const allKeywords = `${commonKeywords}, ${silverKeywords}, ${goldKeywords}`;
+---
+
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Основные мета-теги -->
+    <title>
+      ООО «ДМДК» - Производство и переработка драгоценных металлов, серебряные
+      аноды
+    </title>
+    <meta
+      name="description"
+      content="ООО «ДМДК» - ведущий производитель серебряных анодов и других изделий из драгоценных металлов. Предлагаем серебро, золото и платину в различных формах: аноды серебряные, проволока, гранулы. Высокое качество и надежность."
+    />
+    <meta name="keywords" content={allKeywords} />
+    <meta name="author" content="ООО «ДМДК»" />
+
+    <!-- Мета-теги для поисковых систем -->
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="google" content="notranslate" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#111827" />
+
+    <!-- Open Graph для социальных сетей -->
+    <meta
+      property="og:title"
+      content="ООО «ДМДК» - Производство и переработка драгоценных металлов, серебряные аноды"
+    />
+    <meta
+      property="og:description"
+      content="Мы предлагаем высококачественные серебряные аноды и другие изделия из драгоценных металлов. Наши услуги включают переработку и аффинаж металлов."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ooodmdk.ru" />
+    <meta
+      property="og:image"
+      content="https://i.ytimg.com/vi/duJNQ-EJ5nY/maxresdefault.jpg"
+    />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:site_name" content="ООО «ДМДК»" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="ООО «ДМДК» - Производство и переработка драгоценных металлов, серебряные аноды"
+    />
+    <meta
+      name="twitter:description"
+      content="Мы предлагаем высококачественные серебряные аноды и другие изделия из драгоценных металлов. Наши услуги включают переработку и аффинаж металлов."
+    />
+    <meta
+      name="twitter:image"
+      content="https://i.ytimg.com/vi/duJNQ-EJ5nY/maxresdefault.jpg"
+    />
+
+    <!-- Безопасность -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' https: data: mc.yandex.ru; script-src 'self' 'unsafe-inline' 'unsafe-eval' www.googletagmanager.com mc.yandex.ru; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://api.telegram.org;"
+    />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ooodmdk.ru" />
+
+    <!-- SVG Favicon -->
+    <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles/global.css" />
+
+    <!-- Schema.org разметка -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "ООО «ДМДК»",
+        "description": "Производство и переработка драгоценных металлов, серебряные аноды",
+        "url": "https://ooodmdk.ru",
+        "logo": "https://ooodmdk.ru/logo.svg",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+7-XXX-XXX-XXXX",
+          "contactType": "customer service",
+          "areaServed": "RU",
+          "availableLanguage": "Russian"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "RU",
+          "addressLocality": "Россия"
+        },
+        "sameAs": ["https://vk.com/ooodmdk", "https://t.me/ooodmdk"],
+        "keywords": "${allKeywords}"
+      }
+    </script>
+
+    <!-- Analytics -->
+    <Analytics />
+
+    <slot name="head" />
+  </head>
+  <body class="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+    <Header />
+    <slot />
+    <FloatingFAQ />
+    <Up />
+    <Footer />
+  </body>
+</html>

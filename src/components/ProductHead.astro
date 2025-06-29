@@ -1,0 +1,93 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  imageUrl: string;
+  slug: string;
+  category?: string;
+}
+
+const { title, description = "", imageUrl, slug, category = "" } = Astro.props;
+const SITE_URL = "https://ooodmdk.ru";
+const fullUrl = `${SITE_URL}/${slug}`;
+
+// Безопасное получение части описания
+const descriptionPreview = description ? description.slice(0, 150) : "";
+
+// Расширенные ключевые слова для продукта
+const productKeywords = title.toLowerCase().includes("анод")
+  ? `аноды серебряные, серебряные аноды, анод серебряный, серебряный анод, ${title.toLowerCase()}, серебро 999, чистое серебро, анодирование серебром`
+  : title.toLowerCase().includes("серебр")
+    ? `серебро, изделия из серебра, ${title.toLowerCase()}, драгоценные металлы, серебро 999 пробы, чистое серебро`
+    : `${title.toLowerCase()}, драгоценные металлы, ${category.toLowerCase()}, ДМДК, производство металлов`;
+---
+
+<!-- Основные мета-теги -->
+<title>
+  {title} | ООО «ДМДК» - Производство и переработка драгоценных металлов
+</title>
+<meta
+  name="description"
+  content={`${description} | Производитель: ООО «ДМДК» | Высокое качество | Доставка по всей России`}
+/>
+<meta
+  name="keywords"
+  content={`${productKeywords}, драгоценные металлы, производство ДМДК, ${category}`}
+/>
+
+<!-- Open Graph -->
+<meta
+  property="og:title"
+  content={`${title} | ООО «ДМДК» - Производство и переработка драгоценных металлов`}
+/>
+<meta property="og:description" content={description} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:url" content={fullUrl} />
+<meta property="og:type" content="product" />
+<meta property="og:site_name" content="ООО «ДМДК»" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta
+  name="twitter:title"
+  content={`${title} | ООО «ДМДК» - Производство и переработка драгоценных металлов`}
+/>
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />
+
+<!-- Schema.org разметка -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "${title}",
+    "description": "${description}",
+    "image": "${imageUrl}",
+    "url": "${fullUrl}",
+    "category": "${category}",
+    "brand": {
+      "@type": "Brand",
+      "name": "ООО «ДМДК»",
+      "description": "Производство и переработка драгоценных металлов",
+      "url": "https://ooodmdk.ru"
+    },
+    "manufacturer": {
+      "@type": "Organization",
+      "name": "ООО «ДМДК»",
+      "description": "Производство и переработка драгоценных металлов",
+      "url": "https://ooodmdk.ru"
+    },
+    "offers": {
+      "@type": "Offer",
+      "availability": "https://schema.org/InStock",
+      "seller": {
+        "@type": "Organization",
+        "name": "ООО «ДМДК»"
+      }
+    },
+    "keywords": "${productKeywords}"
+  }
+</script>
+
+<!-- Canonical URL -->
+<link rel="canonical" href={fullUrl} />

@@ -1,0 +1,51 @@
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nevduplenysh";
+  src: url("/fonts/Nevduplenysh.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Базовые стили */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #f7f7f7;
+  color: #2c2c2c;
+}
+
+/* Кастомные стили */
+.social-icon {
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.1);
+  color: #facc15;
+}
+
+.social-icon img {
+  transition: filter 0.3s ease;
+}
+
+.social-icon:hover img {
+  filter: brightness(1.2) saturate(1.2);
+}

@@ -1,0 +1,46 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  className?: string;
+  width?: number;
+  height?: number;
+  loading?: "lazy" | "eager";
+}
+
+const {
+  src,
+  alt,
+  className = "",
+  width,
+  height,
+  loading = "lazy",
+} = Astro.props;
+
+// Функция для получения оптимизированного URL изображения из Sanity
+function getOptimizedImageUrl(imageUrl: string, width?: number): string {
+  if (!imageUrl.includes("sanity.io")) return imageUrl;
+
+  const baseUrl = imageUrl.split("?")[0];
+  const params = new URLSearchParams();
+
+  params.append("auto", "format");
+  params.append("q", "80"); // качество
+  if (width) params.append("w", width.toString());
+
+  return `${baseUrl}?${params.toString()}`;
+}
+
+const optimizedSrc = getOptimizedImageUrl(src, width);
+---
+
+<img
+  src={optimizedSrc}
+  alt={alt}
+  class={className}
+  width={width}
+  height={height}
+  loading={loading}
+  decoding="async"
+  onError="this.onerror=null; this.src='/placeholder.jpg';"
+/>

@@ -1,0 +1,116 @@
+---
+// Компонент информационного блока с ссылками на важные страницы
+---
+
+<section class="py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-black relative overflow-hidden">
+  <!-- Декоративные элементы -->
+  <div class="absolute inset-0 opacity-5">
+    <div class="absolute top-20 left-20 w-32 h-32 bg-yellow-500 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-20 right-20 w-40 h-40 bg-yellow-400 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-yellow-300 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="container mx-auto px-8 lg:px-24 relative z-10">
+    <div class="text-center mb-16">
+      <h2 class="text-5xl lg:text-6xl font-bold text-white mb-6 font-nevduplenysh">
+        Экспертиза и сервис
+      </h2>
+      <p class="text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto font-gilroy leading-relaxed">
+        Профессиональная поддержка, экспертные знания и комплексные решения для вашего бизнеса
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <!-- Блог -->
+      <div class="group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700 hover:border-yellow-500/50 transition-all duration-500 hover:transform hover:scale-105">
+        <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="relative z-10">
+          <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center mb-6 group-hover:shadow-lg group-hover:shadow-yellow-500/25 transition-shadow duration-500">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-4 font-gilroy">Экспертный блог</h3>
+          <p class="text-gray-300 mb-6 font-gilroy leading-relaxed">Глубокие знания о драгоценных металлах, технологиях аффинажа и рыночных тенденциях</p>
+          <a href="/blog" class="inline-flex items-center text-yellow-400 hover:text-yellow-300 font-gilroy font-semibold transition-colors group-hover:translate-x-1 transform duration-300">
+            Читать статьи
+            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700 hover:border-blue-500/50 transition-all duration-500 hover:transform hover:scale-105">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="relative z-10">
+          <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 group-hover:shadow-lg group-hover:shadow-blue-500/25 transition-shadow duration-500">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-4 font-gilroy">Вопросы и ответы</h3>
+          <p class="text-gray-300 mb-6 font-gilroy leading-relaxed">Исчерпывающие ответы на вопросы о продукции, сотрудничестве и технических решениях</p>
+          <a href="/faq" class="inline-flex items-center text-blue-400 hover:text-blue-300 font-gilroy font-semibold transition-colors group-hover:translate-x-1 transform duration-300">
+            Найти ответы
+            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Наши города -->
+      <div class="group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700 hover:border-green-500/50 transition-all duration-500 hover:transform hover:scale-105">
+        <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="relative z-10">
+          <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-6 group-hover:shadow-lg group-hover:shadow-green-500/25 transition-shadow duration-500">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-4 font-gilroy">Региональная сеть</h3>
+          <p class="text-gray-300 mb-6 font-gilroy leading-relaxed">Широкая география присутствия, надежная логистика и локальная поддержка клиентов</p>
+          <a href="/cities" class="inline-flex items-center text-green-400 hover:text-green-300 font-gilroy font-semibold transition-colors group-hover:translate-x-1 transform duration-300">
+            География работы
+            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Реквизиты -->
+      <div class="group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700 hover:border-purple-500/50 transition-all duration-500 hover:transform hover:scale-105">
+        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="relative z-10">
+          <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:shadow-lg group-hover:shadow-purple-500/25 transition-shadow duration-500">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-4 font-gilroy">Документооборот</h3>
+          <p class="text-gray-300 mb-6 font-gilroy leading-relaxed">Полная юридическая информация, реквизиты и документы для ведения бизнеса</p>
+          <a href="/requisites" class="inline-flex items-center text-purple-400 hover:text-purple-300 font-gilroy font-semibold transition-colors group-hover:translate-x-1 transform duration-300">
+            Документы
+            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Дополнительная информация -->
+    <div class="mt-16 text-center">
+      <div class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 rounded-full border border-yellow-500/30">
+        <svg class="w-5 h-5 text-yellow-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span class="text-yellow-300 font-gilroy">Профессиональная поддержка 24/7</span>
+      </div>
+    </div>
+  </div>
+</section> 

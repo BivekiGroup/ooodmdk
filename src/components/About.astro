@@ -1,0 +1,92 @@
+---
+import { sanityClient } from "sanity:client";
+
+const about = await sanityClient.fetch(`*[_type == "about"][0]{
+  title,
+  paragraph1,
+  paragraph2,
+  paragraph3,
+  paragraph4,
+  paragraph5,
+  paragraph6,
+  paragraph7,
+  paragraph8,
+  "imageUrls": images[].asset->url
+}`);
+---
+
+<section
+  id="about"
+  class="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white py-20 px-8 lg:px-24 relative overflow-hidden"
+>
+  <!-- Декоративные элементы -->
+  <div class="absolute inset-0 opacity-5">
+    <div class="absolute top-32 left-32 w-40 h-40 bg-yellow-500 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-32 right-32 w-48 h-48 bg-yellow-400 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between max-w-7xl mx-auto">
+    <!-- Левая часть: заголовок и описание -->
+    <div class="lg:w-1/2 mb-12 lg:mb-0 lg:pr-16">
+      <h2
+        class="text-6xl lg:text-8xl font-bold text-yellow-500 mb-8 font-nevduplenysh leading-tight"
+      >
+        {about.title}
+      </h2>
+      <div class="text-lg lg:text-xl text-gray-300 leading-relaxed font-gilroy">
+        <p class="text-2xl text-white font-semibold mb-4">{about.paragraph1}</p>
+        <p class="mb-3">{about.paragraph2}</p>
+        <p class="mb-3">{about.paragraph3}</p>
+        <p class="mb-3">{about.paragraph4}</p>
+        <p class="mb-3">{about.paragraph5}</p>
+        <p class="mb-3">{about.paragraph6}</p>
+        <p class="mb-3">{about.paragraph7}</p>
+        <p>{about.paragraph8}</p>
+      </div>
+      
+      <!-- Блок быстрых ссылок -->
+      <div class="mt-12 flex flex-wrap gap-4">
+        <a href="/cities" class="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black rounded-xl hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 font-gilroy font-semibold shadow-lg shadow-yellow-500/25">
+          <svg class="w-5 h-5 mr-3 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+          Наши города
+        </a>
+        <a href="/requisites" class="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-gray-700 to-gray-800 text-white rounded-xl hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 font-gilroy font-semibold border border-gray-600 hover:border-gray-500">
+          <svg class="w-5 h-5 mr-3 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          Реквизиты
+        </a>
+      </div>
+    </div>
+
+    <!-- Правая часть: коллаж из изображений -->
+    <div class="lg:w-1/2 grid grid-cols-2 gap-6">
+      {
+        about.imageUrls.map((imageUrl, index) => (
+          <div class="group relative overflow-hidden rounded-2xl shadow-2xl hover:shadow-yellow-500/20 transition-all duration-500 transform hover:scale-105">
+            <img
+              src={imageUrl}
+              alt={`О нас изображение ${index + 1}`}
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  p {
+    line-height: 1.8;
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+</style>
