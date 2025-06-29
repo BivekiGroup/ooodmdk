@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ooodmdk-app
+    restart: unless-stopped
+    ports:
+      - "3016:4321"
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=4321
+      # Sanity переменные окружения
+      - SANITY_PROJECT_ID=${SANITY_PROJECT_ID:-hngg8xd3}
+      - SANITY_DATASET=${SANITY_DATASET:-production}
+      - SANITY_API_VERSION=${SANITY_API_VERSION:-2023-05-03}
+      - SANITY_TOKEN=${SANITY_TOKEN:-}
+      # Дополнительные переменные
+      - PUBLIC_SITE_URL=${PUBLIC_SITE_URL:-http://localhost:4321}
+    env_file:
+      - stack.env
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:4321/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  app-data:
+    driver: local 
