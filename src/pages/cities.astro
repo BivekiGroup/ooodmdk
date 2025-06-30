@@ -129,60 +129,60 @@ const deliveryInfo = [
   <Breadcrumbs items={breadcrumbItems} />
 
   <!-- Основной контент -->
-  <main class="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white py-20 px-8 lg:px-24 relative overflow-hidden">
+  <main class="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 xl:px-24 relative overflow-hidden">
     <!-- Декоративные элементы -->
     <div class="absolute inset-0 opacity-10">
-      <div class="absolute top-32 left-32 w-64 h-64 bg-yellow-500 rounded-full blur-3xl animate-pulse"></div>
-      <div class="absolute bottom-32 right-32 w-80 h-80 bg-yellow-400 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
-      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-yellow-300 rounded-full blur-3xl animate-pulse opacity-30" style="animation-delay: 4s;"></div>
+      <div class="absolute top-16 sm:top-32 left-8 sm:left-32 w-32 sm:w-64 h-32 sm:h-64 bg-yellow-500 rounded-full blur-3xl animate-pulse"></div>
+      <div class="absolute bottom-16 sm:bottom-32 right-8 sm:right-32 w-40 sm:w-80 h-40 sm:h-80 bg-yellow-400 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 sm:w-96 h-48 sm:h-96 bg-yellow-300 rounded-full blur-3xl animate-pulse opacity-30" style="animation-delay: 4s;"></div>
     </div>
 
-    <div class="relative z-10 max-w-7xl mx-auto space-y-20">
+    <div class="relative z-10 max-w-7xl mx-auto space-y-12 sm:space-y-16 lg:space-y-20">
       <!-- Заголовок -->
       <div class="text-center">
-        <h1 class="text-6xl lg:text-8xl font-bold text-yellow-500 mb-8 font-nevduplenysh leading-tight animate-fade-in">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-8xl font-bold text-yellow-500 mb-6 sm:mb-8 font-nevduplenysh leading-tight animate-fade-in">
           Наши города
         </h1>
-        <p class="text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto font-gilroy leading-relaxed">
+        <p class="text-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto font-gilroy leading-relaxed px-4">
           География присутствия ООО «ДМДК» охватывает ключевые регионы России. 
           <span class="text-yellow-400 font-semibold">Мы всегда рядом с нашими клиентами.</span>
         </p>
       </div>
 
       <!-- География присутствия -->
-      <section class="bg-black/40 backdrop-blur-sm rounded-3xl p-8 lg:p-12 border border-yellow-500/20 hover:border-yellow-500/40 transition-all duration-500">
-        <h2 class="text-4xl lg:text-5xl font-bold text-yellow-500 mb-12 text-center font-nevduplenysh">
+      <section class="bg-black/40 backdrop-blur-sm rounded-3xl p-4 sm:p-6 lg:p-8 xl:p-12 border border-yellow-500/20 hover:border-yellow-500/40 transition-all duration-500">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-yellow-500 mb-8 lg:mb-12 text-center font-nevduplenysh">
           География присутствия
         </h2>
         
-        <div class="text-center mb-12">
-          <p class="text-2xl text-white font-gilroy">
-            ООО «ДМДК» работает в <span class="text-yellow-400 font-bold text-3xl">{cities.length}</span> крупнейших городах России
+        <div class="text-center mb-8 lg:mb-12">
+          <p class="text-xl sm:text-2xl text-white font-gilroy px-4">
+            ООО «ДМДК» работает в <span class="text-yellow-400 font-bold text-2xl sm:text-3xl">{cities.length}</span> крупнейших городах России
           </p>
         </div>
         
         <!-- Интерактивная карта-схема -->
-        <div class="relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 lg:p-12 rounded-2xl border border-gray-700/50 min-h-96">
+        <div class="relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-4 sm:p-6 lg:p-8 xl:p-12 rounded-2xl border border-gray-700/50 min-h-96">
           <div class="text-center">
-            <h3 class="text-3xl font-bold text-yellow-400 mb-8 font-nevduplenysh">Карта России</h3>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <h3 class="text-2xl sm:text-3xl font-bold text-yellow-400 mb-6 lg:mb-8 font-nevduplenysh">Карта России</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
               {cities.map((city) => (
-                <div class="group bg-gradient-to-br from-gray-700/50 to-gray-800/50 p-4 rounded-xl shadow-lg hover:shadow-yellow-500/20 transition-all duration-300 transform hover:scale-105 border border-gray-600/30 hover:border-yellow-500/50 cursor-pointer">
-                  <div class="flex items-center space-x-3 mb-2">
-                    <div class={`w-4 h-4 rounded-full ${city.isHeadOffice ? 'bg-gradient-to-r from-yellow-400 to-yellow-600 shadow-lg shadow-yellow-500/50' : 'bg-gradient-to-r from-blue-400 to-blue-600 shadow-lg shadow-blue-500/50'} animate-pulse`}></div>
-                    <span class="font-bold text-white text-lg group-hover:text-yellow-400 transition-colors duration-300">{city.name}</span>
+                <div class="group bg-gradient-to-br from-gray-700/50 to-gray-800/50 p-3 sm:p-4 rounded-xl shadow-lg hover:shadow-yellow-500/20 transition-all duration-300 transform hover:scale-105 border border-gray-600/30 hover:border-yellow-500/50 cursor-pointer">
+                  <div class="flex items-center space-x-2 sm:space-x-3 mb-2">
+                    <div class={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${city.isHeadOffice ? 'bg-gradient-to-r from-yellow-400 to-yellow-600 shadow-lg shadow-yellow-500/50' : 'bg-gradient-to-r from-blue-400 to-blue-600 shadow-lg shadow-blue-500/50'} animate-pulse`}></div>
+                    <span class="font-bold text-white text-base sm:text-lg group-hover:text-yellow-400 transition-colors duration-300">{city.name}</span>
                   </div>
-                  <div class="text-sm text-gray-400 font-gilroy">{city.region}</div>
+                  <div class="text-xs sm:text-sm text-gray-400 font-gilroy">{city.region}</div>
                 </div>
               ))}
             </div>
-            <div class="mt-12 flex justify-center space-x-8 text-lg font-gilroy">
+            <div class="mt-8 lg:mt-12 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8 text-base sm:text-lg font-gilroy">
               <div class="flex items-center space-x-3">
-                <div class="w-4 h-4 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 shadow-lg shadow-yellow-500/50"></div>
+                <div class="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 shadow-lg shadow-yellow-500/50"></div>
                 <span class="text-yellow-400 font-semibold">Головной офис</span>
               </div>
               <div class="flex items-center space-x-3">
-                <div class="w-4 h-4 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 shadow-lg shadow-blue-500/50"></div>
+                <div class="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 shadow-lg shadow-blue-500/50"></div>
                 <span class="text-blue-400 font-semibold">Региональное представительство</span>
               </div>
             </div>
@@ -192,16 +192,16 @@ const deliveryInfo = [
 
       <!-- Контакты региональных представителей -->
       <section>
-        <h2 class="text-4xl lg:text-5xl font-bold text-yellow-500 mb-12 text-center font-nevduplenysh">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-yellow-500 mb-8 lg:mb-12 text-center font-nevduplenysh">
           Контакты региональных представителей
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
           {cities.map((city) => (
-            <div class={`group bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 rounded-2xl shadow-2xl border-l-4 ${city.isHeadOffice ? 'border-yellow-500 shadow-yellow-500/20' : 'border-blue-500 shadow-blue-500/20'} hover:shadow-2xl transition-all duration-500 transform hover:scale-105 backdrop-blur-sm border border-gray-700/50 hover:border-yellow-500/50`}>
-              <div class="flex items-center justify-between mb-6">
-                <h3 class="text-2xl font-bold text-white group-hover:text-yellow-400 transition-colors duration-300 font-nevduplenysh">{city.name}</h3>
+            <div class={`group bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-6 lg:p-8 rounded-2xl shadow-2xl border-l-4 ${city.isHeadOffice ? 'border-yellow-500 shadow-yellow-500/20' : 'border-blue-500 shadow-blue-500/20'} hover:shadow-2xl transition-all duration-500 transform hover:scale-105 backdrop-blur-sm border border-gray-700/50 hover:border-yellow-500/50`}>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 lg:mb-6 space-y-2 sm:space-y-0">
+                <h3 class="text-xl sm:text-2xl font-bold text-white group-hover:text-yellow-400 transition-colors duration-300 font-nevduplenysh">{city.name}</h3>
                 {city.isHeadOffice && (
-                  <span class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-black px-3 py-1 rounded-full text-xs font-bold">
+                  <span class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-black px-2 sm:px-3 py-1 rounded-full text-xs font-bold self-start sm:self-center">
                     ГОЛОВНОЙ ОФИС
                   </span>
                 )}
@@ -287,62 +287,86 @@ const deliveryInfo = [
       </section>
 
       <!-- Условия доставки -->
-      <section class="bg-black/40 backdrop-blur-sm rounded-3xl p-8 lg:p-12 border border-yellow-500/20 hover:border-yellow-500/40 transition-all duration-500">
-        <h2 class="text-4xl lg:text-5xl font-bold text-yellow-500 mb-12 text-center font-nevduplenysh">
+      <section class="bg-black/40 backdrop-blur-sm rounded-3xl p-4 sm:p-6 lg:p-8 xl:p-12 border border-yellow-500/20 hover:border-yellow-500/40 transition-all duration-500">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-yellow-500 mb-8 lg:mb-12 text-center font-nevduplenysh">
           Условия доставки по регионам
         </h2>
         
-        <div class="overflow-x-auto">
+        <!-- Мобильная версия - карточки -->
+        <div class="block lg:hidden space-y-4">
+          {deliveryInfo.map((info, index) => (
+            <div class="bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-4 sm:p-6 rounded-2xl shadow-2xl border border-gray-700/50 hover:border-yellow-500/50 transition-all duration-300">
+              <h3 class="text-lg sm:text-xl font-bold text-yellow-400 mb-4 font-nevduplenysh">{info.region}</h3>
+              <div class="space-y-3 text-sm sm:text-base font-gilroy">
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-400">Время доставки:</span>
+                  <span class="text-white font-medium">{info.deliveryTime}</span>
+                </div>
+                <div class="flex justify-between items-start">
+                  <span class="text-gray-400">Стоимость:</span>
+                  <span class="text-white font-medium text-right">{info.cost}</span>
+                </div>
+                <div class="pt-2 border-t border-gray-700/50">
+                  <span class="text-gray-400 block mb-2">Особенности:</span>
+                  <span class="text-white">{info.specialConditions}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Десктопная версия - таблица -->
+        <div class="hidden lg:block overflow-x-auto">
           <table class="w-full bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl shadow-2xl border border-gray-700/50">
             <thead class="bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 border-b border-yellow-500/30">
               <tr>
-                <th class="px-8 py-6 text-left font-bold text-yellow-400 text-lg font-nevduplenysh">Регион</th>
-                <th class="px-8 py-6 text-left font-bold text-yellow-400 text-lg font-nevduplenysh">Время доставки</th>
-                <th class="px-8 py-6 text-left font-bold text-yellow-400 text-lg font-nevduplenysh">Стоимость</th>
-                <th class="px-8 py-6 text-left font-bold text-yellow-400 text-lg font-nevduplenysh">Особенности</th>
+                <th class="px-6 xl:px-8 py-4 xl:py-6 text-left font-bold text-yellow-400 text-base xl:text-lg font-nevduplenysh">Регион</th>
+                <th class="px-6 xl:px-8 py-4 xl:py-6 text-left font-bold text-yellow-400 text-base xl:text-lg font-nevduplenysh">Время доставки</th>
+                <th class="px-6 xl:px-8 py-4 xl:py-6 text-left font-bold text-yellow-400 text-base xl:text-lg font-nevduplenysh">Стоимость</th>
+                <th class="px-6 xl:px-8 py-4 xl:py-6 text-left font-bold text-yellow-400 text-base xl:text-lg font-nevduplenysh">Особенности</th>
               </tr>
             </thead>
             <tbody>
               {deliveryInfo.map((info, index) => (
                 <tr class={`${index % 2 === 0 ? 'bg-gray-800/30' : 'bg-gray-900/30'} hover:bg-yellow-500/10 transition-colors duration-300 border-b border-gray-700/30`}>
-                  <td class="px-8 py-6 font-bold text-white font-gilroy">{info.region}</td>
-                  <td class="px-8 py-6 text-gray-300 font-gilroy">{info.deliveryTime}</td>
-                  <td class="px-8 py-6 text-gray-300 font-gilroy">{info.cost}</td>
-                  <td class="px-8 py-6 text-gray-300 font-gilroy">{info.specialConditions}</td>
+                  <td class="px-6 xl:px-8 py-4 xl:py-6 font-bold text-white font-gilroy text-sm xl:text-base">{info.region}</td>
+                  <td class="px-6 xl:px-8 py-4 xl:py-6 text-gray-300 font-gilroy text-sm xl:text-base">{info.deliveryTime}</td>
+                  <td class="px-6 xl:px-8 py-4 xl:py-6 text-gray-300 font-gilroy text-sm xl:text-base">{info.cost}</td>
+                  <td class="px-6 xl:px-8 py-4 xl:py-6 text-gray-300 font-gilroy text-sm xl:text-base">{info.specialConditions}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         
-        <div class="mt-12 bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 border-l-4 border-yellow-500 p-8 rounded-2xl backdrop-blur-sm">
-          <h3 class="text-2xl font-bold text-yellow-400 mb-6 font-nevduplenysh flex items-center">
-            <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="mt-8 lg:mt-12 bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 border-l-4 border-yellow-500 p-4 sm:p-6 lg:p-8 rounded-2xl backdrop-blur-sm">
+          <h3 class="text-xl sm:text-2xl font-bold text-yellow-400 mb-4 sm:mb-6 font-nevduplenysh flex items-center">
+            <svg class="w-6 h-6 sm:w-8 sm:h-8 mr-2 sm:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             Важная информация
           </h3>
-          <ul class="space-y-3 text-white font-gilroy text-lg">
+          <ul class="space-y-3 text-white font-gilroy text-base sm:text-lg">
             <li class="flex items-start space-x-3">
-              <svg class="w-6 h-6 text-yellow-400 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
               <span>Все поставки драгоценных металлов осуществляются с соблюдением требований безопасности</span>
             </li>
             <li class="flex items-start space-x-3">
-              <svg class="w-6 h-6 text-yellow-400 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
               <span>Доставка производится только в рабочие дни с 9:00 до 18:00</span>
             </li>
             <li class="flex items-start space-x-3">
-              <svg class="w-6 h-6 text-yellow-400 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
               <span>Для крупных заказов возможна индивидуальная схема логистики</span>
             </li>
             <li class="flex items-start space-x-3">
-              <svg class="w-6 h-6 text-yellow-400 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
               <span>Все грузы застрахованы на полную стоимость</span>
@@ -352,38 +376,38 @@ const deliveryInfo = [
       </section>
 
       <!-- Партнерская сеть -->
-      <section class="bg-black/40 backdrop-blur-sm rounded-3xl p-8 lg:p-12 border border-yellow-500/20 hover:border-yellow-500/40 transition-all duration-500">
-        <h2 class="text-4xl lg:text-5xl font-bold text-yellow-500 mb-12 text-center font-nevduplenysh">
+      <section class="bg-black/40 backdrop-blur-sm rounded-3xl p-4 sm:p-6 lg:p-8 xl:p-12 border border-yellow-500/20 hover:border-yellow-500/40 transition-all duration-500">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-yellow-500 mb-8 lg:mb-12 text-center font-nevduplenysh">
           Партнерская сеть
         </h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          <div class="group bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 rounded-2xl shadow-2xl text-center border border-gray-700/50 hover:border-yellow-500/50 transition-all duration-300 transform hover:scale-105">
-            <div class="text-5xl font-bold text-yellow-400 mb-4 font-nevduplenysh group-hover:text-yellow-300 transition-colors duration-300">50+</div>
-            <div class="text-gray-300 font-gilroy text-lg">Авторизованных дилеров</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-8 lg:mb-12">
+          <div class="group bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-6 sm:p-8 rounded-2xl shadow-2xl text-center border border-gray-700/50 hover:border-yellow-500/50 transition-all duration-300 transform hover:scale-105">
+            <div class="text-3xl sm:text-4xl lg:text-5xl font-bold text-yellow-400 mb-3 sm:mb-4 font-nevduplenysh group-hover:text-yellow-300 transition-colors duration-300">50+</div>
+            <div class="text-gray-300 font-gilroy text-sm sm:text-base lg:text-lg">Авторизованных дилеров</div>
           </div>
-          <div class="group bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 rounded-2xl shadow-2xl text-center border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 transform hover:scale-105">
-            <div class="text-5xl font-bold text-blue-400 mb-4 font-nevduplenysh group-hover:text-blue-300 transition-colors duration-300">25+</div>
-            <div class="text-gray-300 font-gilroy text-lg">Логистических партнеров</div>
+          <div class="group bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-6 sm:p-8 rounded-2xl shadow-2xl text-center border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 transform hover:scale-105">
+            <div class="text-3xl sm:text-4xl lg:text-5xl font-bold text-blue-400 mb-3 sm:mb-4 font-nevduplenysh group-hover:text-blue-300 transition-colors duration-300">25+</div>
+            <div class="text-gray-300 font-gilroy text-sm sm:text-base lg:text-lg">Логистических партнеров</div>
           </div>
-          <div class="group bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 rounded-2xl shadow-2xl text-center border border-gray-700/50 hover:border-green-500/50 transition-all duration-300 transform hover:scale-105">
-            <div class="text-5xl font-bold text-green-400 mb-4 font-nevduplenysh group-hover:text-green-300 transition-colors duration-300">100+</div>
-            <div class="text-gray-300 font-gilroy text-lg">Пунктов выдачи</div>
+          <div class="group bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-6 sm:p-8 rounded-2xl shadow-2xl text-center border border-gray-700/50 hover:border-green-500/50 transition-all duration-300 transform hover:scale-105">
+            <div class="text-3xl sm:text-4xl lg:text-5xl font-bold text-green-400 mb-3 sm:mb-4 font-nevduplenysh group-hover:text-green-300 transition-colors duration-300">100+</div>
+            <div class="text-gray-300 font-gilroy text-sm sm:text-base lg:text-lg">Пунктов выдачи</div>
           </div>
-          <div class="group bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 rounded-2xl shadow-2xl text-center border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 transform hover:scale-105">
-            <div class="text-5xl font-bold text-purple-400 mb-4 font-nevduplenysh group-hover:text-purple-300 transition-colors duration-300">24/7</div>
-            <div class="text-gray-300 font-gilroy text-lg">Служба поддержки</div>
+          <div class="group bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-6 sm:p-8 rounded-2xl shadow-2xl text-center border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 transform hover:scale-105">
+            <div class="text-3xl sm:text-4xl lg:text-5xl font-bold text-purple-400 mb-3 sm:mb-4 font-nevduplenysh group-hover:text-purple-300 transition-colors duration-300">24/7</div>
+            <div class="text-gray-300 font-gilroy text-sm sm:text-base lg:text-lg">Служба поддержки</div>
           </div>
         </div>
         
         <div class="text-center">
-          <h3 class="text-3xl font-bold mb-6 text-white font-nevduplenysh">Стать партнером</h3>
-          <p class="text-xl text-gray-300 mb-8 max-w-3xl mx-auto font-gilroy leading-relaxed">
+          <h3 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-white font-nevduplenysh">Стать партнером</h3>
+          <p class="text-lg sm:text-xl text-gray-300 mb-6 sm:mb-8 max-w-3xl mx-auto font-gilroy leading-relaxed px-4">
             Заинтересованы в сотрудничестве? Мы всегда открыты для новых партнерских отношений.
             <span class="text-yellow-400 font-semibold block mt-2">Присоединяйтесь к нашей команде профессионалов!</span>
           </p>
-          <button class="open-modal group inline-flex items-center px-12 py-6 text-xl font-bold bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 text-black rounded-2xl shadow-2xl shadow-yellow-500/50 hover:shadow-yellow-400/70 hover:from-yellow-400 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105 font-gilroy">
-            <svg class="w-6 h-6 mr-3 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button class="open-modal group inline-flex items-center px-8 sm:px-12 py-4 sm:py-6 text-lg sm:text-xl font-bold bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 text-black rounded-2xl shadow-2xl shadow-yellow-500/50 hover:shadow-yellow-400/70 hover:from-yellow-400 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105 font-gilroy">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h2m-4 0V4a2 2 0 012-2h6a2 2 0 012 2v4m-6 0a2 2 0 100-4 2 2 0 000 4zm0 0h2a2 2 0 012 2v4a2 2 0 01-2 2H9a2 2 0 01-2-2v-4a2 2 0 012-2z"></path>
             </svg>
             Стать партнером
