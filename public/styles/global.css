@@ -30,22 +30,276 @@ body {
   color: #2c2c2c;
 }
 
+/* Отступы от фиксированного хедера */
+.header-offset {
+  padding-top: 4rem; /* 64px */
+}
+
+@media (min-width: 320px) {
+  .header-offset {
+    padding-top: 4.5rem; /* 72px */
+  }
+}
+
+@media (min-width: 480px) {
+  .header-offset {
+    padding-top: 5rem; /* 80px */
+  }
+}
+
+@media (min-width: 640px) {
+  .header-offset {
+    padding-top: 5.5rem; /* 88px */
+  }
+}
+
+@media (min-width: 768px) {
+  .header-offset {
+    padding-top: 6rem; /* 96px */
+  }
+}
+
+@media (min-width: 1024px) {
+  .header-offset {
+    padding-top: 7rem; /* 112px */
+  }
+}
+
+/* Планшетные стили */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Оптимизация для планшетов */
+  .tablet-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .tablet-text-lg {
+    font-size: 1.125rem;
+  }
+  
+  .tablet-p-6 {
+    padding: 1.5rem;
+  }
+  
+  .tablet-gap-6 {
+    gap: 1.5rem;
+  }
+  
+  /* Увеличиваем размер кликабельных элементов для планшетов */
+  .tablet-touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}
+
+/* Портретная ориентация планшетов */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  .tablet-portrait-stack {
+    flex-direction: column;
+  }
+  
+  .tablet-portrait-full {
+    width: 100%;
+  }
+  
+  .tablet-portrait-center {
+    text-align: center;
+  }
+}
+
+/* Альбомная ориентация планшетов */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+  .tablet-landscape-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .tablet-landscape-flex {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* Ноутбучные стили */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  /* Оптимизация для ноутбуков */
+  .laptop-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .laptop-text-xl {
+    font-size: 1.25rem;
+  }
+  
+  .laptop-p-8 {
+    padding: 2rem;
+  }
+  
+  .laptop-gap-8 {
+    gap: 2rem;
+  }
+  
+  /* Компактные отступы для ноутбуков */
+  .laptop-compact {
+    padding: 1rem 2rem;
+  }
+  
+  .laptop-sidebar {
+    width: 280px;
+  }
+}
+
+/* Оптимизация для touch-устройств */
+@media (hover: none) and (pointer: coarse) {
+  /* Увеличиваем размер кликабельных элементов */
+  button, 
+  .btn,
+  a[role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px 16px;
+  }
+  
+  /* Убираем hover эффекты для touch-устройств */
+  .hover\:scale-105:hover {
+    transform: none;
+  }
+  
+  /* Добавляем активные состояния для touch */
+  .touch-active:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
+}
+
+/* Улучшенная прокрутка для планшетов */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+  
+  /* Скрываем скроллбары на планшетах для более чистого вида */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Адаптивная типографика */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .responsive-text-sm {
+    font-size: 0.875rem;
+  }
+  
+  .responsive-text-base {
+    font-size: 1rem;
+  }
+  
+  .responsive-text-lg {
+    font-size: 1.125rem;
+  }
+  
+  .responsive-text-xl {
+    font-size: 1.25rem;
+  }
+  
+  .responsive-text-2xl {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .responsive-text-sm {
+    font-size: 0.875rem;
+  }
+  
+  .responsive-text-base {
+    font-size: 1rem;
+  }
+  
+  .responsive-text-lg {
+    font-size: 1.125rem;
+  }
+  
+  .responsive-text-xl {
+    font-size: 1.25rem;
+  }
+  
+  .responsive-text-2xl {
+    font-size: 1.5rem;
+  }
+  
+  .responsive-text-3xl {
+    font-size: 1.875rem;
+  }
+}
+
 /* Кастомные стили */
 .social-icon {
-  transition:
-    transform 0.3s ease,
-    color 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .social-icon:hover {
   transform: scale(1.1);
-  color: #facc15;
+  opacity: 0.8;
 }
 
-.social-icon img {
-  transition: filter 0.3s ease;
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.social-icon:hover img {
-  filter: brightness(1.2) saturate(1.2);
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Специальные стили для модальных окон на планшетах */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .modal-tablet {
+    max-width: 90vw;
+    max-height: 90vh;
+  }
+  
+  .modal-tablet .modal-content {
+    padding: 2rem;
+  }
+  
+  .modal-tablet .modal-header {
+    font-size: 1.5rem;
+  }
+  
+  .modal-tablet .modal-text {
+    font-size: 1rem;
+  }
+}
+
+/* Специальные стили для модальных окон на ноутбуках */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .modal-laptop {
+    max-width: 80vw;
+    max-height: 85vh;
+  }
+  
+  .modal-laptop .modal-content {
+    padding: 2.5rem;
+  }
+  
+  .modal-laptop .modal-header {
+    font-size: 1.75rem;
+  }
+  
+  .modal-laptop .modal-text {
+    font-size: 1.125rem;
+  }
 }
