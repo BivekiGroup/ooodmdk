@@ -1,18 +1,15 @@
 ---
-import { sanityClient } from "sanity:client";
-
-const about = await sanityClient.fetch(`*[_type == "about"][0]{
-  title,
-  paragraph1,
-  paragraph2,
-  paragraph3,
-  paragraph4,
-  paragraph5,
-  paragraph6,
-  paragraph7,
-  paragraph8,
-  "imageUrls": images[].asset->url
-}`);
+// Статичные данные для раздела О НАС
+const about = {
+  title: "О НАС",
+  paragraph1: "Наша компания занимается производством продукции из драгоценных металлов.",
+  imageUrls: [
+    "/images/hero.webp",
+    "/images/hero.webp",
+    "/images/hero.webp",
+    "/images/hero.webp"
+  ]
+};
 ---
 
 <section
@@ -35,13 +32,6 @@ const about = await sanityClient.fetch(`*[_type == "about"][0]{
       </h2>
       <div class="text-lg lg:text-xl text-gray-300 leading-relaxed font-gilroy">
         <p class="text-2xl text-white font-semibold mb-4">{about.paragraph1}</p>
-        <p class="mb-3">{about.paragraph2}</p>
-        <p class="mb-3">{about.paragraph3}</p>
-        <p class="mb-3">{about.paragraph4}</p>
-        <p class="mb-3">{about.paragraph5}</p>
-        <p class="mb-3">{about.paragraph6}</p>
-        <p class="mb-3">{about.paragraph7}</p>
-        <p>{about.paragraph8}</p>
       </div>
       
       <!-- Блок быстрых ссылок -->
