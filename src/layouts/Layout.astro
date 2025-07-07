@@ -121,10 +121,146 @@ const allKeywords = `${commonKeywords}, ${silverKeywords}, ${goldKeywords}`;
     <slot name="head" />
   </head>
   <body class="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
-    <Header />
-    <slot />
-    <FloatingFAQ />
-    <Up />
-    <Footer />
+    <!-- Загрузчик страницы -->
+    <div id="page-loader" class="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black z-50 flex items-center justify-center">
+      <div class="text-center">
+        <!-- Логотип -->
+        <div class="mb-8">
+          <img src="/logo.svg" alt="ООО «ДМДК»" class="h-16 xs:h-20 sm:h-24 md:h-28 lg:h-32 mx-auto animate-logo-pulse" />
+        </div>
+        
+        <!-- Название компании -->
+        <h1 class="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white font-nevduplenysh mb-6 xs:mb-8 animate-fade-in">
+          ООО «ДМДК»
+        </h1>
+        
+        <!-- Подзаголовок -->
+        <p class="text-gray-300 text-sm xs:text-base lg:text-lg font-gilroy mb-8 animate-fade-in" style="animation-delay: 0.3s;">
+          Драгоценные металлы высшей пробы
+        </p>
+        
+        <!-- Анимированные точки загрузки -->
+        <div class="flex justify-center space-x-2 mb-8">
+          <div class="w-3 h-3 xs:w-4 xs:h-4 bg-yellow-400 rounded-full animate-enhanced-bounce"></div>
+          <div class="w-3 h-3 xs:w-4 xs:h-4 bg-yellow-400 rounded-full animate-enhanced-bounce" style="animation-delay: 0.1s;"></div>
+          <div class="w-3 h-3 xs:w-4 xs:h-4 bg-yellow-400 rounded-full animate-enhanced-bounce" style="animation-delay: 0.2s;"></div>
+        </div>
+        
+        <!-- Прогресс бар -->
+        <div class="w-64 xs:w-80 sm:w-96 mx-auto">
+          <div class="bg-gray-700 rounded-full h-2 xs:h-3 overflow-hidden shadow-inner">
+            <div id="progress-bar" class="progress-shimmer h-full rounded-full transition-all duration-300 ease-out" style="width: 0%"></div>
+          </div>
+          <p id="loading-text" class="text-gray-300 text-sm xs:text-base mt-4 font-gilroy">Загрузка...</p>
+        </div>
+        
+        <!-- Декоративные элементы -->
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+          <div class="absolute top-1/4 left-1/4 w-32 h-32 xs:w-48 xs:h-48 bg-yellow-500 rounded-full blur-3xl animate-pulse"></div>
+          <div class="absolute bottom-1/4 right-1/4 w-40 h-40 xs:w-60 xs:h-60 bg-yellow-400 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+          <div class="absolute top-1/2 left-1/3 w-24 h-24 xs:w-36 xs:h-36 bg-yellow-300 rounded-full blur-2xl animate-pulse" style="animation-delay: 1s;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-content" style="display: none;">
+      <Header />
+      <slot />
+      <FloatingFAQ />
+      <Up />
+      <Footer />
+    </div>
+
+    <!-- Скрипт для управления загрузчиком -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const loader = document.getElementById('page-loader');
+        const progressBar = document.getElementById('progress-bar');
+        const loadingText = document.getElementById('loading-text');
+        let progress = 0;
+        
+        // Массив сообщений для загрузки
+        const loadingMessages = [
+          'Загрузка...',
+          'Подготовка драгоценных металлов...',
+          'Инициализация системы...',
+          'Проверка качества...',
+          'Почти готово...'
+        ];
+        
+        let messageIndex = 0;
+        
+        // Функция для скрытия загрузчика
+        function hideLoader() {
+          const pageContent = document.getElementById('page-content');
+          loadingText.textContent = 'Готово!';
+          
+          setTimeout(() => {
+            loader.style.opacity = '0';
+            loader.style.transform = 'scale(0.95)';
+            loader.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+            
+            setTimeout(() => {
+              loader.style.display = 'none';
+              pageContent.style.display = 'block';
+              document.body.style.overflow = 'auto';
+            }, 500);
+          }, 300);
+        }
+        
+        // Анимация прогресс-бара
+        const progressInterval = setInterval(() => {
+          progress += Math.random() * 12 + 3; // Случайный прирост от 3 до 15%
+          if (progress > 100) progress = 100;
+          
+          progressBar.style.width = progress + '%';
+          
+          // Обновляем сообщение в зависимости от прогресса
+          if (progress >= 20 && messageIndex === 0) {
+            messageIndex = 1;
+            loadingText.textContent = loadingMessages[messageIndex];
+          } else if (progress >= 40 && messageIndex === 1) {
+            messageIndex = 2;
+            loadingText.textContent = loadingMessages[messageIndex];
+          } else if (progress >= 60 && messageIndex === 2) {
+            messageIndex = 3;
+            loadingText.textContent = loadingMessages[messageIndex];
+          } else if (progress >= 80 && messageIndex === 3) {
+            messageIndex = 4;
+            loadingText.textContent = loadingMessages[messageIndex];
+          }
+          
+          if (progress >= 100) {
+            clearInterval(progressInterval);
+            hideLoader();
+          }
+        }, 80);
+        
+        // Блокируем прокрутку во время загрузки и скрываем контент
+        document.body.style.overflow = 'hidden';
+        const pageContent = document.getElementById('page-content');
+        pageContent.style.display = 'none';
+        
+        // Принудительно скрыть загрузчик через 4 секунды на случай медленной загрузки
+        setTimeout(() => {
+          if (loader.style.display !== 'none') {
+            progress = 100;
+            progressBar.style.width = '100%';
+            clearInterval(progressInterval);
+            hideLoader();
+          }
+        }, 4000);
+        
+        // Скрыть загрузчик когда страница полностью загружена
+        window.addEventListener('load', function() {
+          if (progress < 100) {
+            progress = 100;
+            progressBar.style.width = '100%';
+            clearInterval(progressInterval);
+            hideLoader();
+          }
+        });
+      });
+    </script>
   </body>
 </html>
