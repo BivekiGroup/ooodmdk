@@ -22,7 +22,6 @@ const cities = [
     address: "г. Москва, ВН. ТЕР. Г. МУНИЦИПАЛЬНЫЙ ОКРУГ ТАГАНСКИЙ, НАБ КОТЕЛЬНИЧЕСКАЯ, Д.1/15 К.А. ПОМЕЩ. 8/1",
     phone: "+7 (925) 104-50-50",
     email: "ooo.dmdk@mail.ru",
-    manager: "Иванов Алексей Петрович",
     services: ["Аффинаж", "Торговля", "Консультации", "Логистика"],
     workingHours: "Пн-Пт: 9:00-18:00",
     isHeadOffice: true
@@ -243,18 +242,6 @@ const deliveryInfo = [
                   </div>
                 </div>
                 
-                {city.manager && (
-                  <div class="flex items-start space-x-2 xs:space-x-3">
-                    <svg class="w-4 h-4 xs:w-5 xs:h-5 text-yellow-400 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                    </svg>
-                    <div>
-                      <div class="text-xs xs:text-sm text-gray-400">Менеджер</div>
-                      <div class="text-white text-sm xs:text-base">{city.manager}</div>
-                    </div>
-                  </div>
-                )}
-
                 
                 <div class="flex items-start space-x-2 xs:space-x-3">
                   <svg class="w-4 h-4 xs:w-5 xs:h-5 text-yellow-400 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
