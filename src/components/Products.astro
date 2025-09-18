@@ -18,10 +18,11 @@ const categories =
     items
   }
 }`);
+
+const initialCategorySlug = categories?.[0]?.slug?.current ?? "";
 ---
 
-<section id="products" class="bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white py-12 xs:py-16 sm:py-20 px-4 xs:px-6 sm:px-8 lg:px-24 relative overflow-hidden">
-  <!-- Декоративные элементы -->
+<section id="products" class="text-white py-12 xs:py-16 sm:py-20 px-4 xs:px-6 sm:px-8 lg:px-24 relative overflow-hidden">
   <div class="absolute inset-0 opacity-5">
     <div class="absolute top-20 left-20 w-32 h-32 bg-yellow-500 rounded-full blur-3xl"></div>
     <div class="absolute bottom-20 right-20 w-40 h-40 bg-yellow-400 rounded-full blur-3xl"></div>
@@ -29,139 +30,215 @@ const categories =
   </div>
 
   <div class="relative z-10 max-w-7xl mx-auto">
-    <h2
-      class="text-center text-4xl xs:text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-yellow-500 mb-8 xs:mb-12 sm:mb-16 font-nevduplenysh"
-    >
-      ПРОДУКЦИЯ
-    </h2>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 xs:gap-6 sm:gap-8">
-      {
-        categories.map((category, index) => (
-          <div
-            class={`group relative rounded-2xl xs:rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 hover:transform hover:scale-105 ${
-              index === categories.length - 1 ? "xl:col-span-3" : ""
-            }`}
-            style={`background: linear-gradient(135deg, ${category.color}, ${category.color}dd); min-height: ${
-              280 + category.elements.length * 15
-            }px;`}
-          >
-            <!-- Градиентный оверлей -->
-            <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-black/60"></div>
-            
-            <!-- Декоративные элементы -->
-            <div class={`absolute top-3 xs:top-4 right-3 xs:right-4 z-20 ${category.elements.length > 2 ? 'grid grid-cols-2 gap-1 max-w-[70px] xs:max-w-[80px]' : 'flex flex-col space-y-1.5 xs:space-y-2 max-w-[60px] xs:max-w-[70px]'}`}>
-              {category.elements.map((element, idx) => (
-                <div
-                  class={`relative flex flex-col items-center justify-center rounded-lg text-white font-bold shadow-lg backdrop-blur-sm border border-white/20 shrink-0 ${category.elements.length > 2 ? 'w-8 h-8 xs:w-9 xs:h-9' : 'w-12 h-12 xs:w-14 xs:h-14'}`}
-                  style={`background: linear-gradient(135deg, ${category.color}ee, ${category.color}aa);`}
-                >
-                  <span class={category.elements.length > 2 ? 'text-xs' : 'text-sm'}>{element.element}</span>
-                  <span class={`font-normal opacity-90 ${category.elements.length > 2 ? 'text-[9px] xs:text-[10px]' : 'text-xs'}`}>
-                    {element.elementNumber}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <div class="relative z-10 p-4 xs:p-6 sm:p-8 h-full flex flex-col justify-between">
-              <div class="pr-16 xs:pr-20">
-                <h3 class="text-xl xs:text-2xl sm:text-3xl font-bold mb-4 xs:mb-6 text-white font-nevduplenysh break-words leading-tight">
-                  {category.title.toUpperCase()}
-                </h3>
-              </div>
-
-              <div class="mt-auto">
-                <button
-                  class="w-full text-base xs:text-lg sm:text-xl font-semibold py-3 xs:py-4 px-4 xs:px-6 rounded-xl xs:rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white transition-all duration-300 flex items-center justify-center hover:bg-white hover:text-gray-900 group-hover:transform group-hover:scale-105 font-gilroy shadow-lg"
-                  onclick={`toggleDropdown('${category.slug.current}')`}
-                >
-                  Показать товары
-                  <svg
-                    id={`arrow-${category.slug.current}`}
-                    class="ml-2 xs:ml-3 w-5 h-5 xs:w-6 xs:h-6 transform transition-transform duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
-
-                <div id={`dropdown-${category.slug.current}`} class="mt-4 xs:mt-6 hidden">
-                  <div class="bg-black/30 backdrop-blur-sm rounded-xl xs:rounded-2xl p-4 xs:p-6 border border-white/10">
-                    <ul class="text-base xs:text-lg space-y-2 xs:space-y-3 text-white font-gilroy">
-                      {category.products.map((product) => (
-                        <li class="group/item">
-                          <a
-                            href={`/${product.slug.current}`}
-                            class="block hover:text-yellow-400 transition-colors duration-300 font-gilroy p-2 xs:p-3 rounded-lg xs:rounded-xl hover:bg-white/5"
-                          >
-                            <div class="flex items-center">
-                              <svg class="w-3 h-3 xs:w-4 xs:h-4 mr-2 xs:mr-3 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                              </svg>
-                              <span class="text-sm xs:text-base">{product.title}</span>
-                            </div>
-                            {product.description && (
-                              <p class="ml-5 xs:ml-7 text-xs xs:text-sm text-gray-300 mt-1 xs:mt-2 line-clamp-2 font-gilroy">
-                                {product.description}
-                              </p>
-                            )}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))
-      }
+    <div class="text-center">
+      <span class="text-xs uppercase tracking-[0.4em] text-yellow-400 font-semibold font-gilroy">каталог</span>
+      <h2 class="mt-3 text-4xl xs:text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-yellow-500 font-nevduplenysh">
+        Продукция
+      </h2>
+      <p class="mt-4 text-base xs:text-lg text-gray-300 font-gilroy max-w-3xl mx-auto leading-relaxed">
+        Выберите категорию металла слева — и сразу увидите карточки товаров с описанием, областями применения и ссылками для запроса.
+      </p>
     </div>
+
+    {categories && categories.length > 0 ? (
+      <div class="mt-12 grid gap-6 lg:gap-10 lg:grid-cols-[320px,1fr]">
+        <nav class="space-y-3 lg:sticky lg:top-24" aria-label="Категории продукции">
+          {categories.map((category) => (
+            <button
+              type="button"
+              class="category-tab w-full text-left px-4 xs:px-5 sm:px-6 py-3 xs:py-4 rounded-2xl border border-white/10 bg-black/30 backdrop-blur-sm text-white transition-all duration-300 font-gilroy"
+              data-category-button={category.slug.current}
+              data-active={category.slug.current === initialCategorySlug ? "true" : "false"}
+              aria-selected={category.slug.current === initialCategorySlug ? "true" : "false"}
+            >
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-lg font-semibold">{category.title}</span>
+                <span class="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs text-gray-300">
+                  {category.products.length} позиций
+                </span>
+              </div>
+              {Array.isArray(category.elements) && category.elements.length > 0 && (
+                <div class="mt-3 flex flex-wrap gap-2 text-xs text-yellow-200">
+                  {category.elements.map((element) => (
+                    <span class="inline-flex items-center gap-1 rounded-full bg-yellow-500/15 px-3 py-1 border border-yellow-500/30">
+                      <span class="font-bold">{element.element}</span>
+                      <span class="opacity-70">{element.elementNumber}</span>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </button>
+          ))}
+        </nav>
+
+        <div class="space-y-6">
+          {categories.map((category) => (
+            <div
+              id={`panel-${category.slug.current}`}
+              class={`category-panel rounded-3xl border border-white/10 bg-black/30 backdrop-blur-sm p-6 xs:p-8 sm:p-10 transition-opacity duration-300 ${
+                category.slug.current === initialCategorySlug ? "" : "hidden opacity-0"
+              }`}
+              data-category-panel={category.slug.current}
+            >
+              <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+                <div>
+                  <h3 class="text-2xl xs:text-3xl sm:text-4xl font-bold text-white font-nevduplenysh">
+                    {category.title}
+                  </h3>
+                  <p class="mt-3 text-sm xs:text-base text-gray-300 font-gilroy leading-relaxed max-w-2xl">
+                    {category.products.length > 0
+                      ? `В подборке ${category.products.length} ${category.products.length === 1 ? "позиция" : category.products.length < 5 ? "позиции" : "позиций"}.`
+                      : "Ассортимент находится в обновлении. Оставьте заявку, и менеджер предложит варианты."}
+                  </p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button class="open-modal inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-yellow-500 text-yellow-400 font-semibold text-sm xs:text-base font-gilroy hover:bg-yellow-500 hover:text-black transition-all duration-300">
+                    Получить консультацию
+                  </button>
+                  <a
+                    href="#lead-request"
+                    class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 border border-white/10 text-sm xs:text-base text-white font-gilroy hover:bg-white/15 transition-all duration-300"
+                  >
+                    Оставить заявку
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m0 0l3 3m-3-3l3-3"></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+
+              {Array.isArray(category.elements) && category.elements.length > 0 && (
+                <div class="mt-6 flex flex-wrap gap-2 text-xs text-gray-300 font-gilroy">
+                  {category.elements.map((element) => (
+                    <span class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-1">
+                      <span class="rounded-full bg-yellow-500/20 px-2 py-0.5 text-yellow-300 font-semibold">
+                        {element.element}
+                      </span>
+                      <span class="opacity-70">№ {element.elementNumber}</span>
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {category.products.length > 0 ? (
+                <div class="mt-8 grid gap-4 xs:gap-6 sm:grid-cols-2 xl:grid-cols-3 auto-rows-fr">
+                  {category.products.map((product) => (
+                    <article class="flex h-full min-h-[380px] flex-col rounded-2xl border border-white/10 bg-white/5 p-5 xs:p-6 shadow-lg shadow-black/20 transition-transform duration-300 hover:-translate-y-1">
+                      <div class="flex-1">
+                        <h4 class="text-lg xs:text-xl font-semibold text-white font-gilroy leading-tight">
+                          {product.title}
+                        </h4>
+                        {product.description && (
+                          <p class="mt-2 text-sm text-gray-300 font-gilroy leading-relaxed line-clamp-3">
+                            {product.description}
+                          </p>
+                        )}
+                        {Array.isArray(product.items) && product.items.length > 0 && (
+                          <ul class="mt-4 space-y-2 text-sm text-gray-200 font-gilroy">
+                            {product.items.map((item) => (
+                              <li class="flex items-start gap-2">
+                                <svg class="w-4 h-4 mt-1 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+
+                      <div class="mt-auto flex flex-col gap-3 pt-4 border-t border-white/10">
+                        <a
+                          href={`/${product.slug.current}`}
+                          class="inline-flex items-center justify-center gap-2 rounded-xl bg-yellow-500 px-4 py-2 text-sm font-semibold text-black transition hover:bg-yellow-400"
+                        >
+                          Подробнее о товаре
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                          </svg>
+                        </a>
+                        <button class="open-modal inline-flex items-center justify-center gap-2 rounded-xl border border-yellow-500 px-4 py-2 text-sm font-semibold text-yellow-400 transition hover:bg-yellow-500 hover:text-black">
+                          Запросить коммерческое предложение
+                        </button>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <div class="mt-8 rounded-2xl border border-yellow-500/20 bg-yellow-500/10 p-6 text-center text-sm xs:text-base text-yellow-100 font-gilroy">
+                  Товары в этой категории уточняются. Оставьте заявку — мы подготовим расчёт под вашу задачу.
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    ) : (
+      <div class="mt-10 rounded-3xl border border-white/10 bg-white/5 p-8 text-center text-gray-300 font-gilroy">
+        Категории продукции пока не загружены. Оставьте заявку, и мы пришлём актуальный каталог.
+      </div>
+    )}
   </div>
 </section>
 
 <script>
-  // Определяем функцию в глобальном контексте
-  (window as any).toggleDropdown = (categorySlug: string) => {
-    const dropdown = document.getElementById(`dropdown-${categorySlug}`);
-    const arrow = document.getElementById(`arrow-${categorySlug}`);
+  document.addEventListener("DOMContentLoaded", () => {
+    const buttons = Array.from(document.querySelectorAll("[data-category-button]"));
+    const panels = Array.from(document.querySelectorAll("[data-category-panel]"));
 
-    if (dropdown) {
-      if (dropdown.classList.contains("hidden")) {
-        dropdown.classList.remove("hidden");
-        if (arrow) arrow.style.transform = "rotate(180deg)";
-      } else {
-        dropdown.classList.add("hidden");
-        if (arrow) arrow.style.transform = "rotate(0deg)";
+    const activateCategory = (slug) => {
+      buttons.forEach((button) => {
+        const isActive = button.dataset.categoryButton === slug;
+        button.dataset.active = isActive ? "true" : "false";
+        button.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+
+      panels.forEach((panel) => {
+        const isActive = panel.dataset.categoryPanel === slug;
+        if (isActive) {
+          panel.classList.remove("hidden", "opacity-0");
+        } else {
+          panel.classList.add("hidden", "opacity-0");
+        }
+      });
+    };
+
+    if (buttons.length > 0) {
+      const defaultSlug = buttons[0].dataset.categoryButton;
+      if (defaultSlug) {
+        activateCategory(defaultSlug);
       }
     }
-  };
 
-  document.addEventListener("DOMContentLoaded", function () {
-    const buttons = document.querySelectorAll("[onclick^='toggleDropdown']");
     buttons.forEach((button) => {
-      (button as HTMLElement).onclick = function (e) {
-        e.preventDefault();
-        const categorySlug = (this as HTMLElement).getAttribute("onclick")?.match(/'([^']+)'/)?.[1];
-        if (categorySlug) {
-          (window as any).toggleDropdown(categorySlug);
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const slug = button.dataset.categoryButton;
+        if (slug) {
+          activateCategory(slug);
         }
-      };
+      });
     });
   });
 </script>
 
 <style>
-  svg {
-    transition: transform 0.3s ease;
+  .category-tab {
+    position: relative;
+  }
+
+  .category-tab[data-active="true"] {
+    border-color: rgba(250, 204, 21, 0.5);
+    background: rgba(250, 204, 21, 0.12);
+    box-shadow: 0 16px 40px -20px rgba(250, 204, 21, 0.6);
+  }
+
+  .category-tab:hover {
+    border-color: rgba(250, 204, 21, 0.35);
+    background: rgba(250, 204, 21, 0.16);
+  }
+
+  .category-panel {
+    transition: opacity 0.3s ease;
   }
 </style>
