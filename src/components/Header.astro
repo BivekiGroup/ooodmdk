@@ -42,10 +42,10 @@ const languageLinks = localeOptions.map((option) => {
 <!-- Модальное окно -->
 <div
   id="modal"
-  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden p-4 sm:p-6"
 >
   <div
-    class="bg-gray-100 rounded-xl p-8 max-w-md w-full mx-4 lg:mx-auto relative"
+    class="bg-gray-100 rounded-xl p-5 sm:p-7 md:p-8 w-full max-w-4xl max-h-[82vh] overflow-y-auto mx-4 lg:mx-auto relative shadow-2xl"
   >
     <button
       id="closeModal"
@@ -66,71 +66,78 @@ const languageLinks = localeOptions.map((option) => {
       </svg>
     </button>
 
-    <h2 class="text-3xl font-semibold mb-4 text-center font-gilroy text-gray-900">
-      {locale.header.modal.title}
-    </h2>
-    <ul class="text-gray-800 mb-6 space-y-2 font-gilroy text-center">
-      {locale.header.modal.bullets.map((item) => (
-        <li>{item}</li>
-      ))}
-    </ul>
-    <form id="contactForm" class="space-y-4">
-      <input
-        type="text"
-        id="name"
-        name="name"
-        placeholder={locale.header.modal.form.name}
-        autocomplete="name"
-        class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy text-gray-900 placeholder:text-gray-500"
-        required
-      />
-      <input
-        type="tel"
-        id="phone"
-        name="phone"
-        placeholder={locale.header.modal.form.phone}
-        autocomplete="tel"
-        inputmode="tel"
-        class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy text-gray-900 placeholder:text-gray-500"
-        required
-      />
-      <input
-        type="email"
-        id="email"
-        name="email"
-        placeholder={locale.header.modal.form.email}
-        autocomplete="email"
-        class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy text-gray-900 placeholder:text-gray-500"
-      />
-      <textarea
-        id="comment"
-        name="comment"
-        placeholder={locale.header.modal.form.comment}
-        rows="4"
-        class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy text-gray-900 placeholder:text-gray-500 resize-none"
-      ></textarea>
-      <div>
-        <label for="attachment" class="block text-sm font-gilroy text-gray-600 mb-2">
-          {locale.header.modal.form.fileLabel}
-        </label>
-        <input
-          type="file"
-          id="attachment"
-          name="attachment"
-          accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.txt"
-          class="block w-full text-sm text-gray-600 font-gilroy file:mr-4 file:rounded-md file:border-0 file:bg-yellow-500 file:text-black file:px-4 file:py-2 file:text-sm file:font-semibold file:cursor-pointer cursor-pointer"
-        />
-        <p class="mt-1 text-xs text-gray-500 font-gilroy">
-          {locale.header.modal.form.fileHint}
-        </p>
+    <div class="grid gap-5 md:gap-8 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] items-start">
+      <div class="space-y-4">
+        <h2 class="text-2xl sm:text-3xl font-semibold text-center md:text-left font-gilroy text-gray-900">
+          {locale.header.modal.title}
+        </h2>
+        <ul class="text-gray-800 space-y-1.5 font-gilroy text-sm sm:text-base text-center md:text-left">
+          {locale.header.modal.bullets.map((item) => (
+            <li class="flex items-start gap-2 md:gap-3">
+              <span class="mt-1 md:mt-0.5 h-2 w-2 rounded-full bg-yellow-500 flex-shrink-0"></span>
+              <span class="leading-snug text-gray-700">{item}</span>
+            </li>
+          ))}
+        </ul>
       </div>
-      <button
-        type="submit"
-        class="w-full py-3 bg-yellow-500 text-white rounded-lg font-semibold text-lg hover:bg-yellow-600 transition font-gilroy"
-      >
-        {locale.header.modal.form.submit}
-      </button>
-    </form>
+      <form id="contactForm" class="space-y-3 md:space-y-4">
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder={locale.header.modal.form.name}
+          autocomplete="name"
+          class="w-full px-3 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy text-gray-900 placeholder:text-gray-500"
+          required
+        />
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          placeholder={locale.header.modal.form.phone}
+          autocomplete="tel"
+          inputmode="tel"
+          class="w-full px-3 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy text-gray-900 placeholder:text-gray-500"
+          required
+        />
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder={locale.header.modal.form.email}
+          autocomplete="email"
+          class="w-full px-3 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy text-gray-900 placeholder:text-gray-500"
+        />
+        <textarea
+          id="comment"
+          name="comment"
+          placeholder={locale.header.modal.form.comment}
+          rows="3"
+          class="w-full px-3 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy text-gray-900 placeholder:text-gray-500 resize-none"
+        ></textarea>
+        <div>
+          <label for="attachment" class="block text-sm font-gilroy text-gray-600 mb-2">
+            {locale.header.modal.form.fileLabel}
+          </label>
+          <input
+            type="file"
+            id="attachment"
+            name="attachment"
+            accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.txt"
+            class="block w-full text-sm text-gray-600 font-gilroy file:mr-4 file:rounded-md file:border-0 file:bg-yellow-500 file:text-black file:px-4 file:py-2 file:text-sm file:font-semibold file:cursor-pointer cursor-pointer"
+          />
+          <p class="mt-1 text-xs text-gray-500 font-gilroy">
+            {locale.header.modal.form.fileHint}
+          </p>
+        </div>
+        <button
+          type="submit"
+          class="w-full py-3 bg-yellow-500 text-white rounded-lg font-semibold text-lg hover:bg-yellow-600 transition font-gilroy"
+        >
+          {locale.header.modal.form.submit}
+        </button>
+      </form>
+    </div>
   </div>
 </div>
 
