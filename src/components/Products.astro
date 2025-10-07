@@ -1,8 +1,29 @@
 ---
 import { sanityClient } from "sanity:client";
+import {
+  defaultLocale,
+  getTranslations,
+  buildLocalizedLink,
+  isRtl,
+  normalizeLocale,
+} from "../i18n";
+import { localizeDocuments } from "../lib/documentTranslations";
 
-const categories =
+export interface Props {
+  lang?;
+}
+
+const incomingLang = Astro.props.lang;
+const baseLocale = Astro.locals.baseLocale ?? defaultLocale;
+const lang = normalizeLocale(incomingLang ?? baseLocale);
+const locale = getTranslations(lang);
+const rtl = isRtl(lang);
+const buildLink = (href: string, targetLocale = lang) =>
+  buildLocalizedLink(href, targetLocale, baseLocale);
+
+const rawCategories =
   await sanityClient.fetch(`*[_type == "category"] | order(order asc){
+  _id,
   title,
   slug,
   color,
@@ -11,6 +32,7 @@ const categories =
     elementNumber
   },
   "products": *[_type == "product" && references(^._id)] | order(_createdAt desc){
+    _id,
     title,
     slug,
     description,
@@ -19,7 +41,45 @@ const categories =
   }
 }`);
 
+const sourceCategories = Array.isArray(rawCategories) ? rawCategories : [];
+const categories =
+  lang === defaultLocale
+    ? sourceCategories
+    : await Promise.all(
+        sourceCategories.map(async (category) => {
+          const [localizedCategory] = await localizeDocuments([category], {
+            targetLanguage: lang,
+            sourceLanguage: defaultLocale,
+            fields: ["title"],
+          });
+
+          const localizedProducts = Array.isArray(category.products) && category.products.length > 0
+            ? await localizeDocuments(category.products, {
+                targetLanguage: lang,
+                sourceLanguage: defaultLocale,
+                fields: ["title", "description", "items[]"],
+              })
+            : [];
+
+          return {
+            ...localizedCategory,
+            products: localizedProducts,
+          };
+        }),
+      );
+
 const initialCategorySlug = categories?.[0]?.slug?.current ?? "";
+const productsLocale = locale.products;
+const pluralRules = new Intl.PluralRules(lang);
+
+const formatCategoryCount = (count: number) => {
+  const rule = pluralRules.select(count) as keyof typeof productsLocale.categoryCount;
+  const template = productsLocale.categoryCount[rule] ?? productsLocale.categoryCount.other;
+  return template.replace("{count}", String(count));
+};
+
+const formatSummary = (count: number) =>
+  productsLocale.summary.replace("{items}", formatCategoryCount(count));
 ---
 
 <section id="products" class="text-white py-12 xs:py-16 sm:py-20 px-4 xs:px-6 sm:px-8 lg:px-24 relative overflow-hidden">
@@ -31,18 +91,18 @@ const initialCategorySlug = categories?.[0]?.slug?.current ?? "";
 
   <div class="relative z-10 max-w-7xl mx-auto">
     <div class="text-center">
-      <span class="text-xs uppercase tracking-[0.4em] text-yellow-400 font-semibold font-gilroy">каталог</span>
+      <span class="text-xs uppercase tracking-[0.4em] text-yellow-400 font-semibold font-gilroy">{productsLocale.badge}</span>
       <h2 class="mt-3 text-4xl xs:text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-yellow-500 font-nevduplenysh">
-        Продукция
+        {productsLocale.title}
       </h2>
       <p class="mt-4 text-base xs:text-lg text-gray-300 font-gilroy max-w-3xl mx-auto leading-relaxed">
-        Выберите категорию металла слева — и сразу увидите карточки товаров с описанием, областями применения и ссылками для запроса.
+        {productsLocale.description}
       </p>
     </div>
 
     {categories && categories.length > 0 ? (
       <div class="mt-12 grid gap-6 lg:gap-10 lg:grid-cols-[320px,1fr]">
-        <nav class="space-y-3 lg:sticky lg:top-24" aria-label="Категории продукции">
+        <nav class="space-y-3 lg:sticky lg:top-24" aria-label={productsLocale.navLabel}>
           {categories.map((category) => (
             <button
               type="button"
@@ -54,7 +114,7 @@ const initialCategorySlug = categories?.[0]?.slug?.current ?? "";
               <div class="flex items-center justify-between gap-3">
                 <span class="text-lg font-semibold">{category.title}</span>
                 <span class="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs text-gray-300">
-                  {category.products.length} позиций
+                  {formatCategoryCount(category.products.length)}
                 </span>
               </div>
               {Array.isArray(category.elements) && category.elements.length > 0 && (
@@ -87,19 +147,19 @@ const initialCategorySlug = categories?.[0]?.slug?.current ?? "";
                   </h3>
                   <p class="mt-3 text-sm xs:text-base text-gray-300 font-gilroy leading-relaxed max-w-2xl">
                     {category.products.length > 0
-                      ? `В подборке ${category.products.length} ${category.products.length === 1 ? "позиция" : category.products.length < 5 ? "позиции" : "позиций"}.`
-                      : "Ассортимент находится в обновлении. Оставьте заявку, и менеджер предложит варианты."}
+                      ? formatSummary(category.products.length)
+                      : productsLocale.panel.updating}
                   </p>
                 </div>
                 <div class="flex flex-wrap gap-2">
                   <button class="open-modal inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-yellow-500 text-yellow-400 font-semibold text-sm xs:text-base font-gilroy hover:bg-yellow-500 hover:text-black transition-all duration-300">
-                    Получить консультацию
+                    {productsLocale.panel.actions.consultation}
                   </button>
                   <a
                     href="#lead-request"
                     class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 border border-white/10 text-sm xs:text-base text-white font-gilroy hover:bg-white/15 transition-all duration-300"
                   >
-                    Оставить заявку
+                    {productsLocale.panel.actions.request}
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m0 0l3 3m-3-3l3-3"></path>
                     </svg>
@@ -121,7 +181,7 @@ const initialCategorySlug = categories?.[0]?.slug?.current ?? "";
               )}
 
               {category.products.length > 0 ? (
-                <div class="mt-8 grid gap-4 xs:gap-6 sm:grid-cols-2 xl:grid-cols-3 auto-rows-fr">
+                <div class="mt-8 grid gap-4 xs:gap-6 sm:grid-cols-2 xl:grid-cols-3 auto-rows-fr" dir={rtl ? "rtl" : "ltr"}>
                   {category.products.map((product) => (
                     <article class="flex h-full min-h-[380px] flex-col rounded-2xl border border-white/10 bg-white/5 p-5 xs:p-6 shadow-lg shadow-black/20 transition-transform duration-300 hover:-translate-y-1">
                       <div class="flex-1">
@@ -149,16 +209,16 @@ const initialCategorySlug = categories?.[0]?.slug?.current ?? "";
 
                       <div class="mt-auto flex flex-col gap-3 pt-4 border-t border-white/10">
                         <a
-                          href={`/${product.slug.current}`}
+                          href={buildLink(`/${product.slug.current}`)}
                           class="inline-flex items-center justify-center gap-2 rounded-xl bg-yellow-500 px-4 py-2 text-sm font-semibold text-black transition hover:bg-yellow-400"
                         >
-                          Подробнее о товаре
+                          {productsLocale.panel.buttons.details}
                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                           </svg>
                         </a>
                         <button class="open-modal inline-flex items-center justify-center gap-2 rounded-xl border border-yellow-500 px-4 py-2 text-sm font-semibold text-yellow-400 transition hover:bg-yellow-500 hover:text-black">
-                          Запросить коммерческое предложение
+                          {productsLocale.panel.buttons.quote}
                         </button>
                       </div>
                     </article>
@@ -166,7 +226,7 @@ const initialCategorySlug = categories?.[0]?.slug?.current ?? "";
                 </div>
               ) : (
                 <div class="mt-8 rounded-2xl border border-yellow-500/20 bg-yellow-500/10 p-6 text-center text-sm xs:text-base text-yellow-100 font-gilroy">
-                  Товары в этой категории уточняются. Оставьте заявку — мы подготовим расчёт под вашу задачу.
+                  {productsLocale.panel.updating}
                 </div>
               )}
             </div>
@@ -175,7 +235,7 @@ const initialCategorySlug = categories?.[0]?.slug?.current ?? "";
       </div>
     ) : (
       <div class="mt-10 rounded-3xl border border-white/10 bg-white/5 p-8 text-center text-gray-300 font-gilroy">
-        Категории продукции пока не загружены. Оставьте заявку, и мы пришлём актуальный каталог.
+        {productsLocale.fallback.noCategories}
       </div>
     )}
   </div>

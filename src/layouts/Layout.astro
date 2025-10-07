@@ -5,34 +5,70 @@ import Footer from "../components/Footer.astro";
 import FloatingFAQ from "../components/FloatingFAQ.astro";
 import StickyCTA from "../components/StickyCTA.astro";
 import Analytics from "../components/Analytics.astro";
+import { defaultLocale, getTranslations, isRtl, normalizeLocale, type Locale } from "../i18n";
+import { primaryDomainByLocale } from "../config/localization";
 import "../styles/tailwind.css";
 
-// Оптимизированные ключевые слова для SEO
 const commonKeywords =
   "драгоценные металлы, золото, серебро, платина, производство, переработка, слитки, проволоки, гранулы, порошки, аффинаж, металлургия";
 const silverKeywords =
   "аноды серебряные, серебряные аноды, анод серебряный, серебро 999, чистое серебро, анодирование серебром, серебряная проволока, техническое серебро, серебряные изделия";
 const goldKeywords =
   "золотые сплавы, золотые слитки, очистка золота, золото для ювелиров, золотые аноды";
-const allKeywords = `${commonKeywords}, ${silverKeywords}, ${goldKeywords}`;
+const keywords = `${commonKeywords}, ${silverKeywords}, ${goldKeywords}`;
+
+const baseLocale = Astro.locals.baseLocale ?? defaultLocale;
+const lang = normalizeLocale(Astro.props.lang ?? baseLocale);
+const locale = getTranslations(lang);
+const direction = isRtl(lang) ? "rtl" : "ltr";
+const companyName = lang === "ar" ? "شركة دمدك" : "ООО «ДМДК»";
+const fallbackHost = primaryDomainByLocale[baseLocale] ?? "ooodmdk.ru";
+const siteOrigin =
+  Astro.locals.siteOrigin ?? `${Astro.url.protocol}//${Astro.url.host || fallbackHost}`;
+const canonical = new URL(Astro.url.pathname + Astro.url.search, siteOrigin).toString();
+const ogLocaleMap: Record<Locale, string> = {
+  ru: "ru_RU",
+  en: "en_US",
+  ar: "ar_AE",
+};
+const ogLocale = ogLocaleMap[lang] ?? "ru_RU";
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: companyName,
+  description: locale.meta.description,
+  url: canonical,
+  logo: `${siteOrigin}/logo.svg`,
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+7-925-104-50-50",
+    contactType: "customer service",
+    areaServed: "RU",
+    availableLanguage: ["Russian", "Arabic"],
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "RU",
+    addressLocality: lang === "ar" ? "روسия" : "Россия",
+  },
+  sameAs: ["https://vk.com/ooodmdk", "https://t.me/ooodmdk"],
+  keywords,
+};
 ---
 
-<html lang="ru">
+<html lang={lang} dir={direction} class:list={[direction === "rtl" && "rtl"]}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Основные мета-теги -->
-    <title>
-      ООО «ДМДК» - Производство и переработка драгоценных металлов, серебряные
-      аноды
-    </title>
+    <title>{locale.meta.title}</title>
     <meta
       name="description"
-      content="ООО «ДМДК» - ведущий производитель серебряных анодов и других изделий из драгоценных металлов. Предлагаем серебро, золото и платину в различных формах: аноды серебряные, проволока, гранулы. Высокое качество и надежность."
+      content={locale.meta.description}
     />
-    <meta name="keywords" content={allKeywords} />
-    <meta name="author" content="ООО «ДМДК»" />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content={companyName} />
 
     <!-- Мета-теги для поисковых систем -->
     <meta name="robots" content="index, follow" />
@@ -44,30 +80,30 @@ const allKeywords = `${commonKeywords}, ${silverKeywords}, ${goldKeywords}`;
     <!-- Open Graph для социальных сетей -->
     <meta
       property="og:title"
-      content="ООО «ДМДК» - Производство и переработка драгоценных металлов, серебряные аноды"
+      content={locale.meta.title}
     />
     <meta
       property="og:description"
-      content="Мы предлагаем высококачественные серебряные аноды и другие изделия из драгоценных металлов. Наши услуги включают переработку и аффинаж металлов."
+      content={locale.meta.description}
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://ooodmdk.ru" />
+    <meta property="og:url" content={canonical} />
     <meta
       property="og:image"
       content="https://i.ytimg.com/vi/duJNQ-EJ5nY/maxresdefault.jpg"
     />
-    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:locale" content={ogLocale} />
     <meta property="og:site_name" content="ООО «ДМДК»" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="ООО «ДМДК» - Производство и переработка драгоценных металлов, серебряные аноды"
+      content={locale.meta.title}
     />
     <meta
       name="twitter:description"
-      content="Мы предлагаем высококачественные серебряные аноды и другие изделия из драгоценных металлов. Наши услуги включают переработку и аффинаж металлов."
+      content={locale.meta.description}
     />
     <meta
       name="twitter:image"
@@ -82,7 +118,7 @@ const allKeywords = `${commonKeywords}, ${silverKeywords}, ${goldKeywords}`;
     />
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://ooodmdk.ru" />
+    <link rel="canonical" href={canonical} />
 
     <!-- SVG Favicon -->
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
@@ -92,28 +128,7 @@ const allKeywords = `${commonKeywords}, ${silverKeywords}, ${goldKeywords}`;
 
     <!-- Schema.org разметка -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "ООО «ДМДК»",
-        "description": "Производство и переработка драгоценных металлов, серебряные аноды",
-        "url": "https://ooodmdk.ru",
-        "logo": "https://ooodmdk.ru/logo.svg",
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": "+7-925-104-50-50",
-          "contactType": "customer service",
-          "areaServed": "RU",
-          "availableLanguage": "Russian"
-        },
-        "address": {
-          "@type": "PostalAddress",
-          "addressCountry": "RU",
-          "addressLocality": "Россия"
-        },
-        "sameAs": ["https://vk.com/ooodmdk", "https://t.me/ooodmdk"],
-        "keywords": "${allKeywords}"
-      }
+      {JSON.stringify(schemaData)}
     </script>
 
     <!-- Analytics -->
@@ -121,7 +136,7 @@ const allKeywords = `${commonKeywords}, ${silverKeywords}, ${goldKeywords}`;
 
     <slot name="head" />
   </head>
-  <body class="bg-[#090B12] text-white">
+  <body class:list={["bg-[#090B12] text-white", direction === "rtl" && "rtl" ]}>
     <!-- Загрузчик страницы -->
     <div id="page-loader" class="fixed inset-0 bg-[#090B12] z-50 flex items-center justify-center">
       <div class="text-center">
@@ -132,12 +147,12 @@ const allKeywords = `${commonKeywords}, ${silverKeywords}, ${goldKeywords}`;
         
         <!-- Название компании -->
         <h1 class="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white font-nevduplenysh mb-6 xs:mb-8 animate-fade-in">
-          ООО «ДМДК»
+          {locale.layout.loader.company}
         </h1>
         
         <!-- Подзаголовок -->
         <p class="text-gray-300 text-sm xs:text-base lg:text-lg font-gilroy mb-8 animate-fade-in" style="animation-delay: 0.3s;">
-          Драгоценные металлы высшей пробы
+          {locale.layout.loader.tagline}
         </p>
         
         <!-- Анимированные точки загрузки -->
@@ -152,7 +167,7 @@ const allKeywords = `${commonKeywords}, ${silverKeywords}, ${goldKeywords}`;
           <div class="bg-gray-700 rounded-full h-2 xs:h-3 overflow-hidden shadow-inner">
             <div id="progress-bar" class="progress-shimmer h-full rounded-full transition-all duration-300 ease-out" style="width: 0%"></div>
           </div>
-          <p id="loading-text" class="text-gray-300 text-sm xs:text-base mt-4 font-gilroy">Загрузка...</p>
+          <p id="loading-text" class="text-gray-300 text-sm xs:text-base mt-4 font-gilroy">{locale.layout.loader.loading}</p>
         </div>
         
         <!-- Декоративные элементы -->
@@ -165,13 +180,17 @@ const allKeywords = `${commonKeywords}, ${silverKeywords}, ${goldKeywords}`;
     </div>
 
     <div id="page-content" style="display: none;">
-      <Header />
+      <Header lang={lang} />
       <slot />
-      <FloatingFAQ />
-      <StickyCTA />
+      <FloatingFAQ lang={lang} />
+      <StickyCTA lang={lang} />
       <Up />
-      <Footer />
+      <Footer lang={lang} />
     </div>
+
+    <script type="application/json" id="loader-config">
+      {JSON.stringify(locale.layout.loader)}
+    </script>
 
     <!-- Скрипт для управления загрузчиком -->
     <script>
@@ -179,23 +198,31 @@ const allKeywords = `${commonKeywords}, ${silverKeywords}, ${goldKeywords}`;
         const loader = document.getElementById('page-loader');
         const progressBar = document.getElementById('progress-bar');
         const loadingText = document.getElementById('loading-text');
+        const loaderConfigElement = document.getElementById('loader-config');
+        let loaderConfig = {
+          messages: [],
+          complete: 'Done'
+        };
+
+        if (loaderConfigElement?.textContent) {
+          try {
+            loaderConfig = JSON.parse(loaderConfigElement.textContent);
+          } catch (error) {
+            console.error('Failed to parse loader config', error);
+          }
+        }
         let progress = 0;
-        
+
         // Массив сообщений для загрузки
-        const loadingMessages = [
-          'Загрузка...',
-          'Подготовка драгоценных металлов...',
-          'Инициализация системы...',
-          'Проверка качества...',
-          'Почти готово...'
-        ];
-        
+        const loadingMessages = loaderConfig.messages ?? [];
+        const loaderCompleteText = loaderConfig.complete ?? 'Done';
+
         let messageIndex = 0;
-        
+
         // Функция для скрытия загрузчика
         function hideLoader() {
           const pageContent = document.getElementById('page-content');
-          loadingText.textContent = 'Готово!';
+          loadingText.textContent = loaderCompleteText;
           
           setTimeout(() => {
             loader.style.opacity = '0';

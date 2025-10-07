@@ -2,15 +2,27 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
+import { buildLocalizedLink, defaultLocale, getLocaleFromUrl } from "../i18n";
+
+export interface Props {
+  lang?;
+}
+
+const propLang = Astro.props.lang;
+const baseLocale = Astro.locals.baseLocale ?? defaultLocale;
+const detectedLang = getLocaleFromUrl(Astro.url.pathname, baseLocale);
+const lang = propLang ?? detectedLang ?? baseLocale;
+const buildLink = (href: string, targetLocale = lang) =>
+  buildLocalizedLink(href, targetLocale, baseLocale);
 
 const breadcrumbItems = [
   {
     title: "Главная",
-    href: "/",
+    href: buildLink("/"),
   },
   {
     title: "Наши города",
-    href: "/cities",
+    href: buildLink("/cities"),
   },
 ];
 
@@ -108,15 +120,15 @@ const deliveryInfo = [
 ];
 ---
 
-<Layout>
+<Layout lang={lang}>
   <Fragment slot="head">
     <title>Наши города | ООО «ДМДК»</title>
     <meta name="description" content="География присутствия ООО «ДМДК». Региональные представительства, контакты, условия доставки по всей России." />
     <meta name="keywords" content="ДМДК представительства, региональные офисы, доставка драгоценных металлов, география работы" />
   </Fragment>
 
-  <Hero />
-  <Breadcrumbs items={breadcrumbItems} />
+  <Hero lang={lang} />
+  <Breadcrumbs items={breadcrumbItems} homeHref={buildLink("/")} />
 
   <!-- Основной контент -->
   <main class="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 xl:px-24 relative overflow-hidden">

@@ -3,15 +3,40 @@ import { sanityClient } from "sanity:client";
 import Layout from "../layouts/Layout.astro";
 import ProductHead from "../components/ProductHead.astro";
 import OptimizedImage from "../components/OptimizedImage.astro";
+import {
+  buildLocalizedLink,
+  defaultLocale,
+  getLocaleFromUrl,
+  getTranslations,
+  normalizeLocale,
+} from "../i18n";
+import { localizeDocuments } from "../lib/documentTranslations";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import RelatedProducts from "../components/RelatedProducts.astro";
 import RecommendedProducts from "../components/RecommendedProducts.astro";
 import InfoBanner from "../components/InfoBanner.astro";
 import Hero from "../components/Hero.astro";
 
+export interface Props {
+  lang?;
+}
+
+const propLang = Astro.props.lang;
+const baseLocale = Astro.locals.baseLocale ?? defaultLocale;
+const detectedLang = getLocaleFromUrl(Astro.url.pathname, baseLocale);
+const lang = normalizeLocale(propLang ?? detectedLang ?? baseLocale);
+const locale = getTranslations(lang);
+const fallbackProductLocale = getTranslations(defaultLocale).productPage;
+const productLocale = locale.productPage ?? fallbackProductLocale;
+const buildLink = (href: string, targetLocale = lang) =>
+  buildLocalizedLink(href, targetLocale, baseLocale);
+const breadcrumbsAria =
+  productLocale.breadcrumbs.aria ??
+  (lang === defaultLocale ? "Хлебные крошки" : lang === "ar" ? "مسار التنقل" : "Breadcrumbs");
+
 const { slug } = Astro.params;
 
-const product = await sanityClient.fetch(
+const baseProduct = await sanityClient.fetch(
   `*[_type == "product" && slug.current == $slug][0]{
     _id,
     title,
@@ -28,29 +53,56 @@ const product = await sanityClient.fetch(
   { slug },
 );
 
-if (!product) {
+if (!baseProduct) {
   return Astro.redirect("/404");
+}
+
+let product = baseProduct;
+
+if (lang !== defaultLocale) {
+  const [localizedProduct] = await localizeDocuments([baseProduct], {
+    targetLanguage: lang,
+    sourceLanguage: defaultLocale,
+    fields: ["title", "description", "descriptions[]", "items[]"],
+  });
+
+  if (localizedProduct) {
+    product = { ...product, ...localizedProduct };
+  }
+
+  if (baseProduct.category) {
+    const [localizedCategory] = await localizeDocuments([baseProduct.category], {
+      targetLanguage: lang,
+      sourceLanguage: defaultLocale,
+      fields: ["title"],
+    });
+
+    if (localizedCategory) {
+      product = { ...product, category: { ...baseProduct.category, ...localizedCategory } };
+    }
+  }
 }
 
 const breadcrumbItems = [
   {
-    title: "Продукция",
-    href: "/#products",
+    title: productLocale.breadcrumbs.products,
+    href: buildLink("/#products"),
   },
 ];
 
 // Добавляем категорию в хлебные крошки только если она существует
-if (product.category) {
+if (product.category?.title) {
+  const categorySlug = product.category.slug || product.category.title.toLowerCase();
   breadcrumbItems.push({
     title: product.category.title,
-    href: `/#${product.category.slug || product.category.title.toLowerCase()}`,
+    href: categorySlug ? buildLink(`/#${categorySlug}`) : buildLink("/"),
   });
 }
 
 // Добавляем текущий продукт
 breadcrumbItems.push({
   title: product.title,
-  href: `/${slug}`,
+  href: buildLink(`/${slug}`),
 });
 
 // Для отслеживания просмотра продукта в аналитике
@@ -59,9 +111,9 @@ const analyticsScript = `
     document.addEventListener('DOMContentLoaded', function() {
       if (window.Analytics && window.Analytics.trackProductView) {
         window.Analytics.trackProductView(
-          "${product._id}",
-          "${product.title}",
-          "${product.category?.title || ''}"
+          ${JSON.stringify(product._id)},
+          ${JSON.stringify(product.title)},
+          ${JSON.stringify(product.category?.title ?? "")}
         );
       }
     });
@@ -69,7 +121,7 @@ const analyticsScript = `
 `;
 ---
 
-<Layout>
+<Layout lang={lang}>
   <Fragment slot="head">
     <ProductHead
       title={product.title}
@@ -81,9 +133,15 @@ const analyticsScript = `
     <Fragment set:html={analyticsScript} />
   </Fragment>
 
-  <Hero />
+  <Hero lang={lang} />
 
-  <Breadcrumbs items={breadcrumbItems} />
+  <Breadcrumbs
+    lang={lang}
+    homeLabel={productLocale.breadcrumbs.home}
+    ariaLabel={breadcrumbsAria}
+    homeHref={buildLink("/")}
+    items={breadcrumbItems}
+  />
 
   <article
     class="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white py-12 xs:py-16 sm:py-20 md:py-24 lg:py-28 px-4 xs:px-6 sm:px-8 md:px-12 lg:px-24 relative overflow-hidden"
@@ -117,14 +175,14 @@ const analyticsScript = `
 
         <div class="space-y-4 xs:space-y-6 sm:space-y-8">
           <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl xs:rounded-2xl p-4 xs:p-6 sm:p-8 border border-gray-700">
-            <h2 class="text-lg xs:text-xl sm:text-2xl font-bold text-yellow-400 mb-3 xs:mb-4 sm:mb-6 font-gilroy">Описание продукта</h2>
+            <h2 class="text-lg xs:text-xl sm:text-2xl font-bold text-yellow-400 mb-3 xs:mb-4 sm:mb-6 font-gilroy">{productLocale.descriptionTitle}</h2>
             <p class="text-base xs:text-lg leading-relaxed text-gray-300 font-gilroy">{product.description}</p>
           </div>
 
           {
             product.descriptions && product.descriptions.length > 0 && (
               <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl xs:rounded-2xl p-4 xs:p-6 sm:p-8 border border-gray-700">
-                <h2 class="text-lg xs:text-xl sm:text-2xl font-bold text-yellow-400 mb-3 xs:mb-4 sm:mb-6 font-gilroy">Подробное описание</h2>
+                <h2 class="text-lg xs:text-xl sm:text-2xl font-bold text-yellow-400 mb-3 xs:mb-4 sm:mb-6 font-gilroy">{productLocale.detailsTitle}</h2>
                 <div class="space-y-3 xs:space-y-4">
                   {product.descriptions.map((desc) => (
                     <p class="text-sm xs:text-base text-gray-300 leading-relaxed font-gilroy">{desc}</p>
@@ -137,7 +195,7 @@ const analyticsScript = `
           {
             product.items && product.items.length > 0 && (
               <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl xs:rounded-2xl p-4 xs:p-6 sm:p-8 border border-gray-700">
-                <h2 class="text-lg xs:text-xl sm:text-2xl font-bold text-yellow-400 mb-3 xs:mb-4 sm:mb-6 font-gilroy">Характеристики</h2>
+                <h2 class="text-lg xs:text-xl sm:text-2xl font-bold text-yellow-400 mb-3 xs:mb-4 sm:mb-6 font-gilroy">{productLocale.specsTitle}</h2>
                 <ul class="space-y-2 xs:space-y-3">
                   {product.items.map((item) => (
                     <li class="flex items-center space-x-3">
@@ -152,20 +210,20 @@ const analyticsScript = `
 
           <!-- Кнопка заказа -->
           <div class="bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 rounded-xl xs:rounded-2xl p-4 xs:p-6 sm:p-8 border border-yellow-500/30">
-            <h3 class="text-lg xs:text-xl font-bold text-yellow-400 mb-3 xs:mb-4 font-gilroy">Заинтересовал этот продукт?</h3>
-            <p class="text-sm xs:text-base text-gray-300 mb-4 xs:mb-6 font-gilroy">Свяжитесь с нами для получения подробной информации и оформления заказа</p>
+            <h3 class="text-lg xs:text-xl font-bold text-yellow-400 mb-3 xs:mb-4 font-gilroy">{productLocale.cta.title}</h3>
+            <p class="text-sm xs:text-base text-gray-300 mb-4 xs:mb-6 font-gilroy">{productLocale.cta.description}</p>
             <button class="open-modal w-full inline-flex items-center justify-center px-4 xs:px-6 sm:px-8 py-3 xs:py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black rounded-lg xs:rounded-xl hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 font-gilroy font-semibold shadow-lg shadow-yellow-500/25 text-sm xs:text-base">
               <svg class="w-4 h-4 xs:w-5 xs:h-5 mr-2 xs:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
               </svg>
-              Заказать продукт
+              {productLocale.cta.button}
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <InfoBanner />
+    <InfoBanner lang={lang} />
   </article>
 
   {
@@ -173,6 +231,7 @@ const analyticsScript = `
       <RelatedProducts
         currentProductId={product._id}
         categoryId={product.category._id}
+        lang={lang}
       />
     )
   }
@@ -180,6 +239,7 @@ const analyticsScript = `
   <RecommendedProducts
     currentProductSlug={slug}
     category={product.category?.title}
-    title="Также может заинтересовать"
+    lang={lang}
+    title={productLocale.recommended.title}
   />
 </Layout>

@@ -1,4 +1,12 @@
 ---
+import { defaultLocale, getTranslations } from "../i18n";
+
+export interface Props {
+  lang?;
+}
+
+const lang = (Astro.props.lang) ?? defaultLocale;
+const locale = getTranslations(lang);
 // Компонент информационного блока с ссылками на важные страницы
 ---
 
@@ -13,10 +21,10 @@
   <div class="container mx-auto px-4 xs:px-6 sm:px-8 md:px-12 lg:px-24 relative z-10">
     <div class="text-center mb-8 xs:mb-10 sm:mb-12 md:mb-16">
       <h2 class="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 xs:mb-5 sm:mb-6 font-nevduplenysh">
-        Экспертиза и сервис
+        {locale.infoSection.title}
       </h2>
       <p class="text-base xs:text-lg sm:text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto font-gilroy leading-relaxed">
-        Профессиональная поддержка, экспертные знания и комплексные решения для вашего бизнеса
+        {locale.infoSection.description}
       </p>
     </div>
 
@@ -30,10 +38,10 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
             </svg>
           </div>
-          <h3 class="text-lg xs:text-xl sm:text-2xl font-bold text-white mb-3 xs:mb-4 font-gilroy">Экспертный блог</h3>
-          <p class="text-sm xs:text-base text-gray-300 mb-4 xs:mb-5 sm:mb-6 font-gilroy leading-relaxed">Глубокие знания о драгоценных металлах, технологиях аффинажа и рыночных тенденциях</p>
+          <h3 class="text-lg xs:text-xl sm:text-2xl font-bold text-white mb-3 xs:mb-4 font-gilroy">{locale.infoSection.cards.blog.title}</h3>
+          <p class="text-sm xs:text-base text-gray-300 mb-4 xs:mb-5 sm:mb-6 font-gilroy leading-relaxed">{locale.infoSection.cards.blog.description}</p>
           <a href="/blog" class="inline-flex items-center text-yellow-400 hover:text-yellow-300 font-gilroy font-semibold transition-colors group-hover:translate-x-1 transform duration-300 text-sm xs:text-base">
-            Читать статьи
+            {locale.infoSection.cards.blog.link}
             <svg class="w-3 h-3 xs:w-4 xs:h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
             </svg>
@@ -50,10 +58,10 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
           </div>
-          <h3 class="text-lg xs:text-xl sm:text-2xl font-bold text-white mb-3 xs:mb-4 font-gilroy">Вопросы и ответы</h3>
-          <p class="text-sm xs:text-base text-gray-300 mb-4 xs:mb-5 sm:mb-6 font-gilroy leading-relaxed">Исчерпывающие ответы на вопросы о продукции, сотрудничестве и технических решениях</p>
+          <h3 class="text-lg xs:text-xl sm:text-2xl font-bold text-white mb-3 xs:mb-4 font-gilroy">{locale.infoSection.cards.faq.title}</h3>
+          <p class="text-sm xs:text-base text-gray-300 mb-4 xs:mb-5 sm:mb-6 font-gilroy leading-relaxed">{locale.infoSection.cards.faq.description}</p>
           <a href="/faq" class="inline-flex items-center text-blue-400 hover:text-blue-300 font-gilroy font-semibold transition-colors group-hover:translate-x-1 transform duration-300 text-sm xs:text-base">
-            Найти ответы
+            {locale.infoSection.cards.faq.link}
             <svg class="w-3 h-3 xs:w-4 xs:h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
             </svg>
@@ -71,10 +79,10 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
             </svg>
           </div>
-          <h3 class="text-lg xs:text-xl sm:text-2xl font-bold text-white mb-3 xs:mb-4 font-gilroy">Региональная сеть</h3>
-          <p class="text-sm xs:text-base text-gray-300 mb-4 xs:mb-5 sm:mb-6 font-gilroy leading-relaxed">Широкая география присутствия, надежная логистика и локальная поддержка клиентов</p>
+          <h3 class="text-lg xs:text-xl sm:text-2xl font-bold text-white mb-3 xs:mb-4 font-gilroy">{locale.infoSection.cards.cities.title}</h3>
+          <p class="text-sm xs:text-base text-gray-300 mb-4 xs:mb-5 sm:mb-6 font-gilroy leading-relaxed">{locale.infoSection.cards.cities.description}</p>
           <a href="/cities" class="inline-flex items-center text-green-400 hover:text-green-300 font-gilroy font-semibold transition-colors group-hover:translate-x-1 transform duration-300 text-sm xs:text-base">
-            География работы
+            {locale.infoSection.cards.cities.link}
             <svg class="w-3 h-3 xs:w-4 xs:h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
             </svg>
@@ -91,10 +99,10 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
           </div>
-          <h3 class="text-lg xs:text-xl sm:text-2xl font-bold text-white mb-3 xs:mb-4 font-gilroy">Документооборот</h3>
-          <p class="text-sm xs:text-base text-gray-300 mb-4 xs:mb-5 sm:mb-6 font-gilroy leading-relaxed">Полная юридическая информация, реквизиты и документы для ведения бизнеса</p>
+          <h3 class="text-lg xs:text-xl sm:text-2xl font-bold text-white mb-3 xs:mb-4 font-gilroy">{locale.infoSection.cards.requisites.title}</h3>
+          <p class="text-sm xs:text-base text-gray-300 mb-4 xs:mb-5 sm:mb-6 font-gilroy leading-relaxed">{locale.infoSection.cards.requisites.description}</p>
           <a href="/requisites" class="inline-flex items-center text-purple-400 hover:text-purple-300 font-gilroy font-semibold transition-colors group-hover:translate-x-1 transform duration-300 text-sm xs:text-base">
-            Документы
+            {locale.infoSection.cards.requisites.link}
             <svg class="w-3 h-3 xs:w-4 xs:h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
             </svg>
@@ -109,7 +117,7 @@
         <svg class="w-4 h-4 xs:w-5 xs:h-5 text-yellow-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
-        <span class="text-yellow-300 font-gilroy text-sm xs:text-base">Профессиональная поддержка 24/7</span>
+        <span class="text-yellow-300 font-gilroy text-sm xs:text-base">{locale.infoSection.supportBadge}</span>
       </div>
     </div>
   </div>

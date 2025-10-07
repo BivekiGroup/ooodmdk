@@ -1,16 +1,31 @@
 ---
 import { sanityClient } from "sanity:client";
+import {
+  buildLocalizedLink,
+  defaultLocale,
+  getTranslations,
+  normalizeLocale,
+} from "../i18n";
+import { localizeDocuments } from "../lib/documentTranslations";
 
 interface Props {
   currentProductSlug: string;
   category?: string;
   title?: string;
+  lang?: string;
 }
 
-const { currentProductSlug, category, title = "Рекомендуемые товары" } = Astro.props;
+const props = Astro.props as Props;
+const baseLocale = Astro.locals.baseLocale ?? defaultLocale;
+const lang = normalizeLocale(props.lang ?? baseLocale);
+const { currentProductSlug, title } = props;
+const locale = getTranslations(lang);
+const fallbackProductLocale = getTranslations(defaultLocale).productPage;
+const productLocale = locale.productPage ?? fallbackProductLocale;
+const sectionTitle = title ?? productLocale.recommended.title;
 
 // Получаем рекомендуемые продукты (исключая текущий)
-const recommendedProducts = await sanityClient.fetch(`
+const rawRecommendedProducts = await sanityClient.fetch(`
   *[_type == "product" && slug.current != $currentSlug] | order(_createdAt desc)[0...6]{
     _id,
     title,
@@ -23,6 +38,43 @@ const recommendedProducts = await sanityClient.fetch(`
     }
   }
 `, { currentSlug: currentProductSlug });
+
+const sourceRecommendedProducts = Array.isArray(rawRecommendedProducts) ? rawRecommendedProducts : [];
+
+const recommendedProducts =
+  lang === defaultLocale || sourceRecommendedProducts.length === 0
+    ? sourceRecommendedProducts
+    : await Promise.all(
+        sourceRecommendedProducts.map(async (product) => {
+          const [localizedProduct] = await localizeDocuments([product], {
+            targetLanguage: lang,
+            sourceLanguage: defaultLocale,
+            fields: ["title", "description"],
+          });
+
+          let categoryData = product.category ?? null;
+
+          if (product.category) {
+            const [localizedCategory] = await localizeDocuments([product.category], {
+              targetLanguage: lang,
+              sourceLanguage: defaultLocale,
+              fields: ["title"],
+            });
+
+            if (localizedCategory) {
+              categoryData = { ...product.category, ...localizedCategory };
+            }
+          }
+
+          return {
+            ...product,
+            ...(localizedProduct ?? {}),
+            category: categoryData,
+          };
+        }),
+      );
+const buildLink = (href: string, targetLocale = lang) =>
+  buildLocalizedLink(href, targetLocale, baseLocale);
 ---
 
 {recommendedProducts && recommendedProducts.length > 0 && (
@@ -33,82 +85,82 @@ const recommendedProducts = await sanityClient.fetch(`
       <div class="absolute bottom-20 right-20 w-40 h-40 bg-yellow-400 rounded-full blur-3xl"></div>
     </div>
 
-    <div class="relative z-10 max-w-7xl mx-auto">
-      <div class="text-center mb-16">
-        <h2 class="text-5xl lg:text-6xl font-bold text-yellow-500 mb-6 font-nevduplenysh">
-          {title}
-        </h2>
-        <p class="text-xl text-gray-300 max-w-3xl mx-auto font-gilroy">
-          Откройте для себя другие высококачественные продукты из нашего каталога
-        </p>
-      </div>
+      <div class="relative z-10 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-5xl lg:text-6xl font-bold text-yellow-500 mb-6 font-nevduplenysh">
+          {sectionTitle}
+          </h2>
+          <p class="text-xl text-gray-300 max-w-3xl mx-auto font-gilroy">
+            {productLocale.recommended.subtitle}
+          </p>
+        </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {recommendedProducts.map((product) => (
-          <article class="group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700 hover:border-yellow-500/50 transition-all duration-500 hover:transform hover:scale-105">
-            <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
-            <div class="relative z-10">
-              <!-- Изображение продукта -->
-              <div class="aspect-video overflow-hidden">
-                <img
-                  src={product.imageUrl || '/images/placeholder-product.jpg'}
-                  alt={product.title}
-                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {recommendedProducts.map((product) => (
+            <article class="group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700 hover:border-yellow-500/50 transition-all duration-500 hover:transform hover:scale-105">
+              <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+              <div class="relative z-10">
+                <!-- Изображение продукта -->
+                <div class="aspect-video overflow-hidden">
+                  <img
+                    src={product.imageUrl || '/images/placeholder-product.jpg'}
+                    alt={product.title}
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                </div>
+
+                <!-- Контент карточки -->
+                <div class="p-6">
+                  <!-- Категория -->
+                  {product.category && (
+                    <div class="mb-3">
+                      <span
+                        class="inline-block px-3 py-1 text-xs font-semibold rounded-full text-white font-gilroy"
+                        style={`background-color: ${product.category.color || '#6B7280'}`}
+                      >
+                        {product.category.title}
+                      </span>
+                    </div>
+                  )}
+
+                  <!-- Заголовок -->
+                  <h3 class="text-xl font-bold text-white mb-3 font-gilroy leading-tight group-hover:text-yellow-400 transition-colors duration-300">
+                    {product.title}
+                  </h3>
+
+                  <!-- Описание -->
+                  <p class="text-gray-300 text-sm mb-6 font-gilroy leading-relaxed line-clamp-3">
+                    {product.description || productLocale.recommended.fallbackDescription}
+                  </p>
+
+                  <!-- Кнопка -->
+                  <a
+                    href={buildLink(`/${product.slug}`)}
+                    class="inline-flex items-center w-full justify-center px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black rounded-xl hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 font-gilroy font-semibold text-sm shadow-lg shadow-yellow-500/25"
+                  >
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                    {productLocale.recommended.button}
+                  </a>
+                </div>
               </div>
-
-              <!-- Контент карточки -->
-              <div class="p-6">
-                <!-- Категория -->
-                {product.category && (
-                  <div class="mb-3">
-                    <span 
-                      class="inline-block px-3 py-1 text-xs font-semibold rounded-full text-white font-gilroy"
-                      style={`background-color: ${product.category.color || '#6B7280'}`}
-                    >
-                      {product.category.title}
-                    </span>
-                  </div>
-                )}
-
-                <!-- Заголовок -->
-                <h3 class="text-xl font-bold text-white mb-3 font-gilroy leading-tight group-hover:text-yellow-400 transition-colors duration-300">
-                  {product.title}
-                </h3>
-
-                <!-- Описание -->
-                <p class="text-gray-300 text-sm mb-6 font-gilroy leading-relaxed line-clamp-3">
-                  {product.description || "Высококачественный продукт из драгоценных металлов"}
-                </p>
-
-                <!-- Кнопка -->
-                <a
-                  href={`/${product.slug}`}
-                  class="inline-flex items-center w-full justify-center px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black rounded-xl hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 font-gilroy font-semibold text-sm shadow-lg shadow-yellow-500/25"
-                >
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                  </svg>
-                  Подробнее
-                </a>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
+            </article>
+          ))}
+        </div>
 
       <!-- Ссылка на все продукты -->
       <div class="text-center mt-16">
         <a
-          href="/#products"
+          href={buildLink("/#products")}
           class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-gray-700 to-gray-800 text-white rounded-2xl hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 font-gilroy font-semibold border border-gray-600 hover:border-gray-500"
         >
           <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0l-4-4m4 4l-4 4"></path>
           </svg>
-          Смотреть всю продукцию
+          {productLocale.recommended.viewAll}
         </a>
       </div>
     </div>

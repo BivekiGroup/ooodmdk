@@ -1,0 +1,9 @@
+---
+import Page from "../../blog/sertifikaciya-kontrolj-kachestva.astro";
+import { normalizeLocale } from "../../../i18n";
+
+const { lang: langParam } = Astro.params;
+const lang = normalizeLocale(langParam);
+---
+
+<Page lang={lang} />

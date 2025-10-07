@@ -1,15 +1,29 @@
 ---
-// Статичные данные для раздела О НАС
-const about = {
-  title: "О НАС",
-  paragraph1: "Наша компания занимается производством продукции из драгоценных металлов.",
-  imageUrls: [
-    "/images/1.jpg",
-    "/images/12.jpg",
-    "/images/123.jpg",
-    "/images/1234.jpg"
-  ]
-};
+import { buildLocalizedLink,
+  defaultLocale,
+  getTranslations,
+  isRtl } from "../i18n";
+
+const incomingLang = Astro.props.lang;
+const baseLocale = Astro.locals.baseLocale ?? defaultLocale;
+const lang = incomingLang ?? baseLocale;
+const locale = getTranslations(lang);
+const about = locale.about;
+const rtl = isRtl(lang);
+const ctaLinks = [
+  { href: "/cities", label: about.ctas.cities },
+  { href: "/requisites", label: about.ctas.requisites },
+];
+const imageUrls = [
+  "/images/1.jpg",
+  "/images/12.jpg",
+  "/images/123.jpg",
+  "/images/1234.jpg",
+];
+const getImageAlt = (index: number) => about.imageAlt.replace("{index}", String(index + 1));
+const ctaIconMargin = rtl ? "ml-2" : "mr-2";
+const buildLink = (href: string, targetLocale = lang) =>
+  buildLocalizedLink(href, targetLocale, baseLocale);
 ---
 
 <section
@@ -22,32 +36,52 @@ const about = {
     <div class="absolute bottom-16 xs:bottom-20 sm:bottom-24 md:bottom-32 right-16 xs:right-20 sm:right-24 md:right-32 w-28 xs:w-32 sm:w-36 md:w-48 h-28 xs:h-32 sm:h-36 md:h-48 bg-yellow-400 rounded-full blur-3xl"></div>
   </div>
 
-  <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between max-w-7xl mx-auto">
+  <div class:list={["relative z-10 flex flex-col lg:flex-row items-center justify-between max-w-7xl mx-auto", rtl && "lg:flex-row-reverse"]}>
     <!-- Левая часть: заголовок и описание -->
-    <div class="lg:w-1/2 mb-8 xs:mb-10 sm:mb-12 lg:mb-0 lg:pr-8 xl:pr-16">
+    <div class:list={["lg:w-1/2 mb-8 xs:mb-10 sm:mb-12 lg:mb-0 lg:pr-8 xl:pr-16", rtl && "lg:pr-0 lg:pl-16"]}>
       <h2
         class="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-yellow-500 mb-4 xs:mb-6 sm:mb-8 font-nevduplenysh leading-tight"
       >
         {about.title}
       </h2>
-      <div class="text-base xs:text-lg sm:text-xl md:text-2xl text-gray-300 leading-relaxed font-gilroy">
-        <p class="text-xl xs:text-2xl sm:text-3xl md:text-4xl text-white font-semibold mb-3 xs:mb-4 leading-tight">{about.paragraph1}</p>
+      <div class="text-base xs:text-lg sm:text-xl md:text-2xl text-gray-300 leading-relaxed font-gilroy space-y-4">
+        <p class="text-xl xs:text-2xl sm:text-3xl md:text-4xl text-white font-semibold leading-tight">
+          {about.paragraph}
+        </p>
+        <p>
+          <span class="text-yellow-400 font-semibold">{about.leadHighlight}</span> — {about.leadDescription}
+        </p>
+        <ul class="space-y-3 text-sm xs:text-base sm:text-lg">
+          {about.bullets.map((item) => (
+            <li class="flex items-start gap-3">
+              <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-yellow-500/20 text-yellow-400">
+                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12l5 5L20 7" />
+                </svg>
+              </span>
+              <span>
+                <span class="text-white font-semibold">{item.title}</span>
+                <span class="block text-gray-300">{item.description}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
       
       <!-- Блок быстрых ссылок -->
       <div class="mt-8 xs:mt-10 sm:mt-12 flex flex-col xs:flex-row gap-3 xs:gap-4">
-        <a href="/cities" class="group inline-flex items-center justify-center px-4 xs:px-5 sm:px-6 py-2.5 xs:py-3 sm:py-3.5 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black rounded-lg xs:rounded-xl hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 font-gilroy font-semibold shadow-lg shadow-yellow-500/25 text-sm xs:text-base">
-          <svg class="w-4 h-4 xs:w-5 xs:h-5 mr-2 xs:mr-3 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <a href={buildLink("/cities")} class="group inline-flex items-center justify-center px-4 xs:px-5 sm:px-6 py-2.5 xs:py-3 sm:py-3.5 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black rounded-lg xs:rounded-xl hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 font-gilroy font-semibold shadow-lg shadow-yellow-500/25 text-sm xs:text-base">
+          <svg class:list={["w-4 h-4 xs:w-5 xs:h-5 transition-transform duration-300", ctaIconMargin, rtl ? "group-hover:-translate-x-1" : "group-hover:translate-x-1"]} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
           </svg>
-          Наши города
+          {about.ctas.cities}
         </a>
-        <a href="/requisites" class="group inline-flex items-center justify-center px-4 xs:px-5 sm:px-6 py-2.5 xs:py-3 sm:py-3.5 bg-gradient-to-r from-gray-700 to-gray-800 text-white rounded-lg xs:rounded-xl hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 font-gilroy font-semibold border border-gray-600 hover:border-gray-500 text-sm xs:text-base">
-          <svg class="w-4 h-4 xs:w-5 xs:h-5 mr-2 xs:mr-3 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <a href={buildLink("/requisites")} class="group inline-flex items-center justify-center px-4 xs:px-5 sm:px-6 py-2.5 xs:py-3 sm:py-3.5 bg-gradient-to-r from-gray-700 to-gray-800 text-white rounded-lg xs:rounded-xl hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 font-gilroy font-semibold border border-gray-600 hover:border-gray-500 text-sm xs:text-base">
+          <svg class:list={["w-4 h-4 xs:w-5 xs:h-5 transition-transform duration-300", ctaIconMargin, rtl ? "group-hover:-translate-x-1" : "group-hover:translate-x-1"]} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
           </svg>
-          Реквизиты
+          {about.ctas.requisites}
         </a>
       </div>
     </div>
@@ -55,11 +89,11 @@ const about = {
     <!-- Правая часть: коллаж из изображений -->
     <div class="lg:w-1/2 grid grid-cols-2 gap-3 xs:gap-4 sm:gap-6">
       {
-        about.imageUrls.map((imageUrl, index) => (
+        imageUrls.map((imageUrl, index) => (
           <div class="group relative overflow-hidden rounded-xl xs:rounded-2xl shadow-2xl hover:shadow-yellow-500/20 transition-all duration-500 transform hover:scale-105 h-32 xs:h-36 sm:h-40 md:h-44 lg:h-48 xl:h-52">
             <img
               src={imageUrl}
-              alt={`О нас изображение ${index + 1}`}
+              alt={getImageAlt(index)}
               class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>

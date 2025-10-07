@@ -1,15 +1,29 @@
 ---
 import OptimizedImage from "./OptimizedImage.astro";
 import { sanityClient } from "sanity:client";
+import {
+  buildLocalizedLink,
+  defaultLocale,
+  getTranslations,
+  normalizeLocale,
+} from "../i18n";
+import { localizeDocuments } from "../lib/documentTranslations";
 
 interface Props {
   currentProductId: string;
   categoryId: string;
+  lang?: string;
 }
 
-const { currentProductId, categoryId } = Astro.props;
+const props = Astro.props as Props;
+const baseLocale = Astro.locals.baseLocale ?? defaultLocale;
+const lang = normalizeLocale(props.lang ?? baseLocale);
+const { currentProductId, categoryId } = props;
+const locale = getTranslations(lang);
+const fallbackProductLocale = getTranslations(defaultLocale).productPage;
+const productLocale = locale.productPage ?? fallbackProductLocale;
 
-const relatedProducts = await sanityClient.fetch(
+const rawRelatedProducts = await sanityClient.fetch(
   `*[_type == "product" && references($categoryId) && _id != $currentProductId][0...4]{
     _id,
     title,
@@ -19,11 +33,24 @@ const relatedProducts = await sanityClient.fetch(
   }`,
   { categoryId, currentProductId },
 );
+
+const sourceRelatedProducts = Array.isArray(rawRelatedProducts) ? rawRelatedProducts : [];
+
+const relatedProducts =
+  lang === defaultLocale || sourceRelatedProducts.length === 0
+    ? sourceRelatedProducts
+    : await localizeDocuments(sourceRelatedProducts, {
+        targetLanguage: lang,
+        sourceLanguage: defaultLocale,
+        fields: ["title", "description"],
+      });
+const buildLink = (href: string, targetLocale = lang) =>
+  buildLocalizedLink(href, targetLocale, baseLocale);
 ---
 
 <section class="py-16 px-8 lg:px-24 bg-gray-50">
   <h2 class="text-3xl font-bold mb-8 text-yellow-500 font-nevduplenysh">
-    Похожие продукты
+    {productLocale.related.title}
   </h2>
 
   {
@@ -31,9 +58,9 @@ const relatedProducts = await sanityClient.fetch(
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {relatedProducts.map((product) => (
           <a
-            href={`/${product.slug}`}
+            href={buildLink(`/${product.slug}`)}
             class="group block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow"
-            aria-label={`Перейти к продукту ${product.title}`}
+            aria-label={`${productLocale.related.title}: ${product.title}`}
           >
             <div class="aspect-w-16 aspect-h-9">
               <OptimizedImage
@@ -53,7 +80,7 @@ const relatedProducts = await sanityClient.fetch(
               </p>
               <div class="mt-3">
                 <span class="inline-block bg-yellow-500 text-white text-xs font-medium py-1 px-2 rounded-full">
-                  Подробнее
+                  {productLocale.related.more}
                 </span>
               </div>
             </div>

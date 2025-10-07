@@ -1,16 +1,32 @@
 ---
-interface Props {
-  items: {
-    title: string;
-    href: string;
-  }[];
-}
+const props = Astro.props;
+const items = Array.isArray(props.items) ? props.items : [];
+const homeLabel = typeof props.homeLabel === "string" ? props.homeLabel : "Главная";
+const ariaLabel = typeof props.ariaLabel === "string" ? props.ariaLabel : "Breadcrumbs";
+const siteOrigin = Astro.locals.siteOrigin ?? `${Astro.url.protocol}//${Astro.url.host}`;
+const homeHref = typeof props.homeHref === "string" ? props.homeHref : `${siteOrigin}/`;
 
-const { items } = Astro.props;
-const SITE_URL = "https://ooodmdk.ru";
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: homeLabel,
+      item: homeHref,
+    },
+    ...items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 2,
+      name: item.title,
+      item: item.href,
+    })),
+  ],
+};
 ---
 
-<nav aria-label="Хлебные крошки" class="py-4 px-8 lg:px-24 header-offset">
+<nav aria-label={ariaLabel} class="py-4 px-8 lg:px-24 header-offset">
   <ol
     class="flex flex-wrap items-center space-x-2 text-sm text-gray-600"
     itemscope
@@ -23,11 +39,11 @@ const SITE_URL = "https://ooodmdk.ru";
       itemtype="https://schema.org/ListItem"
     >
       <a
-        href={SITE_URL}
+        href={homeHref}
         class="hover:text-yellow-500 transition-colors"
         itemprop="item"
       >
-        <span itemprop="name">Главная</span>
+        <span itemprop="name">{homeLabel}</span>
       </a>
       <meta itemprop="position" content="1" />
       <span class="mx-2">/</span>
@@ -56,43 +72,6 @@ const SITE_URL = "https://ooodmdk.ru";
   </ol>
 </nav>
 
-<script>
-  // Добавляем микроразметку для поисковых систем
-  const breadcrumbsSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Главная",
-        item: "https://ooodmdk.ru",
-      },
-    ],
-  };
-
-  // Добавляем остальные элементы из props
-  const items = document.querySelectorAll('[itemprop="itemListElement"]');
-  items.forEach((item, index) => {
-    if (index > 0) {
-      // пропускаем "Главная"
-      const name = item.querySelector('[itemprop="name"]')?.textContent;
-      const href = item
-        .querySelector('[itemprop="item"]')
-        ?.getAttribute("href");
-
-      breadcrumbsSchema.itemListElement.push({
-        "@type": "ListItem",
-        position: index + 1,
-        name: name,
-        item: href,
-      });
-    }
-  });
-
-  // Добавляем микроразметку на страницу
-  const script = document.createElement("script");
-  script.type = "application/ld+json";
-  script.text = JSON.stringify(breadcrumbsSchema);
-  document.head.appendChild(script);
+<script type="application/ld+json">
+  {JSON.stringify(breadcrumbSchema)}
 </script>

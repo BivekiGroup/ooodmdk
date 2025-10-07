@@ -1,63 +1,93 @@
+---
+import { defaultLocale, getTranslations, isRtl } from "../i18n";
+
+export interface Props {
+  lang?;
+}
+
+const lang = (Astro.props.lang) ?? defaultLocale;
+const locale = getTranslations(lang);
+const rtl = isRtl(lang);
+const footer = locale.footer;
+const navLinks = [
+  { href: "/#about", label: footer.nav.about },
+  { href: "/products", label: footer.nav.products },
+  { href: "/cities", label: footer.nav.cities },
+  { href: "/blog", label: footer.nav.blog },
+  { href: "/faq", label: footer.nav.faq },
+  { href: "/requisites", label: footer.nav.requisites },
+  { href: "/#contacts", label: footer.nav.contacts },
+];
+const quickActions = [
+  { type: "link", href: "#lead-request", label: footer.quickActions.lead },
+  { type: "button", label: footer.quickActions.manager },
+];
+const phones = ["+7 (925) 104-50-50", "+7 (926) 664-62-46"];
+---
+
 <footer
   id="contacts"
-  class="text-white py-12 xs:py-16 px-4 xs:px-6 sm:px-8 lg:px-24 relative overflow-hidden"
+  class:list={[
+    "text-white py-12 xs:py-16 px-4 xs:px-6 sm:px-8 lg:px-24 relative overflow-hidden",
+    rtl && "text-right",
+  ]}
 >
-  <!-- Декоративные элементы -->
   <div class="absolute inset-0 opacity-10">
     <div class="absolute top-10 left-10 w-32 h-32 bg-yellow-500 rounded-full blur-3xl"></div>
     <div class="absolute bottom-10 right-10 w-40 h-40 bg-yellow-400 rounded-full blur-3xl"></div>
   </div>
 
-  <!-- Верхняя декоративная линия -->
   <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-yellow-500 to-transparent"></div>
 
   <div class="relative z-10 max-w-7xl mx-auto">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 xs:gap-10 sm:gap-12">
-      <!-- Левая колонка -->
       <div>
-        <div class="flex items-center mb-6 xs:mb-8">
-          <img src="/logo.svg" alt="Логотип" class="h-12 xs:h-14 sm:h-16 mr-4 xs:mr-6" />
-          <h3 class="text-2xl xs:text-3xl sm:text-4xl font-bold font-gilroy">ООО «ДМДК»</h3>
+        <div class="flex items-center gap-4 xs:gap-6 mb-6 xs:mb-8">
+          <img src="/logo.svg" alt={locale.layout.loader.company} class="h-12 xs:h-14 sm:h-16" />
+          <h3 class="text-2xl xs:text-3xl sm:text-4xl font-bold font-gilroy">{locale.layout.loader.company}</h3>
         </div>
         <p class="text-lg xs:text-xl sm:text-2xl mb-6 xs:mb-8 font-gilroy text-gray-300">
-          Режим работы:<br />
-          <span class="text-yellow-400 font-semibold">09:00 - 21:00</span>
+          {footer.workingHoursLabel}<br />
+          <span class="text-yellow-400 font-semibold">{footer.workingHours}</span>
         </p>
-        <nav class="space-y-3 xs:space-y-4 text-base xs:text-lg">
-          <a href="/#about" class="block hover:text-yellow-400 font-gilroy transition-colors duration-300 hover:translate-x-2 transform">о нас</a>
-          <a href="/products" class="block hover:text-yellow-400 font-gilroy transition-colors duration-300 hover:translate-x-2 transform">продукция</a>
-          <a href="/cities" class="block hover:text-yellow-400 font-gilroy transition-colors duration-300 hover:translate-x-2 transform">наши города</a>
-          <a href="/blog" class="block hover:text-yellow-400 font-gilroy transition-colors duration-300 hover:translate-x-2 transform">блог</a>
-          <a href="/faq" class="block hover:text-yellow-400 font-gilroy transition-colors duration-300 hover:translate-x-2 transform">вопросы и ответы</a>
-          <a href="/requisites" class="block hover:text-yellow-400 font-gilroy transition-colors duration-300 hover:translate-x-2 transform">реквизиты</a>
-          <a href="/#contacts" class="block hover:text-yellow-400 font-gilroy transition-colors duration-300 hover:translate-x-2 transform">контакты</a>
+        <nav class="space-y-3 xs:space-y-4 text-base xs:text-lg font-gilroy">
+          {navLinks.map((link) => (
+            <a
+              href={link.href}
+              class="block capitalize hover:text-yellow-400 transition-colors duration-300 transform hover:translate-x-2"
+            >
+              {link.label}
+            </a>
+          ))}
         </nav>
       </div>
 
-      <!-- Правая колонка -->
       <div class="flex flex-col space-y-6 xs:space-y-8">
         <div class="group">
-          <div class="bg-gradient-to-br from-gray-800 to-gray-900 p-6 xs:p-8 rounded-xl xs:rounded-2xl border border-gray-700 hover:border-yellow-500/50 transition-all duration-300 hover:transform hover:scale-105">
-            <div class="flex items-center mb-3 xs:mb-4">
-              <div class="w-10 h-10 xs:w-12 xs:h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg xs:rounded-xl flex items-center justify-center mr-3 xs:mr-4">
-                <img src="/icons/phone.svg" alt="Позвонить" class="h-5 w-5 xs:h-6 xs:w-6" />
+          <div class="bg-gradient-to-br from-gray-800 to-gray-900 p-6 xs:p-8 rounded-xl xs:rounded-2xl border border-gray-700 transition-all duration-300 group-hover:border-yellow-500/50 group-hover:scale-105">
+            <div class="flex items-center gap-3 xs:gap-4 mb-3 xs:mb-4">
+              <div class="w-10 h-10 xs:w-12 xs:h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg xs:rounded-xl flex items-center justify-center">
+                <img src="/icons/phone.svg" alt="Phone" class="h-5 w-5 xs:h-6 xs:w-6" />
               </div>
-              <h4 class="text-xl xs:text-2xl text-yellow-400 font-semibold font-gilroy">ПОЗВОНИТЬ</h4>
+              <h4 class="text-xl xs:text-2xl text-yellow-400 font-semibold font-gilroy">{footer.callCardTitle}</h4>
             </div>
             <div class="text-lg xs:text-xl text-white font-gilroy">
-              <a href="tel:+79251045050" class="block hover:text-yellow-400 transition-colors">+7 (925) 104-50-50</a>
-              <a href="tel:+79266646246" class="block hover:text-yellow-400 transition-colors">+7 (926) 664-62-46</a>
+              {phones.map((phone) => (
+                <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} class="block hover:text-yellow-400 transition-colors">
+                  {phone}
+                </a>
+              ))}
             </div>
           </div>
         </div>
 
         <div class="group">
-          <div class="bg-gradient-to-br from-gray-800 to-gray-900 p-6 xs:p-8 rounded-xl xs:rounded-2xl border border-gray-700 hover:border-blue-500/50 transition-all duration-300 hover:transform hover:scale-105">
-            <div class="flex items-center mb-3 xs:mb-4">
-              <div class="w-10 h-10 xs:w-12 xs:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg xs:rounded-xl flex items-center justify-center mr-3 xs:mr-4">
-                <img src="/icons/email.svg" alt="Написать" class="h-5 w-5 xs:h-6 xs:w-6" />
+          <div class="bg-gradient-to-br from-gray-800 to-gray-900 p-6 xs:p-8 rounded-xl xs:rounded-2xl border border-gray-700 transition-all duration-300 group-hover:border-blue-500/50 group-hover:scale-105">
+            <div class="flex items-center gap-3 xs:gap-4 mb-3 xs:mb-4">
+              <div class="w-10 h-10 xs:w-12 xs:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg xs:rounded-xl flex items-center justify-center">
+                <img src="/icons/email.svg" alt="Email" class="h-5 w-5 xs:h-6 xs:w-6" />
               </div>
-              <h4 class="text-xl xs:text-2xl text-blue-400 font-semibold font-gilroy">НАПИСАТЬ</h4>
+              <h4 class="text-xl xs:text-2xl text-blue-400 font-semibold font-gilroy">{footer.writeCardTitle}</h4>
             </div>
             <a href="mailto:ooo.dmdk@mail.ru" class="text-lg xs:text-xl text-white font-gilroy hover:text-blue-400 transition-colors">
               ooo.dmdk@mail.ru
@@ -66,32 +96,37 @@
         </div>
 
         <div class="bg-gradient-to-br from-yellow-500/10 to-yellow-400/10 border border-yellow-500/30 rounded-2xl p-5 xs:p-6">
-          <h4 class="text-lg xs:text-xl font-semibold text-yellow-300 font-gilroy mb-3">Быстрые действия</h4>
+          <h4 class="text-lg xs:text-xl font-semibold text-yellow-300 font-gilroy mb-3">{footer.quickActionsTitle}</h4>
           <div class="flex flex-col xs:flex-row xs:flex-wrap gap-3">
-            <a
-              href="#lead-request"
-              class="inline-flex items-center justify-center px-4 py-3 rounded-lg bg-yellow-500 text-black font-semibold font-gilroy text-sm xs:text-base hover:bg-yellow-400 transition"
-            >
-              Онлайн-заявка
-            </a>
-            <button
-              class="open-modal inline-flex items-center justify-center px-4 py-3 rounded-lg border border-yellow-500 text-yellow-400 font-semibold font-gilroy text-sm xs:text-base hover:bg-yellow-500 hover:text-black transition"
-            >
-              Связаться менеджером
-            </button>
+            {quickActions.map((action) =>
+              action.type === "link" ? (
+                <a
+                  href={action.href}
+                  class="inline-flex items-center justify-center px-4 py-3 rounded-lg bg-yellow-500 text-black font-semibold font-gilroy text-sm xs:text-base hover:bg-yellow-400 transition"
+                >
+                  {action.label}
+                </a>
+              ) : (
+                <button
+                  class="open-modal inline-flex items-center justify-center px-4 py-3 rounded-lg border border-yellow-500 text-yellow-400 font-semibold font-gilroy text-sm xs:text-base hover:bg-yellow-500 hover:text-black transition"
+                >
+                  {action.label}
+                </button>
+              )
+            )}
           </div>
         </div>
 
         <div class="flex justify-center lg:justify-start space-x-4 xs:space-x-6 mt-6 xs:mt-8">
           <a
             href="https://wa.me/79251045050"
-            class="group bg-gradient-to-br from-green-500 to-green-600 p-4 xs:p-6 rounded-xl xs:rounded-2xl text-white flex items-center justify-center w-16 h-16 xs:w-20 xs:h-20 hover:from-green-400 hover:to-green-500 transition-all duration-300 transform hover:scale-110 shadow-lg shadow-green-500/25"
+            class="group bg-gradient-to-br from-green-500 to-green-600 p-4 xs:p-6 rounded-xl xs:rounded-2xl text-white flex items-center justify-center w-16 h-16 xs:w-20 xs:h-20 transition-all duration-300 transform hover:scale-110 hover:from-green-400 hover:to-green-500 shadow-lg shadow-green-500/25"
           >
             <img src="/icons/ws.svg" alt="WhatsApp" class="h-8 w-8 xs:h-10 xs:w-10" />
           </a>
           <a
             href="https://t.me/OOO_DMDK"
-            class="group bg-gradient-to-br from-blue-500 to-blue-600 p-4 xs:p-6 rounded-xl xs:rounded-2xl text-white flex items-center justify-center w-16 h-16 xs:w-20 xs:h-20 hover:from-blue-400 hover:to-blue-500 transition-all duration-300 transform hover:scale-110 shadow-lg shadow-blue-500/25"
+            class="group bg-gradient-to-br from-blue-500 to-blue-600 p-4 xs:p-6 rounded-xl xs:rounded-2xl text-white flex items-center justify-center w-16 h-16 xs:w-20 xs:h-20 transition-all duration-300 transform hover:scale-110 hover:from-blue-400 hover:to-blue-500 shadow-lg shadow-blue-500/25"
           >
             <img src="/icons/tg.svg" alt="Telegram" class="h-8 w-8 xs:h-10 xs:w-10" />
           </a>
@@ -99,15 +134,14 @@
       </div>
     </div>
 
-    <!-- Нижняя часть -->
     <div class="mt-12 xs:mt-16 pt-6 xs:pt-8 border-t border-gray-700">
       <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
         <div class="text-gray-400 font-gilroy text-sm xs:text-base text-center sm:text-left">
-          © 2024 ООО «ДМДК». Все права защищены.
+          {footer.copyright}
         </div>
         <div class="flex flex-col xs:flex-row space-y-2 xs:space-y-0 xs:space-x-4 sm:space-x-6 text-xs xs:text-sm text-gray-400 font-gilroy text-center">
-          <a href="/requisites" class="hover:text-yellow-400 transition-colors">Политика конфиденциальности</a>
-          <a href="/requisites" class="hover:text-yellow-400 transition-colors">Пользовательское соглашение</a>
+          <a href="/requisites" class="hover:text-yellow-400 transition-colors">{footer.privacy}</a>
+          <a href="/requisites" class="hover:text-yellow-400 transition-colors">{footer.terms}</a>
         </div>
       </div>
     </div>

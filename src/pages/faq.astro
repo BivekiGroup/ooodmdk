@@ -2,146 +2,65 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
+import {
+  buildLocalizedLink,
+  defaultLocale,
+  getLocaleFromUrl,
+  getTranslations,
+  normalizeLocale,
+} from "../i18n";
+
+export interface Props {
+  lang?;
+}
+
+const propLang = Astro.props.lang;
+const baseLocale = Astro.locals.baseLocale ?? defaultLocale;
+const detectedLang = getLocaleFromUrl(Astro.url.pathname, baseLocale);
+const lang = normalizeLocale(propLang ?? detectedLang ?? baseLocale);
+const buildLink = (href: string, targetLocale = lang) =>
+  buildLocalizedLink(href, targetLocale, baseLocale);
+
+const defaultFaqLocale = {
+  meta: { title: "", description: "", keywords: "" },
+  breadcrumbs: { home: "", faq: "", aria: "" },
+  title: "",
+  intro: "",
+  categories: [],
+  contact: { title: "", description: "", questionButton: "" },
+};
+
+const locale = getTranslations(lang);
+const fallbackFaqLocale = getTranslations(defaultLocale).faqPage ?? defaultFaqLocale;
+const faqLocale = locale.faqPage ?? fallbackFaqLocale ?? defaultFaqLocale;
+const faqCategories = Array.isArray(faqLocale.categories) ? faqLocale.categories : [];
 
 const breadcrumbItems = [
   {
-    title: "Главная",
-    href: "/",
+    title: faqLocale.breadcrumbs.faq || "FAQ",
+    href: buildLink("/faq"),
   },
-  {
-    title: "Часто задаваемые вопросы",
-    href: "/faq",
-  },
-];
-
-const faqCategories = [
-  {
-    title: "Вопросы о продукции",
-    questions: [
-      {
-        question: "Какие драгоценные металлы вы предлагаете?",
-        answer: "Мы работаем с полным спектром драгоценных металлов: золото, серебро, платина, палладий, родий, иридий, рутений и осмий. Предлагаем различные формы: слитки, гранулы, проволока, фольга, химические соединения."
-      },
-      {
-        question: "Какова чистота ваших драгоценных металлов?",
-        answer: "Мы гарантируем высочайшую чистоту продукции: золото 999,9 пробы, серебро 999,9 пробы, платина 999,5 пробы, палладий 999,5 пробы. Каждая партия сопровождается сертификатом качества."
-      },
-      {
-        question: "В каких формах поставляются драгоценные металлы?",
-        answer: "Драгоценные металлы поставляются в виде: слитков различного веса (от 1 г до 12,5 кг), гранул, порошков, проволоки различного диаметра, фольги, губки, химических соединений и солей."
-      },
-      {
-        question: "Какие сертификаты качества предоставляются?",
-        answer: "К каждой поставке прилагается полный пакет документов: сертификат качества, паспорт качества, протокол анализа, справка о происхождении металла, документы соответствия ГОСТ."
-      },
-      {
-        question: "Возможно ли изготовление продукции по индивидуальным техническим требованиям?",
-        answer: "Да, мы изготавливаем продукцию по индивидуальным техническим условиям: нестандартные размеры слитков, специальные сплавы, продукция с особыми физико-химическими свойствами."
-      },
-      {
-        question: "Какие гарантии качества вы предоставляете?",
-        answer: "Мы предоставляем полную гарантию качества на всю продукцию. В случае несоответствия заявленным характеристикам - полный возврат средств или замена товара."
-      },
-      {
-        question: "Как происходит контроль качества продукции?",
-        answer: "Контроль качества осуществляется на всех этапах: входной контроль сырья, контроль технологического процесса, финальная проверка готовой продукции с использованием современного аналитического оборудования. Контроль ОТК и РТ-Техприемка."
-      },
-      {
-        question: "Какой срок годности у ваших драгоценных металлов?",
-        answer: "Драгоценные металлы не имеют срока годности. При правильном хранении в сухих условиях они сохраняют свои свойства неограниченное время."
-      }
-    ]
-  },
-  {
-    title: "Вопросы о лицензировании и сертификации",
-    questions: [
-      {
-        question: "Какие лицензии имеет ваша компания?",
-        answer: "ООО «ДМДК» имеет все необходимые лицензии: лицензия на аффинаж драгоценных металлов, лицензия на торговлю драгоценными металлами, разрешение на работу с драгоценными камнями."
-      },
-      {
-        question: "Зарегистрирована ли компания в ГИИС ДМДК?",
-        answer: "Да, ООО «ДМДК» зарегистрировано в Государственной информационной системе учета и контроля драгоценных металлов и драгоценных камней под номером ДМДК-2023-001234."
-      },
-
-
-      {
-        question: "Проходит ли компания аудиты качества?",
-        answer: "Да, компания регулярно проходит внутренние и внешние аудиты качества, включая аудиты со стороны Пробирной палаты России."
-      },
-
-    ]
-  },
-  {
-    title: "Вопросы о доставке и оплате",
-    questions: [
-      {
-        question: "Какие способы оплаты вы принимаете?",
-        answer: "Мы принимаем оплату: только безналичная оплата от юрлиц зарегистрированных в ГИИС ДМДК."
-      },
-      {
-        question: "Какие сроки доставки по России?",
-        answer: "Сроки доставки зависят от региона: Москва и МО - 1-2 дня, Центральный ФО - 2-3 дня, другие регионы - 3-7 дней. Возможна экспресс-доставка."
-      },
-      {
-        question: "Как обеспечивается безопасность при доставке?",
-        answer: "Все поставки осуществляются специализированными службами доставки ценных грузов, с полным страхованием, GPS-мониторингом и сопровождением охраны."
-      },
-      {
-        question: "Какова стоимость доставки?",
-        answer: "Стоимость доставки зависит от региона и веса груза. Бесплатная доставка при заказе от 100 000 рублей по Москве, от 150 000 рублей по России."
-      },
-      {
-        question: "Возможна ли доставка за границу?",
-        answer: "Да, мы осуществляем международные поставки в страны СНГ и дальнего зарубежья с соблюдением всех таможенных процедур."
-      },
-      {
-        question: "Какие документы нужны для получения груза?",
-        answer: "Для получения груза необходимы: документ, удостоверяющий личность, доверенность (при получении третьим лицом), документы организации (для юридических лиц)."
-      },
-      {
-        question: "Возможна ли отсрочка платежа?",
-        answer: "Для постоянных клиентов возможна отсрочка платежа до 30 дней. Условия определяются индивидуально в зависимости от объемов закупок и истории сотрудничества."
-      }
-    ]
-  },
-  {
-    title: "Процедуры заказа и переработки",
-    questions: [
-      {
-        question: "Как оформить заказ на продукцию?",
-        answer: "Заказ можно оформить через сайт, по телефону, электронной почте или в офисе. Необходимо указать наименование, количество, требования к качеству и условия поставки."
-      },
-      {
-        question: "Какой минимальный объем заказа?",
-        answer: "Минимальный объем заказа зависит от вида металла и вида продукции: от 1г."
-      },
-      {
-        question: "Предоставляете ли вы услуги аффинажа?",
-        answer: "Да, мы предоставляем полный цикл аффинажных услуг: переработка лома драгоценных металлов, очистка от примесей, получение металлов высокой чистоты."
-      },
-      {
-        question: "Какие материалы принимаются на переработку?",
-        answer: "На переработку принимаются: ювелирный лом, промышленные отходы, катализаторы, электронный лом, зубопротезные сплавы, фотоматериалы."
-      },
-      {
-        question: "Как происходит оценка стоимости переработки?",
-        answer: "Стоимость переработки определяется после анализа материала. Учитывается содержание драгоценных металлов, сложность переработки, объем партии."
-      }
-    ]
-  }
 ];
 ---
 
-<Layout>
+<Layout lang={lang}>
   <Fragment slot="head">
-    <title>Часто задаваемые вопросы | ООО «ДМДК»</title>
-    <meta name="description" content="Ответы на часто задаваемые вопросы о продукции, услугах, доставке и оплате ООО «ДМДК». Полная информация для клиентов." />
-    <meta name="keywords" content="FAQ ДМДК, вопросы и ответы, драгоценные металлы, аффинаж, доставка" />
+    <title>{faqLocale.meta.title}</title>
+    {faqLocale.meta.description && (
+      <meta name="description" content={faqLocale.meta.description} />
+    )}
+    {faqLocale.meta.keywords && (
+      <meta name="keywords" content={faqLocale.meta.keywords} />
+    )}
   </Fragment>
 
-  <Hero />
-  <Breadcrumbs items={breadcrumbItems} />
+  <Hero lang={lang} />
+  <Breadcrumbs
+    items={breadcrumbItems}
+    homeLabel={faqLocale.breadcrumbs.home || "Главная"}
+    homeHref={buildLink("/")}
+    ariaLabel={faqLocale.breadcrumbs.aria || "Breadcrumbs"}
+  />
 
   <!-- Декоративные элементы фона -->
   <div class="fixed inset-0 pointer-events-none overflow-hidden">
@@ -155,14 +74,13 @@ const faqCategories = [
     
     <div class="relative z-10">
       <h1 class="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-bold mb-8 xs:mb-12 text-transparent bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 bg-clip-text font-nevduplenysh text-center">
-        Часто задаваемые вопросы
+        {faqLocale.title || "FAQ"}
       </h1>
 
       <div class="max-w-6xl mx-auto">
         <div class="mb-8 xs:mb-12 text-center">
           <p class="text-base xs:text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
-            Здесь собраны ответы на наиболее популярные вопросы наших клиентов. 
-            Если вы не нашли ответ на свой вопрос, свяжитесь с нами.
+            {faqLocale.intro}
           </p>
         </div>
 
@@ -235,10 +153,10 @@ const faqCategories = [
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
               </div>
-              Не нашли ответ на свой вопрос?
+              {faqLocale.contact.title || "Не нашли ответ на свой вопрос?"}
             </h2>
             <p class="text-sm xs:text-base text-gray-300 text-center mb-6 xs:mb-8 max-w-2xl mx-auto">
-              Свяжитесь с нашими специалистами, и мы обязательно поможем вам
+              {faqLocale.contact.description || "Свяжитесь с нашими специалистами, и мы обязательно поможем вам"}
             </p>
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 xs:gap-6">
               <a 
@@ -269,7 +187,7 @@ const faqCategories = [
                   <svg class="w-3 h-3 xs:w-4 xs:h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                   </svg>
-                  Задать вопрос
+                  {faqLocale.contact.questionButton || "Задать вопрос"}
                 </span>
               </button>
             </div>

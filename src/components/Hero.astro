@@ -1,3 +1,29 @@
+---
+import {
+  buildLocalizedLink,
+  defaultLocale,
+  getTranslations,
+  isRtl,
+  normalizeLocale,
+} from "../i18n";
+
+const lang = normalizeLocale(Astro.props.lang);
+const baseLocale = Astro.locals.baseLocale ?? defaultLocale;
+const locale = getTranslations(lang);
+const hero = locale.hero;
+const rtl = isRtl(lang);
+const description = hero.description;
+const iconMargin = rtl ? "ml-2" : "mr-2";
+const stats = [
+  hero.stats.experience,
+  hero.stats.purity,
+  hero.stats.cities,
+  hero.stats.support,
+];
+const buildLink = (href: string, targetLocale = lang) =>
+  buildLocalizedLink(href, targetLocale, baseLocale);
+---
+
 <section
   class="relative flex items-center justify-start min-h-screen bg-cover bg-center overflow-hidden header-offset"
   style="background-image: url('/images/hero.webp');"
@@ -12,59 +38,49 @@
   </div>
 
   <!-- Контент -->
-  <div class="relative text-left z-10 p-3 xs:p-4 sm:p-6 md:p-8 lg:p-16 w-full">
+  <div class:list={["relative z-10 p-3 xs:p-4 sm:p-6 md:p-8 lg:p-16 w-full", rtl ? "text-right" : "text-left"]}>
     <div class="max-w-4xl">
       <h1
         class="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold text-white font-nevduplenysh tracking-wider leading-tight mb-4 xs:mb-6 sm:mb-8 animate-fade-in"
       >
-        <span class="block">Драгоценные металлы</span>
-        <span class="block text-gradient">высшей пробы</span>
+        <span class="block">{hero.title[0]}</span>
+        <span class="block text-gradient">{hero.title[1]}</span>
       </h1>
       
-      <p class="mt-4 xs:mt-6 sm:mt-8 lg:mt-12 text-white text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl max-w-3xl font-gilroy leading-relaxed animate-slide-in">
-        ООО «ДМДК» — ведущий поставщик продукции из драгоценных металлов.
-        <span class="text-yellow-400 font-semibold">Блеск и надежность в каждом грамме.</span>
+      <p class:list={["mt-4 xs:mt-6 sm:mt-8 lg:mt-12 text-white text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl max-w-3xl font-gilroy leading-relaxed animate-slide-in", rtl && "ml-auto"]}>
+        {description.lead}
+        <span class="text-yellow-400 font-semibold"> {description.highlight}</span>
       </p>
       
       <div class="mt-6 xs:mt-8 sm:mt-12 lg:mt-16 flex flex-col xs:flex-row gap-3 xs:gap-4 sm:gap-6 animate-fade-in" style="animation-delay: 0.3s;">
         <button
           class="open-modal group inline-flex items-center justify-center px-4 py-3 xs:px-6 xs:py-4 sm:px-8 sm:py-5 lg:px-14 lg:py-7 text-base xs:text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 text-black rounded-lg xs:rounded-xl sm:rounded-2xl shadow-2xl shadow-yellow-500/50 hover:shadow-yellow-400/70 hover:from-yellow-400 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105 font-gilroy"
         >
-          <svg class="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 mr-2 xs:mr-2 sm:mr-3 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class:list={["w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 transition-transform duration-300", iconMargin, rtl ? "group-hover:-translate-x-1" : "group-hover:translate-x-1"]} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
           </svg>
-          Оставить заявку
+          {hero.primaryCta}
         </button>
         
         <a 
-          href="/#products"
+          href={buildLink("/#products")}
           class="group inline-flex items-center justify-center px-4 py-3 xs:px-6 xs:py-4 sm:px-8 sm:py-5 lg:px-14 lg:py-7 text-base xs:text-lg sm:text-xl lg:text-2xl font-bold bg-white/10 backdrop-blur-sm text-white rounded-lg xs:rounded-xl sm:rounded-2xl border-2 border-white/20 hover:bg-white hover:text-gray-900 transition-all duration-300 transform hover:scale-105 font-gilroy"
         >
-          <svg class="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 mr-2 xs:mr-2 sm:mr-3 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class:list={["w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 transition-transform duration-300", iconMargin, rtl ? "group-hover:-translate-x-1" : "group-hover:translate-x-1"]} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0l-4-4m4 4l-4 4"></path>
           </svg>
-          Наша продукция
+          {hero.secondaryCta}
         </a>
       </div>
 
       <!-- Статистика -->
       <div class="mt-8 xs:mt-10 sm:mt-12 lg:mt-20 grid grid-cols-2 md:grid-cols-4 gap-2 xs:gap-3 sm:gap-4 lg:gap-6 animate-fade-in max-w-4xl" style="animation-delay: 0.6s;">
-        <div class="bg-black/40 backdrop-blur-sm rounded-lg xs:rounded-xl lg:rounded-2xl p-3 xs:p-4 sm:p-5 lg:p-6 border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300">
-          <div class="text-xl xs:text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-yellow-400 font-nevduplenysh mb-1 lg:mb-2">15+</div>
-          <div class="text-white font-gilroy font-medium text-xs xs:text-sm sm:text-base">лет опыта</div>
-        </div>
-        <div class="bg-black/40 backdrop-blur-sm rounded-lg xs:rounded-xl lg:rounded-2xl p-3 xs:p-4 sm:p-5 lg:p-6 border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300">
-          <div class="text-xl xs:text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-yellow-400 font-nevduplenysh mb-1 lg:mb-2">99.9%</div>
-          <div class="text-white font-gilroy font-medium text-xs xs:text-sm sm:text-base">чистота металлов</div>
-        </div>
-        <div class="bg-black/40 backdrop-blur-sm rounded-lg xs:rounded-xl lg:rounded-2xl p-3 xs:p-4 sm:p-5 lg:p-6 border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300">
-          <div class="text-xl xs:text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-yellow-400 font-nevduplenysh mb-1 lg:mb-2">50+</div>
-          <div class="text-white font-gilroy font-medium text-xs xs:text-sm sm:text-base">городов</div>
-        </div>
-        <div class="bg-black/40 backdrop-blur-sm rounded-lg xs:rounded-xl lg:rounded-2xl p-3 xs:p-4 sm:p-5 lg:p-6 border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300">
-          <div class="text-xl xs:text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-yellow-400 font-nevduplenysh mb-1 lg:mb-2">24/7</div>
-          <div class="text-white font-gilroy font-medium text-xs xs:text-sm sm:text-base">поддержка</div>
-        </div>
+        {stats.map((stat) => (
+          <div class="bg-black/40 backdrop-blur-sm rounded-lg xs:rounded-xl lg:rounded-2xl p-3 xs:p-4 sm:p-5 lg:p-6 border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300">
+            <div class="text-xl xs:text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-yellow-400 font-nevduplenysh mb-1 lg:mb-2">{stat.value}</div>
+            <div class="text-white font-gilroy font-medium text-xs xs:text-sm sm:text-base">{stat.label}</div>
+          </div>
+        ))}
       </div>
     </div>
   </div>

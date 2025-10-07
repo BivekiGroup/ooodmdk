@@ -1,0 +1,9 @@
+---
+import Page from "../products.astro";
+import { normalizeLocale } from "../../i18n";
+
+const { lang: langParam } = Astro.params;
+const lang = normalizeLocale(langParam);
+---
+
+<Page lang={lang} />

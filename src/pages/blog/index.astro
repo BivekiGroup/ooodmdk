@@ -1,50 +1,42 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import {
+  buildLocalizedLink,
+  defaultLocale,
+  getLocaleFromUrl,
+  getTranslations,
+  normalizeLocale,
+} from "../../i18n";
+
+export interface Props {
+  lang?;
+}
+
+const propLang = Astro.props.lang;
+const baseLocale = Astro.locals.baseLocale ?? defaultLocale;
+const detectedLang = getLocaleFromUrl(Astro.url.pathname, baseLocale);
+const lang = normalizeLocale(propLang ?? detectedLang ?? baseLocale);
+const buildLink = (href: string, targetLocale = lang) =>
+  buildLocalizedLink(href, targetLocale, baseLocale);
+const locale = getTranslations(lang);
+const blogLocale = locale.blogPage;
 
 const breadcrumbItems = [
-  { title: "Главная", href: "/" },
-  { title: "Экспертный блог", href: "/blog" }
+  { title: blogLocale.breadcrumbs.home, href: buildLink("/") },
+  { title: blogLocale.breadcrumbs.blog, href: buildLink("/blog") },
 ];
 
-const articles = [
-  {
-    slug: "sertifikaciya-kontrolj-kachestva",
-    title: "Сертификация и контроль качества драгоценных металлов в России",
-    excerpt: "Обзор системы сертификации драгоценных металлов в России, требований ГОСТ и международных стандартов качества.",
-    readTime: "18 мин",
-    publishDate: "25 января 2024",
-    category: "Сертификация",
-    categoryColor: "from-green-500 to-green-600",
-    image: "/images/hero.webp"
-  },
-  {
-    slug: "platinovye-metally-promyshlennost",
-    title: "Применение платиновых металлов в современной промышленности",
-    excerpt: "Исследование областей применения платиновых металлов в различных отраслях промышленности.",
-    readTime: "12 мин",
-    publishDate: "20 января 2024",
-    category: "Применение",
-    categoryColor: "from-blue-500 to-blue-600",
-    image: "/images/hero.webp"
-  },
-  {
-    slug: "affinazh-dragocennyh-metallov",
-    title: "Аффинаж драгоценных металлов: технологии и стандарты качества",
-    excerpt: "Подробный обзор современных технологий аффинажа драгоценных металлов.",
-    readTime: "15 мин",
-    publishDate: "15 января 2024",
-    category: "Технологии",
-    categoryColor: "from-purple-500 to-purple-600",
-    image: "/images/hero.webp"
-  }
-];
+const articles = blogLocale.articles.map((article) => ({
+  ...article,
+  href: buildLink(`/blog/${article.slug}`),
+}));
 ---
 
-<Layout>
+<Layout lang={lang}>
   <Fragment slot="head">
-    <title>Экспертный блог | ООО «ДМДК»</title>
-    <meta name="description" content="Экспертные статьи о драгоценных металлах, технологиях аффинажа и стандартах качества от ООО «ДМДК»." />
+    <title>{blogLocale.meta.title}</title>
+    <meta name="description" content={blogLocale.meta.description} />
   </Fragment>
 
   <!-- Hero секция для блога -->
@@ -58,27 +50,24 @@ const articles = [
 
     <div class="relative z-10 max-w-7xl mx-auto text-center">
       <h1 class="text-4xl xs:text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-yellow-500 mb-6 xs:mb-8 font-nevduplenysh">
-        ЭКСПЕРТНЫЙ БЛОГ
+        {blogLocale.hero.title}
       </h1>
       <p class="text-base xs:text-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto font-gilroy leading-relaxed">
-        Профессиональные знания и экспертные материалы о драгоценных металлах, 
-        <span class="text-yellow-400 font-semibold">технологиях и стандартах качества</span>
+        {blogLocale.hero.description.lead}{" "}
+        <span class="text-yellow-400 font-semibold">{blogLocale.hero.description.highlight}</span>
       </p>
 
       <!-- Статистика блога -->
       <div class="mt-12 xs:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 xs:gap-6 sm:gap-8 max-w-4xl mx-auto">
-        <div class="bg-black/40 backdrop-blur-sm rounded-xl xs:rounded-2xl p-4 xs:p-6 border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300">
-          <div class="text-3xl xs:text-4xl font-bold text-yellow-400 font-nevduplenysh mb-1 xs:mb-2">15+</div>
-          <div class="text-white font-gilroy font-medium text-sm xs:text-base">экспертных статей</div>
-        </div>
-        <div class="bg-black/40 backdrop-blur-sm rounded-xl xs:rounded-2xl p-4 xs:p-6 border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300">
-          <div class="text-3xl xs:text-4xl font-bold text-yellow-400 font-nevduplenysh mb-1 xs:mb-2">5000+</div>
-          <div class="text-white font-gilroy font-medium text-sm xs:text-base">читателей в месяц</div>
-        </div>
-        <div class="bg-black/40 backdrop-blur-sm rounded-xl xs:rounded-2xl p-4 xs:p-6 border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300">
-          <div class="text-3xl xs:text-4xl font-bold text-yellow-400 font-nevduplenysh mb-1 xs:mb-2">24/7</div>
-          <div class="text-white font-gilroy font-medium text-sm xs:text-base">обновления</div>
-        </div>
+        {blogLocale.hero.stats.map((stat) => (
+          <div
+            class="bg-black/40 backdrop-blur-sm rounded-xl xs:rounded-2xl p-4 xs:p-6 border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300"
+            key={`${stat.value}-${stat.label}`}
+          >
+            <div class="text-3xl xs:text-4xl font-bold text-yellow-400 font-nevduplenysh mb-1 xs:mb-2">{stat.value}</div>
+            <div class="text-white font-gilroy font-medium text-sm xs:text-base">{stat.label}</div>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -97,17 +86,17 @@ const articles = [
       <!-- Заголовок раздела -->
       <div class="text-center mb-12 xs:mb-16">
         <h2 class="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 xs:mb-6 font-nevduplenysh">
-          ПОСЛЕДНИЕ СТАТЬИ
+          {blogLocale.list.title}
         </h2>
         <p class="text-base xs:text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto font-gilroy leading-relaxed">
-          Актуальные материалы от наших экспертов о драгоценных металлах, технологиях и рыночных трендах
+          {blogLocale.list.description}
         </p>
       </div>
 
       <!-- Сетка статей -->
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 xs:gap-8">
-        {articles.map((article, index) => (
-          <article class="group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl xs:rounded-3xl overflow-hidden shadow-2xl hover:transform hover:scale-105 transition-all duration-500 border border-gray-700 hover:border-yellow-500/50">
+        {articles.map((article) => (
+          <article class="group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl xs:rounded-3xl overflow-hidden shadow-2xl hover:transform hover:scale-105 transition-all duration-500 border border-gray-700 hover:border-yellow-500/50" key={article.slug}>
             <!-- Фоновое изображение -->
             <div class="absolute inset-0 bg-cover bg-center opacity-20" style={`background-image: url('${article.image}');`}></div>
             <div class="absolute inset-0 bg-gradient-to-br from-black/60 to-black/80"></div>
@@ -122,7 +111,7 @@ const articles = [
 
               <!-- Заголовок -->
               <h3 class="text-xl xs:text-2xl font-bold mb-3 xs:mb-4 text-white font-gilroy leading-tight group-hover:text-yellow-400 transition-colors duration-300">
-                <a href={`/blog/${article.slug}`} class="block">
+                <a href={article.href} class="block">
                   {article.title}
                 </a>
               </h3>
@@ -149,11 +138,11 @@ const articles = [
               </div>
 
               <!-- Кнопка чтения -->
-              <a 
-                href={`/blog/${article.slug}`}
+              <a
+                href={article.href}
                 class="group/btn inline-flex items-center justify-center w-full px-4 py-3 xs:px-6 xs:py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black rounded-lg xs:rounded-xl hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 font-gilroy font-semibold shadow-lg shadow-yellow-500/25 text-sm xs:text-base"
               >
-                <span>Читать статью</span>
+                <span>{blogLocale.readButton}</span>
                 <svg class="w-4 h-4 xs:w-5 xs:h-5 ml-2 xs:ml-3 group-hover/btn:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                 </svg>
@@ -170,16 +159,16 @@ const articles = [
       <div class="mt-16 xs:mt-20 text-center">
         <div class="bg-gradient-to-r from-gray-800/60 to-gray-900/60 backdrop-blur-sm rounded-2xl xs:rounded-3xl p-8 xs:p-12 border border-gray-700/50">
           <h3 class="text-2xl xs:text-3xl lg:text-4xl font-bold text-white mb-4 xs:mb-6 font-nevduplenysh">
-            ОСТАЛИСЬ ВОПРОСЫ?
+            {blogLocale.cta.title}
           </h3>
           <p class="text-base xs:text-lg sm:text-xl text-gray-300 mb-6 xs:mb-8 max-w-2xl mx-auto font-gilroy leading-relaxed">
-            Наши эксперты готовы ответить на любые вопросы о драгоценных металлах и поделиться профессиональным опытом
+            {blogLocale.cta.description}
           </p>
           <button class="open-modal inline-flex items-center px-6 py-3 xs:px-8 xs:py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black rounded-lg xs:rounded-xl hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 font-gilroy font-semibold shadow-lg shadow-yellow-500/25 text-sm xs:text-base">
             <svg class="w-4 h-4 xs:w-5 xs:h-5 mr-2 xs:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
             </svg>
-            Задать вопрос эксперту
+            {blogLocale.cta.button}
           </button>
         </div>
       </div>

@@ -1,3 +1,14 @@
+---
+import { defaultLocale, getTranslations } from "../i18n";
+
+export interface Props {
+  lang?;
+}
+
+const lang = (Astro.props.lang) ?? defaultLocale;
+const locale = getTranslations(lang);
+---
+
 <section id="lead-request" class="relative py-16 xs:py-20 sm:py-24 overflow-hidden">
   <div class="absolute inset-0 opacity-10">
     <div class="absolute top-10 right-24 w-48 h-48 bg-yellow-500 rounded-full blur-3xl"></div>
@@ -7,63 +18,49 @@
   <div class="max-w-6xl mx-auto px-4 xs:px-6 sm:px-10 relative z-10">
     <div class="grid gap-10 lg:grid-cols-[1.1fr,0.9fr] items-center">
       <div>
-        <span class="text-xs uppercase tracking-[0.4em] text-yellow-400 font-semibold font-gilroy">Заявка без ожидания</span>
+        <span class="text-xs uppercase tracking-[0.4em] text-yellow-400 font-semibold font-gilroy">{locale.inlineLead.badge}</span>
         <h2 class="mt-4 text-3xl xs:text-4xl sm:text-5xl font-bold text-white font-nevduplenysh">
-          Получите расчёт стоимости партии за один рабочий день
+          {locale.inlineLead.title}
         </h2>
         <p class="mt-6 text-base xs:text-lg text-gray-300 font-gilroy leading-relaxed">
-          Сообщите нам параметры поставки — подберём форму металла, подготовим коммерческое предложение и согласуем логистику. Вы будете знать стоимость и сроки до подписания договора.
+          {locale.inlineLead.description}
         </p>
         <ul class="mt-6 space-y-3 text-gray-300 font-gilroy">
-          <li class="flex items-start gap-3">
-            <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-yellow-500/20 text-yellow-400">
-              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12l5 5L20 7" />
-              </svg>
-            </span>
-            <span>Расчёт и прайс-лист отправим в течение 10 минут после подтверждения заявки</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-yellow-500/20 text-yellow-400">
-              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12l5 5L20 7" />
-              </svg>
-            </span>
-            <span>Подбор металла: золото, серебро, платина, палладий — слитки, гранулы, проволока</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-yellow-500/20 text-yellow-400">
-              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12l5 5L20 7" />
-              </svg>
-            </span>
-            <span>Документируем происхождение, чистоту пробы и обеспечиваем страховое сопровождение</span>
-          </li>
+          {locale.inlineLead.bullets.map((bullet) => (
+            <li class="flex items-start gap-3">
+              <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-yellow-500/20 text-yellow-400">
+                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12l5 5L20 7" />
+                </svg>
+              </span>
+              <span>{bullet}</span>
+            </li>
+          ))}
         </ul>
       </div>
 
       <div class="bg-gradient-to-br from-gray-900 to-gray-800 border border-yellow-500/20 rounded-2xl p-6 xs:p-8 shadow-xl shadow-black/30">
-        <h3 class="text-xl xs:text-2xl font-semibold text-white font-gilroy mb-4">Оставьте заявку прямо сейчас</h3>
+        <h3 class="text-xl xs:text-2xl font-semibold text-white font-gilroy mb-4">{locale.inlineLead.form.title}</h3>
         <form id="inlineContactForm" class="space-y-4">
           <div>
-            <label for="inlineName" class="block text-sm text-gray-300 font-gilroy mb-1">Ваше имя</label>
+            <label for="inlineName" class="block text-sm text-gray-300 font-gilroy mb-1">{locale.inlineLead.form.nameLabel}</label>
             <input
               type="text"
               id="inlineName"
               name="name"
-              placeholder="Иван Иванов"
+              placeholder={locale.inlineLead.form.namePlaceholder}
               autocomplete="name"
               class="w-full p-3 rounded-lg bg-gray-900 border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy"
               required
             />
           </div>
           <div>
-            <label for="inlinePhone" class="block text-sm text-gray-300 font-gilroy mb-1">Телефон</label>
+            <label for="inlinePhone" class="block text-sm text-gray-300 font-gilroy mb-1">{locale.inlineLead.form.phoneLabel}</label>
             <input
               type="tel"
               id="inlinePhone"
               name="phone"
-              placeholder="+7 (___) ___-__-__"
+              placeholder={locale.inlineLead.form.phonePlaceholder}
               autocomplete="tel"
               inputmode="tel"
               class="w-full p-3 rounded-lg bg-gray-900 border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy"
@@ -71,33 +68,152 @@
             />
           </div>
           <div>
-            <label for="inlineEmail" class="block text-sm text-gray-300 font-gilroy mb-1">Email (опционально)</label>
+            <label for="inlineEmail" class="block text-sm text-gray-300 font-gilroy mb-1">{locale.inlineLead.form.emailLabel}</label>
             <input
               type="email"
               id="inlineEmail"
               name="email"
-              placeholder="info@example.ru"
+              placeholder={locale.inlineLead.form.emailPlaceholder}
               autocomplete="email"
               class="w-full p-3 rounded-lg bg-gray-900 border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy"
             />
+          </div>
+          <div>
+            <label for="inlineComment" class="block text-sm text-gray-300 font-gilroy mb-1">{locale.inlineLead.form.commentLabel}</label>
+            <textarea
+              id="inlineComment"
+              name="comment"
+              rows="4"
+              placeholder={locale.inlineLead.form.commentPlaceholder}
+              class="w-full p-3 rounded-lg bg-gray-900 border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy resize-none"
+            ></textarea>
+          </div>
+          <div>
+            <label for="inlineAttachment" class="block text-sm text-gray-300 font-gilroy mb-1">{locale.inlineLead.form.fileLabel}</label>
+            <input
+              type="file"
+              id="inlineAttachment"
+              name="attachment"
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.txt"
+              class="block w-full text-sm text-gray-400 font-gilroy file:mr-4 file:rounded-md file:border-0 file:bg-yellow-500 file:text-black file:px-4 file:py-2 file:text-sm file:font-semibold file:cursor-pointer cursor-pointer bg-gray-900 border border-gray-700 rounded-lg"
+            />
+            <p class="mt-1 text-xs text-gray-500 font-gilroy">
+              {locale.inlineLead.form.fileHint}
+            </p>
           </div>
           <button
             type="submit"
             class="w-full py-3 bg-yellow-500 text-black rounded-lg font-semibold text-lg hover:bg-yellow-400 transition font-gilroy"
           >
-            Получить расчёт
+            {locale.inlineLead.form.submit}
           </button>
           <p class="text-xs text-gray-500 font-gilroy text-center">
-            Отправляя данные, вы подтверждаете согласие с обработкой персональных данных по 152-ФЗ.
+            {locale.inlineLead.form.consent}
           </p>
         </form>
       </div>
     </div>
   </div>
 
+  <script type="application/json" id="inline-lead-config">
+    {JSON.stringify(locale.inlineLead.messages)}
+  </script>
+
   <script>
     const inlineForm = document.getElementById("inlineContactForm") as HTMLFormElement | null;
     const inlinePhone = document.getElementById("inlinePhone") as HTMLInputElement | null;
+    const inlineComment = document.getElementById("inlineComment") as HTMLTextAreaElement | null;
+    const inlineAttachment = document.getElementById("inlineAttachment") as HTMLInputElement | null;
+    const inlineConfigElement = document.getElementById("inline-lead-config");
+    let inlineConfig = {
+      telegramTitle: "New request:",
+      nameLabel: "Name",
+      phoneLabel: "Phone",
+      emailLabel: "Email",
+      commentLabel: "Comment",
+      fileLabel: "File",
+      alerts: {
+        incompletePhone: "Please provide a complete phone number.",
+        success: "Request sent successfully!",
+        error: "Something went wrong. Please try again later.",
+        fileError: "Request sent but the attachment could not be uploaded. Please try again.",
+      },
+    };
+
+    type ToastVariant = 'success' | 'error' | 'info';
+    const inlineToastScope = window as typeof window & {
+      showToast?: (message: string, variant?: ToastVariant) => void;
+    };
+
+    if (!inlineToastScope.showToast) {
+      const ensureToastEnvironment = () => {
+        if (!document.getElementById('global-toast-styles')) {
+          const style = document.createElement('style');
+          style.id = 'global-toast-styles';
+          style.textContent = `
+.toast-container{position:fixed;top:1.25rem;right:1.25rem;z-index:9999;display:flex;flex-direction:column;gap:0.75rem;align-items:flex-end;pointer-events:none}
+.toast{min-width:280px;max-width:360px;padding:0.85rem 1.1rem;border-radius:0.9rem;background:rgba(15,15,15,0.92);color:#fff;box-shadow:0 12px 30px rgba(0,0,0,0.28);opacity:0;transform:translateY(-12px);transition:opacity .3s ease,transform .3s ease;pointer-events:auto;font-family:var(--toast-font,'Gilroy',system-ui);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08)}
+.toast--success{background:linear-gradient(135deg,#16a34a,#15803d)}
+.toast--error{background:linear-gradient(135deg,#ef4444,#991b1b)}
+.toast--info{background:linear-gradient(135deg,#facc15,#b45309);color:#111}
+.toast__message{font-size:0.95rem;line-height:1.4;white-space:pre-line;margin:0}
+.toast.show{opacity:1;transform:translateY(0)}
+`;
+          document.head.appendChild(style);
+        }
+
+        let container = document.querySelector('.toast-container') as HTMLDivElement | null;
+        if (!container) {
+          container = document.createElement('div');
+          container.className = 'toast-container';
+          document.body.appendChild(container);
+        }
+
+        return container;
+      };
+
+      inlineToastScope.showToast = (message: string, variant: ToastVariant = 'info') => {
+        const container = ensureToastEnvironment();
+        const toast = document.createElement('div');
+        toast.className = `toast toast--${variant}`;
+
+        const text = document.createElement('p');
+        text.className = 'toast__message';
+        text.textContent = message;
+
+        toast.appendChild(text);
+        container.appendChild(toast);
+
+        requestAnimationFrame(() => {
+          toast.classList.add('show');
+        });
+
+        const dismiss = () => {
+          toast.classList.remove('show');
+          setTimeout(() => {
+            toast.remove();
+            if (!container?.children.length) {
+              container.remove();
+            }
+          }, 300);
+        };
+
+        setTimeout(dismiss, 4500);
+        toast.addEventListener('click', dismiss);
+      };
+    }
+
+    const showToast = (message: string, variant: ToastVariant = 'info') => {
+      inlineToastScope.showToast?.(message, variant);
+    };
+
+    if (inlineConfigElement?.textContent) {
+      try {
+        inlineConfig = JSON.parse(inlineConfigElement.textContent);
+      } catch (error) {
+        console.error('Failed to parse inline lead config', error);
+      }
+    }
 
     const formatInlinePhone = (value: string) => {
       const digits = value.replace(/\D/g, "");
@@ -166,19 +282,26 @@
       const name = nameInput?.value.trim() || "";
       const phone = inlinePhone?.value.trim() || "";
       const email = emailInput?.value.trim() || "";
+      const comment = inlineComment?.value.trim() || "";
+      const attachment = inlineAttachment?.files?.[0] ?? null;
 
       const phoneDigits = phone.replace(/\D/g, "");
       if (phoneDigits.length < 11) {
-        alert("Пожалуйста, укажите полный номер телефона.");
+        showToast(inlineConfig.alerts.incompletePhone, 'error');
         inlinePhone?.focus();
         return;
       }
 
+      const commentLabel = inlineConfig.commentLabel ?? "Comment";
+      const fileLabel = inlineConfig.fileLabel ?? "File";
+
       const messageLines = [
-        "Новая заявка с лендинга (inline):",
-        `Имя: ${name}`,
-        phone ? `Телефон: ${phone}` : null,
-        email ? `Email: ${email}` : null,
+        inlineConfig.telegramTitle,
+        `${inlineConfig.nameLabel}: ${name}`,
+        phone ? `${inlineConfig.phoneLabel}: ${phone}` : null,
+        email ? `${inlineConfig.emailLabel}: ${email}` : null,
+        comment ? `${commentLabel}: ${comment}` : null,
+        attachment ? `${fileLabel}: ${attachment.name}` : null,
       ].filter(Boolean) as string[];
 
       const message = messageLines.join("\n");
@@ -187,19 +310,49 @@
       const chatId = "-1002176656869";
       const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
+      const finalizeInlineSuccess = () => {
+        showToast(inlineConfig.alerts.success, 'success');
+        inlineForm.reset();
+        if (inlinePhone) {
+          inlinePhone.value = "";
+        }
+      };
+
       fetch(url)
         .then((response) => {
-          if (response.ok) {
-            alert("Заявка успешно отправлена!");
-            inlineForm.reset();
-            inlinePhone.value = "";
-          } else {
-            alert("Ошибка при отправке заявки. Попробуйте позже.");
+          if (!response.ok) {
+            throw new Error("requestFailed");
           }
+
+          if (!attachment) {
+            finalizeInlineSuccess();
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append("chat_id", chatId);
+          formData.append("document", attachment);
+          const caption = message.length > 1024 ? message.slice(0, 1024) : message;
+          formData.append("caption", caption);
+
+          return fetch(`https://api.telegram.org/bot${token}/sendDocument`, {
+            method: "POST",
+            body: formData,
+          }).then((docResponse) => {
+            if (!docResponse.ok) {
+              throw new Error("fileFailed");
+            }
+            finalizeInlineSuccess();
+          });
         })
         .catch((error) => {
           console.error("Error:", error);
-          alert("Ошибка при отправке заявки. Попробуйте позже.");
+          const errorKey = error instanceof Error ? error.message : "";
+          if (errorKey === "fileFailed") {
+            showToast(inlineConfig.alerts.fileError ?? inlineConfig.alerts.error, 'error');
+          } else {
+            showToast(inlineConfig.alerts.error, 'error');
+          }
         });
     });
   </script>

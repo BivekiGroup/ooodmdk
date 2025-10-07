@@ -1,3 +1,44 @@
+---
+import {
+  buildLocalizedLink,
+  defaultLocale,
+  getTranslations,
+  localeOptions,
+  normalizeLocale,
+  stripLocaleFromPath,
+} from "../i18n";
+
+const baseLocale = Astro.locals.baseLocale ?? defaultLocale;
+const lang = normalizeLocale(Astro.props.lang ?? baseLocale);
+const locale = getTranslations(lang);
+const navLinks = [
+  { href: "/#about", label: locale.header.nav.about },
+  { href: "/products", label: locale.header.nav.products },
+  { href: "/blog", label: locale.header.nav.blog },
+  { href: "/faq", label: locale.header.nav.faq },
+  { href: "/#contacts", label: locale.header.nav.contacts },
+];
+
+const modalCopy = locale.header.modal.messages;
+const fieldLabels = modalCopy.fieldLabels;
+
+const pathname = Astro.url.pathname;
+const basePath = stripLocaleFromPath(pathname);
+const search = Astro.url.search ?? "";
+const hash = Astro.url.hash ?? "";
+const localizedPath = `${basePath}${search}${hash}`;
+const buildLink = (href: string, targetLocale = lang) =>
+  buildLocalizedLink(href, targetLocale, baseLocale);
+const languageLinks = localeOptions.map((option) => {
+  const normalized = normalizeLocale(option.value);
+  return {
+    ...option,
+    href: buildLocalizedLink(localizedPath || "/", normalized, baseLocale),
+    active: normalized === lang,
+  };
+});
+---
+
 <!-- Модальное окно -->
 <div
   id="modal"
@@ -26,19 +67,19 @@
     </button>
 
     <h2 class="text-3xl font-semibold mb-4 text-center font-gilroy text-gray-900">
-      Обсудим ваш запрос за 10 минут
+      {locale.header.modal.title}
     </h2>
     <ul class="text-gray-800 mb-6 space-y-2 font-gilroy text-center">
-      <li>Перезвоним в течение 10 минут после заявки</li>
-      <li>Отправим актуальный прайс-лист</li>
-      <li>Сделаем бесплатный расчёт под ваш проект</li>
+      {locale.header.modal.bullets.map((item) => (
+        <li>{item}</li>
+      ))}
     </ul>
     <form id="contactForm" class="space-y-4">
       <input
         type="text"
         id="name"
         name="name"
-        placeholder="Ваше имя"
+        placeholder={locale.header.modal.form.name}
         autocomplete="name"
         class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy text-gray-900 placeholder:text-gray-500"
         required
@@ -47,7 +88,7 @@
         type="tel"
         id="phone"
         name="phone"
-        placeholder="Телефон"
+        placeholder={locale.header.modal.form.phone}
         autocomplete="tel"
         inputmode="tel"
         class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy text-gray-900 placeholder:text-gray-500"
@@ -57,15 +98,37 @@
         type="email"
         id="email"
         name="email"
-        placeholder="Email (по желанию)"
+        placeholder={locale.header.modal.form.email}
         autocomplete="email"
         class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy text-gray-900 placeholder:text-gray-500"
       />
+      <textarea
+        id="comment"
+        name="comment"
+        placeholder={locale.header.modal.form.comment}
+        rows="4"
+        class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 font-gilroy text-gray-900 placeholder:text-gray-500 resize-none"
+      ></textarea>
+      <div>
+        <label for="attachment" class="block text-sm font-gilroy text-gray-600 mb-2">
+          {locale.header.modal.form.fileLabel}
+        </label>
+        <input
+          type="file"
+          id="attachment"
+          name="attachment"
+          accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.txt"
+          class="block w-full text-sm text-gray-600 font-gilroy file:mr-4 file:rounded-md file:border-0 file:bg-yellow-500 file:text-black file:px-4 file:py-2 file:text-sm file:font-semibold file:cursor-pointer cursor-pointer"
+        />
+        <p class="mt-1 text-xs text-gray-500 font-gilroy">
+          {locale.header.modal.form.fileHint}
+        </p>
+      </div>
       <button
         type="submit"
         class="w-full py-3 bg-yellow-500 text-white rounded-lg font-semibold text-lg hover:bg-yellow-600 transition font-gilroy"
       >
-        Получить консультацию
+        {locale.header.modal.form.submit}
       </button>
     </form>
   </div>
@@ -74,41 +137,39 @@
 <header
   class="fixed text-white top-1 xs:top-2 sm:top-3 md:top-4 left-1/2 transform -translate-x-1/2 w-[95%] xs:w-11/12 max-w-screen-xl z-50 flex justify-between items-center px-2 py-1.5 xs:px-3 xs:py-2 sm:px-4 sm:py-3 md:px-6 md:py-4 bg-black bg-opacity-70 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl border border-white border-opacity-20"
 >
-  <a href="/" class="flex items-center min-w-0 flex-shrink-0">
-    <img src="/logo.svg" alt="Логотип" class="h-5 xs:h-6 sm:h-8 md:h-10 lg:h-12 flex-shrink-0" />
+  <a href={buildLink("/")} class="flex items-center min-w-0 flex-shrink-0">
+    <img src="/logo.svg" alt={locale.header.company} class="h-5 xs:h-6 sm:h-8 md:h-10 lg:h-12 flex-shrink-0" />
     <span class="ml-1 xs:ml-1.5 sm:ml-2 font-bold text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-gilroy truncate">
-      ООО «ДМДК»
+      {locale.header.company}
     </span>
   </a>
 
   <nav class="hidden lg:flex items-center space-x-6">
     <ul class="flex text-lg space-x-8">
-      <li>
-        <a href="/#about" class="hover:text-yellow-400 font-gilroy transition-colors">О НАС</a>
-      </li>
-      <li>
-        <a href="/products" class="hover:text-yellow-400 font-gilroy transition-colors">ПРОДУКЦИЯ</a>
-      </li>
-      <li>
-        <a href="/blog" class="hover:text-yellow-400 font-gilroy transition-colors">БЛОГ</a>
-      </li>
-      <li>
-        <a href="/faq" class="hover:text-yellow-400 font-gilroy transition-colors">FAQ</a>
-      </li>
-      <li class="relative group">
-        <a href="/#contacts" class="hover:text-yellow-400 font-gilroy transition-colors">КОНТАКТЫ</a>
-        <div
+      {navLinks.map((link, index) => (
+        <li class:list={[index === navLinks.length - 1 && "relative group"]}>
+          <a
+            href={buildLink(link.href)}
+            class="hover:text-yellow-400 font-gilroy transition-colors"
+          >
+            {link.label}
+          </a>
+          {index === navLinks.length - 1 && (
+            <div
           class="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 bg-black bg-opacity-90 backdrop-blur-sm text-white p-6 rounded-xl mt-2 w-80 left-1/2 transform -translate-x-1/2 transition-all duration-300 ease-in-out scale-95 group-hover:scale-100 border border-white border-opacity-20"
         >
           <div class="flex justify-center items-center mb-4">
-            <img src="/logo.svg" alt="Логотип" class="h-8" />
-            <span class="ml-2 font-bold font-gilroy">ООО «ДМДК»</span>
+            <img src="/logo.svg" alt={locale.header.company} class="h-8" />
+            <span class="ml-2 font-bold font-gilroy">{locale.header.company}</span>
           </div>
           <div class="space-y-2 text-center font-gilroy">
             <p>+7 (925) 104-50-50</p>
             <p>+7 (926) 664-62-46</p>
             <p>ooo.dmdk@mail.ru</p>
-            <p>Режим работы:<br /> <span class="text-lg">9:00 - 21:00</span></p>
+            <p>
+              {locale.header.contactCard.schedule}<br />
+              <span class="text-lg">{locale.header.contactCard.hours}</span>
+            </p>
           </div>
           <div class="flex justify-center space-x-4 mt-4">
             <a href="https://t.me/OOO_DMDK" class="social-icon">
@@ -126,15 +187,33 @@
               />
             </a>
           </div>
-        </div>
-      </li>
+            </div>
+          )}
+        </li>
+      ))}
     </ul>
+
+    <div class="flex items-center space-x-2">
+      {languageLinks.map((option) => (
+        <a
+          href={option.href}
+          class:list={[
+            "inline-flex items-center px-2.5 py-1.5 text-sm font-gilroy rounded-md border transition-colors duration-200",
+            option.active
+              ? "bg-yellow-400 text-black border-yellow-300"
+              : "text-white border-white/20 hover:text-yellow-400",
+          ]}
+        >
+          {option.nativeLabel}
+        </a>
+      ))}
+    </div>
 
     <!-- Кнопка "Оставить заявку" -->
     <button
       class="open-modal ml-6 px-4 py-2 xl:px-6 xl:py-3 text-base xl:text-lg font-semibold bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 text-white rounded-lg shadow-lg shadow-yellow-500/50 hover:shadow-xl hover:shadow-yellow-400/70 hover:bg-opacity-90 transition-all duration-300 font-gilroy"
     >
-      Оставить заявку
+      {locale.header.callToAction}
     </button>
   </nav>
 
@@ -142,7 +221,7 @@
   <div class="lg:hidden flex items-center space-x-2">
     <!-- Компактная кнопка заявки для планшетов -->
     <button class="open-modal hidden md:block lg:hidden px-3 py-2 text-sm font-semibold bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 text-white rounded-lg shadow-lg shadow-yellow-500/50 hover:shadow-xl hover:shadow-yellow-400/70 hover:bg-opacity-90 transition-all duration-300 font-gilroy">
-      Заявка
+      {locale.header.mobile.request}
     </button>
     
     <button id="menu-toggle" class="focus:outline-none p-1 hover:text-yellow-400 transition-colors">
@@ -175,16 +254,35 @@
   
   <!-- Логотип в мобильном меню -->
   <div class="flex items-center mb-4 xs:mb-6">
-    <img src="/logo.svg" alt="Логотип" class="h-8 xs:h-10 sm:h-12" />
-    <span class="ml-2 xs:ml-3 font-bold text-lg xs:text-xl sm:text-2xl font-gilroy">ООО «ДМДК»</span>
+    <img src="/logo.svg" alt={locale.header.company} class="h-8 xs:h-10 sm:h-12" />
+    <span class="ml-2 xs:ml-3 font-bold text-lg xs:text-xl sm:text-2xl font-gilroy">{locale.header.company}</span>
   </div>
   
-  <a href="/#about" class="text-lg xs:text-xl sm:text-2xl font-gilroy hover:text-yellow-400 transition-colors mobile-menu-link">О НАС</a>
-  <a href="/products" class="text-lg xs:text-xl sm:text-2xl font-gilroy hover:text-yellow-400 transition-colors mobile-menu-link">ПРОДУКЦИЯ</a>
-  <a href="/blog" class="text-lg xs:text-xl sm:text-2xl font-gilroy hover:text-yellow-400 transition-colors mobile-menu-link">БЛОГ</a>
-  <a href="/faq" class="text-lg xs:text-xl sm:text-2xl font-gilroy hover:text-yellow-400 transition-colors mobile-menu-link">FAQ</a>
-  <a href="/#contacts" class="text-lg xs:text-xl sm:text-2xl font-gilroy hover:text-yellow-400 transition-colors mobile-menu-link">КОНТАКТЫ</a>
+  {navLinks.map((link) => (
+    <a
+      href={buildLink(link.href)}
+      class="text-lg xs:text-xl sm:text-2xl font-gilroy hover:text-yellow-400 transition-colors mobile-menu-link"
+    >
+      {link.label}
+    </a>
+  ))}
   
+  <div class="flex items-center space-x-3 xs:space-x-4 md:space-x-6">
+    {languageLinks.map((option) => (
+      <a
+        href={option.href}
+        class:list={[
+          "inline-flex items-center px-3 py-2 text-base font-gilroy rounded-md border transition-colors duration-200",
+          option.active
+            ? "bg-yellow-400 text-black border-yellow-300"
+            : "text-white border-white/20 hover:text-yellow-400",
+        ]}
+      >
+        {option.nativeLabel}
+      </a>
+    ))}
+  </div>
+
   <!-- Контактная информация в мобильном меню -->
   <div class="mt-6 xs:mt-8 text-center space-y-2 xs:space-y-3">
     <div class="text-sm xs:text-base text-gray-300 font-gilroy">
@@ -206,17 +304,122 @@
   <button
     class="open-modal mt-6 xs:mt-8 px-6 xs:px-8 py-3 xs:py-4 text-base xs:text-lg font-semibold bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 text-white rounded-lg xs:rounded-xl shadow-lg shadow-yellow-500/50 hover:shadow-xl hover:shadow-yellow-400/70 hover:bg-opacity-90 transition-all duration-300 font-gilroy"
   >
-    Оставить заявку
+    {locale.header.callToAction}
   </button>
 </div>
 
+<script type="application/json" id="header-modal-config">
+  {JSON.stringify(locale.header.modal.messages)}
+</script>
+
 <script>
+  const headerModalConfigElement = document.getElementById('header-modal-config');
+  let modalMessages = {
+    incompletePhone: 'Please provide a full phone number.',
+    success: 'Request sent successfully!',
+    error: 'An error occurred. Please try again.',
+    fileError: 'Request sent but the attachment could not be uploaded. Please try again or contact us directly.',
+    title: 'New request',
+    fieldLabels: {
+      name: 'Name',
+      phone: 'Phone',
+      email: 'Email',
+      comment: 'Comment',
+      file: 'File',
+    },
+  };
+
+  if (headerModalConfigElement?.textContent) {
+    try {
+      modalMessages = JSON.parse(headerModalConfigElement.textContent);
+    } catch (error) {
+      console.error('Failed to parse header modal config', error);
+    }
+  }
+
+  const fieldLabels = {
+    name: modalMessages.fieldLabels?.name ?? 'Name',
+    phone: modalMessages.fieldLabels?.phone ?? 'Phone',
+    email: modalMessages.fieldLabels?.email ?? 'Email',
+    comment: modalMessages.fieldLabels?.comment ?? 'Comment',
+    file: modalMessages.fieldLabels?.file ?? 'File',
+  };
+
+  type ToastVariant = 'success' | 'error' | 'info';
+  const globalToastScope = window as typeof window & {
+    showToast?: (message: string, variant?: ToastVariant) => void;
+  };
+
+  if (!globalToastScope.showToast) {
+    const ensureToastEnvironment = () => {
+      if (!document.getElementById('global-toast-styles')) {
+        const style = document.createElement('style');
+        style.id = 'global-toast-styles';
+        style.textContent = `
+.toast-container{position:fixed;top:1.25rem;right:1.25rem;z-index:9999;display:flex;flex-direction:column;gap:0.75rem;align-items:flex-end;pointer-events:none}
+.toast{min-width:280px;max-width:360px;padding:0.85rem 1.1rem;border-radius:0.9rem;background:rgba(15,15,15,0.92);color:#fff;box-shadow:0 12px 30px rgba(0,0,0,0.28);opacity:0;transform:translateY(-12px);transition:opacity .3s ease,transform .3s ease;pointer-events:auto;font-family:var(--toast-font,'Gilroy',system-ui);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08)}
+.toast--success{background:linear-gradient(135deg,#16a34a,#15803d)}
+.toast--error{background:linear-gradient(135deg,#ef4444,#991b1b)}
+.toast--info{background:linear-gradient(135deg,#facc15,#b45309);color:#111}
+.toast__message{font-size:0.95rem;line-height:1.4;white-space:pre-line;margin:0}
+.toast.show{opacity:1;transform:translateY(0)}
+`;
+        document.head.appendChild(style);
+      }
+
+      let container = document.querySelector('.toast-container') as HTMLDivElement | null;
+      if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+      }
+
+      return container;
+    };
+
+    globalToastScope.showToast = (message: string, variant: ToastVariant = 'info') => {
+      const container = ensureToastEnvironment();
+      const toast = document.createElement('div');
+      toast.className = `toast toast--${variant}`;
+
+      const text = document.createElement('p');
+      text.className = 'toast__message';
+      text.textContent = message;
+
+      toast.appendChild(text);
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.add('show');
+      });
+
+      const dismiss = () => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          toast.remove();
+          if (!container?.children.length) {
+            container.remove();
+          }
+        }, 300);
+      };
+
+      setTimeout(dismiss, 4500);
+      toast.addEventListener('click', dismiss);
+    };
+  }
+
+  const showToast = (message: string, variant: ToastVariant = 'info') => {
+    globalToastScope.showToast?.(message, variant);
+  };
+
   // Получение всех кнопок с классом "open-modal"
   const openModalButtons = document.querySelectorAll(".open-modal");
   const closeModalBtn = document.getElementById("closeModal");
   const modal = document.getElementById("modal");
   const contactForm = document.getElementById("contactForm") as HTMLFormElement;
   const phoneInput = document.getElementById("phone") as HTMLInputElement | null;
+  const commentInput = document.getElementById("comment") as HTMLTextAreaElement | null;
+  const attachmentInput = document.getElementById("attachment") as HTMLInputElement | null;
 
   // Простая маска для российского номера телефона
   const formatPhoneNumber = (value: string) => {
@@ -306,21 +509,26 @@
     const name = nameInput?.value.trim() || "";
     const phone = phoneInput?.value.trim() || "";
     const email = emailInput?.value.trim() || "";
+    const comment = commentInput?.value.trim() || "";
+    const attachment = attachmentInput?.files?.[0] ?? null;
 
     const phoneDigits = phone.replace(/\D/g, "");
     if (phoneDigits.length < 11) {
-      alert("Пожалуйста, укажите полный номер телефона.");
+      showToast(modalMessages.incompletePhone, 'error');
       phoneInput?.focus();
       return;
     }
 
     const messageLines = [
-      `Имя: ${name}`,
-      phone ? `Телефон: ${phone}` : null,
-      email ? `Email: ${email}` : null,
+      `${fieldLabels.name}: ${name}`,
+      phone ? `${fieldLabels.phone}: ${phone}` : null,
+      email ? `${fieldLabels.email}: ${email}` : null,
+      comment ? `${fieldLabels.comment}: ${comment}` : null,
+      attachment ? `${fieldLabels.file}: ${attachment.name}` : null,
     ].filter(Boolean);
 
-    const message = `Новая заявка:\n\n${messageLines.join("\n")}`;
+    const messageBody = messageLines.join("\n");
+    const message = `${modalMessages.title}:\n\n${messageBody}`;
 
     const token = "7413445274:AAGFPUJZypcq5fG6r-Eq6pu81RHf6GOW2oU";
     const chatId = "-1002176656869";
@@ -328,19 +536,47 @@
       message,
     )}`;
 
+    const finalizeSuccess = () => {
+      showToast(modalMessages.success, 'success');
+      contactForm?.reset();
+      modal?.classList.add("hidden");
+    };
+
     fetch(url)
       .then((response) => {
-        if (response.ok) {
-          alert("Заявка успешно отправлена!");
-          contactForm?.reset();
-          modal?.classList.add("hidden");
-        } else {
-          alert("Ошибка при отправке заявки. Попробуйте позже.");
+        if (!response.ok) {
+          throw new Error("requestFailed");
         }
+
+        if (!attachment) {
+          finalizeSuccess();
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("chat_id", chatId);
+        formData.append("document", attachment);
+        const caption = message.length > 1024 ? message.slice(0, 1024) : message;
+        formData.append("caption", caption);
+
+        return fetch(`https://api.telegram.org/bot${token}/sendDocument`, {
+          method: "POST",
+          body: formData,
+        }).then((docResponse) => {
+          if (!docResponse.ok) {
+            throw new Error("fileFailed");
+          }
+          finalizeSuccess();
+        });
       })
       .catch((error) => {
         console.error("Error:", error);
-        alert("Ошибка при отправке заявки. Попробуйте позже.");
+        const errorKey = error instanceof Error ? error.message : "";
+        if (errorKey === "fileFailed") {
+          showToast(modalMessages.fileError ?? modalMessages.error, 'error');
+        } else {
+          showToast(modalMessages.error, 'error');
+        }
       });
   });
 

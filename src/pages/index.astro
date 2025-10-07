@@ -7,14 +7,20 @@ import InfoSection from "../components/InfoSection.astro";
 import TrustSection from "../components/TrustSection.astro";
 import InlineLeadSection from "../components/InlineLeadSection.astro";
 import ProductPromoBanner from "../components/ProductPromoBanner.astro";
+import { defaultLocale, getLocaleFromUrl, normalizeLocale } from "../i18n";
+
+const propLang = Astro.props.lang;
+const baseLocale = Astro.locals.baseLocale ?? defaultLocale;
+const detectedLang = getLocaleFromUrl(Astro.url.pathname, baseLocale);
+const lang = normalizeLocale(propLang ?? detectedLang ?? baseLocale);
 ---
 
-<Layout>
-  <Hero />
-  <About />
-  <ProductPromoBanner />
-  <InlineLeadSection />
-  <InfoSection />
-  <TrustSection />
-  <Documents />
+<Layout lang={lang}>
+  <Hero lang={lang} />
+  <About lang={lang} />
+  <ProductPromoBanner lang={lang} />
+  <InlineLeadSection lang={lang} />
+  <InfoSection lang={lang} />
+  <TrustSection lang={lang} />
+  <Documents lang={lang} />
 </Layout>

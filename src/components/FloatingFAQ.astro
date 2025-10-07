@@ -1,9 +1,21 @@
-<!-- Плавающая кнопка FAQ -->
+---
+import { defaultLocale, getTranslations, isRtl } from "../i18n";
+
+export interface Props {
+  lang?;
+}
+
+const lang = (Astro.props.lang) ?? defaultLocale;
+const locale = getTranslations(lang);
+const rtl = isRtl(lang);
+const faq = locale.floatingFaq;
+---
+
 <div class="fixed bottom-4 xs:bottom-6 sm:bottom-8 left-4 xs:left-6 sm:left-8 z-50">
   <button
     id="floating-faq-btn"
     class="group w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl xs:rounded-2xl shadow-2xl shadow-blue-500/25 hover:shadow-blue-400/40 hover:from-blue-400 hover:to-blue-500 transition-all duration-300 transform hover:scale-110 flex items-center justify-center"
-    aria-label="Часто задаваемые вопросы"
+    aria-label={faq.buttonLabel}
   >
     <svg
       class="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 group-hover:scale-110 transition-transform duration-300"
@@ -21,17 +33,15 @@
     </svg>
   </button>
   
-  <!-- Тултип -->
   <div
     id="faq-tooltip"
     class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 xs:mb-4 px-2 xs:px-4 py-1 xs:py-2 bg-gray-900 text-white text-xs xs:text-sm rounded-lg xs:rounded-xl shadow-lg opacity-0 invisible transition-all duration-300 whitespace-nowrap font-gilroy border border-gray-700"
   >
-    Часто задаваемые вопросы
+    {faq.tooltip}
     <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
   </div>
 </div>
 
-<!-- Модальное окно FAQ -->
 <div
   id="faq-modal"
   class="fixed inset-0 bg-black bg-opacity-75 backdrop-blur-sm flex items-center justify-center z-50 opacity-0 invisible transition-all duration-300 p-4"
@@ -60,39 +70,20 @@
     </button>
 
     <h2 class="text-2xl xs:text-3xl font-bold mb-6 xs:mb-8 text-white font-nevduplenysh">
-      Быстрые ответы
+      {faq.modalTitle}
     </h2>
 
-    <div class="space-y-4 xs:space-y-6">
-      <!-- Вопрос 1 -->
-      <div class="bg-gray-800 rounded-xl xs:rounded-2xl p-4 xs:p-6 border border-gray-700">
-        <h3 class="text-lg xs:text-xl font-semibold text-yellow-400 mb-2 xs:mb-3 font-gilroy">
-          Какие драгоценные металлы вы предлагаете?
-        </h3>
-        <p class="text-sm xs:text-base text-gray-300 font-gilroy leading-relaxed">
-          Мы работаем с полным спектром драгоценных металлов: золото, серебро, платина, палладий, родий. Предлагаем различные формы: слитки, гранулы, проволока, фольга.
-        </p>
-      </div>
-
-      <!-- Вопрос 2 -->
-      <div class="bg-gray-800 rounded-xl xs:rounded-2xl p-4 xs:p-6 border border-gray-700">
-        <h3 class="text-lg xs:text-xl font-semibold text-yellow-400 mb-2 xs:mb-3 font-gilroy">
-          Какова чистота ваших металлов?
-        </h3>
-        <p class="text-sm xs:text-base text-gray-300 font-gilroy leading-relaxed">
-          Мы гарантируем высочайшую чистоту: золото 999,9 пробы, серебро 999,9 пробы, платина 999,5 пробы. Каждая партия сопровождается сертификатом качества.
-        </p>
-      </div>
-
-      <!-- Вопрос 3 -->
-      <div class="bg-gray-800 rounded-xl xs:rounded-2xl p-4 xs:p-6 border border-gray-700">
-        <h3 class="text-lg xs:text-xl font-semibold text-yellow-400 mb-2 xs:mb-3 font-gilroy">
-          Как быстро происходит доставка?
-        </h3>
-        <p class="text-sm xs:text-base text-gray-300 font-gilroy leading-relaxed">
-          Доставка по Москве — в день заказа, по России — 1-7 дней в зависимости от региона. Все грузы застрахованы и отслеживаются.
-        </p>
-      </div>
+    <div class="space-y-4 xs:space-y-6" dir={rtl ? "rtl" : "ltr"}>
+      {faq.questions.map(({ question, answer }) => (
+        <div class="bg-gray-800 rounded-xl xs:rounded-2xl p-4 xs:p-6 border border-gray-700">
+          <h3 class="text-lg xs:text-xl font-semibold text-yellow-400 mb-2 xs:mb-3 font-gilroy">
+            {question}
+          </h3>
+          <p class="text-sm xs:text-base text-gray-300 font-gilroy leading-relaxed">
+            {answer}
+          </p>
+        </div>
+      ))}
     </div>
 
     <div class="mt-6 xs:mt-8 text-center">
@@ -103,7 +94,7 @@
         <svg class="w-4 h-4 xs:w-5 xs:h-5 mr-2 xs:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
-        Все вопросы и ответы
+        {faq.cta}
       </a>
     </div>
   </div>
@@ -115,7 +106,6 @@
   const closeFaqModal = document.getElementById("close-faq-modal");
   const faqTooltip = document.getElementById("faq-tooltip");
 
-  // Показать тултип при наведении
   faqBtn?.addEventListener("mouseenter", () => {
     faqTooltip?.classList.remove("opacity-0", "invisible");
     faqTooltip?.classList.add("opacity-100", "visible");
@@ -126,21 +116,18 @@
     faqTooltip?.classList.remove("opacity-100", "visible");
   });
 
-  // Открыть модальное окно
   faqBtn?.addEventListener("click", () => {
     faqModal?.classList.remove("opacity-0", "invisible");
     faqModal?.classList.add("opacity-100", "visible");
     document.body.style.overflow = "hidden";
   });
 
-  // Закрыть модальное окно
   closeFaqModal?.addEventListener("click", () => {
     faqModal?.classList.add("opacity-0", "invisible");
     faqModal?.classList.remove("opacity-100", "visible");
     document.body.style.overflow = "auto";
   });
 
-  // Закрыть при клике на фон
   faqModal?.addEventListener("click", (e) => {
     if (e.target === faqModal) {
       faqModal?.classList.add("opacity-0", "invisible");
@@ -148,4 +135,4 @@
       document.body.style.overflow = "auto";
     }
   });
-</script> 
+</script>
