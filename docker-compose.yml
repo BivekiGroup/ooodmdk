@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ooodmdk-app
+    container_name: aeooodmdk-app
     restart: unless-stopped
     ports:
       - "3023:4321" # не забыть переключать порты 3016 - 3023
