@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: aeooodmdk-app
+    container_name: aeooodmdk-app # менять имя ae взависимости от домена
     restart: unless-stopped
     ports:
       - "3023:4321" # не забыть переключать порты 3016 - 3023
