@@ -20,6 +20,12 @@ services:
       - SANITY_TOKEN=${SANITY_TOKEN:-}
       # Дополнительные переменные
       - PUBLIC_SITE_URL=${PUBLIC_SITE_URL:-http://localhost:4321}
+      # Postgres
+      - POSTGRES_URL=${POSTGRES_URL}
+      # Yandex Translate API
+      - YANDEX_TRANSLATE_API_KEY=${YANDEX_TRANSLATE_API_KEY}
+      - YANDEX_FOLDER_ID=${YANDEX_FOLDER_ID}
+      - YANDEX_TRANSLATE_API_URL=${YANDEX_TRANSLATE_API_URL:-https://translate.api.cloud.yandex.net/translate/v2/translate}
     env_file:
       - stack.env
     healthcheck:
